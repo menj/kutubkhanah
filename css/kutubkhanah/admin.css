@@ -1,0 +1,100 @@
+/* Kutubkhanah admin UI: flat, minimal. GNU GPL v3 or later. */
+.kk {
+  /* Brand: navy primary, gold accent (see images/kutubkhanah/) */
+  --kk-accent: #0f172a; --kk-gold: #b8962a; --kk-ink: #1f2328; --kk-mute: #656d76; --kk-line: #e1e4e8; --kk-soft: #f5f6f7;
+  --kk-ok: #1a7f37; --kk-warn: #9a6700; --kk-bad: #cf222e; --kk-r: 8px;
+  color: var(--kk-ink); font-size: 14px; line-height: 1.5; max-width: 1080px; padding: 8px 4px 32px;
+}
+.kk *, .kk *::before, .kk *::after { box-sizing: border-box; }
+.kk h2 { font-family: var(--kk-font-heading, inherit); font-size: 26px; font-weight: 700; margin: 0 0 4px; color: var(--kk-accent); }
+.kk h3 { font-family: var(--kk-font-heading, inherit); font-size: 18px; font-weight: 700; margin: 0 0 10px; color: var(--kk-accent); }
+.kk-head { margin-bottom: 16px; }
+.kk-head p, .kk-note { color: var(--kk-mute); margin: 4px 0 0; }
+.kk-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+.kk-panel { background: #fff; border: 1px solid var(--kk-line); border-radius: var(--kk-r); padding: 20px 22px; margin-bottom: 16px; }
+.kk-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 14px 0 10px; }
+
+/* Buttons and inputs */
+.kk-btn { display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border: 1px solid var(--kk-line); border-radius: 6px;
+  background: #fff; color: var(--kk-ink) !important; font: inherit; font-weight: 500; cursor: pointer; text-decoration: none !important; }
+.kk-btn:hover { background: var(--kk-soft); }
+.kk-btn:focus-visible, .kk-tab:focus-visible, .kk-input:focus { outline: 2px solid var(--kk-accent); outline-offset: 1px; }
+.kk-btn--primary { background: var(--kk-accent); border-color: var(--kk-accent); color: #e8c84a !important; }
+.kk-btn--primary:hover { background: var(--kk-accent); filter: brightness(0.92); }
+.kk-btn[disabled] { opacity: .55; cursor: default; }
+.kk-link { background: none; border: 0; padding: 0; margin-top: 8px; color: var(--kk-accent); cursor: pointer; font: inherit; }
+.kk-input { height: 34px; padding: 0 10px; border: 1px solid var(--kk-line); border-radius: 6px; font: inherit; width: 100%; max-width: 420px; background: #fff; }
+.kk-input--short { width: 90px; }
+.kk-check { display: block; margin: 0 0 8px; font-weight: 400; }
+.kk-check--inline { display: inline-block; margin: 0; }
+
+/* Tabs */
+.kk-tabs { display: flex; flex-wrap: wrap; gap: 2px; border-bottom: 1px solid var(--kk-line); margin: 0 0 16px; }
+.kk-tab { appearance: none; background: none; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px;
+  padding: 9px 14px; color: var(--kk-mute) !important; font: inherit; font-weight: 500; cursor: pointer; text-decoration: none !important; }
+.kk-tab:hover { color: var(--kk-ink) !important; }
+.kk-tab.is-active { color: var(--kk-accent) !important; border-bottom-color: var(--kk-gold); }
+.kk-count { display: inline-block; min-width: 22px; padding: 0 7px; border-radius: 11px; background: var(--kk-soft); color: var(--kk-mute); font-size: 12px; text-align: center; }
+
+/* Settings rows */
+.kk-row { display: grid; grid-template-columns: 200px 1fr; gap: 6px 24px; padding: 14px 0; border-bottom: 1px solid var(--kk-soft); }
+.kk-row:last-of-type { border-bottom: 0; }
+.kk-row__label { font-weight: 600; padding-top: 6px; }
+.kk-swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; max-width: 620px; }
+.kk-swatch span { display: block; font-size: 12px; color: var(--kk-mute); margin-bottom: 4px; }
+.kk-swatch input[type="color"] { width: 100%; height: 34px; padding: 2px; border: 1px solid var(--kk-line); border-radius: 6px; background: #fff; cursor: pointer; }
+
+/* Scanner */
+.kk-scan { display: grid; grid-template-columns: minmax(280px, 1fr) minmax(280px, 1fr); gap: 16px; align-items: start; }
+.kk-scan .kk-panel { margin: 0; }
+.kk-reader { width: 100%; border-radius: 6px; overflow: hidden; background: #0b0d10; }
+.kk-reader:empty { display: none; }
+.kk-manual { display: flex; gap: 8px; margin-top: 12px; }
+.kk-manual input { flex: 1; min-width: 0; height: 38px; padding: 0 12px; font-size: 16px; border: 1px solid var(--kk-line); border-radius: 6px; }
+.kk-results { list-style: none; margin: 0; padding: 0; max-height: 560px; overflow: auto; }
+.kk-result { display: flex; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--kk-soft); }
+.kk-result__body { display: flex; flex-direction: column; min-width: 0; }
+.kk-result__title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.kk-result.is-pending { opacity: .6; }
+.kk-result.is-created .kk-result__meta::before { content: "\2713  "; color: var(--kk-ok); }
+.kk-result.is-incomplete .kk-result__meta { color: var(--kk-warn); }
+.kk-result.is-error .kk-result__meta { color: var(--kk-bad); }
+
+/* Lists */
+.kk-thumb { flex: 0 0 40px; width: 40px; height: 60px; border-radius: 4px; background: var(--kk-soft); overflow: hidden; display: block; }
+.kk-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.kk-list { list-style: none; margin: 0; padding: 0; }
+.kk-list__row { display: flex; gap: 14px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--kk-soft); }
+.kk-list__body { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.kk-list__actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+.kk-pager { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 14px; }
+.kk-pager a { padding: 3px 9px; border-radius: 6px; color: var(--kk-mute); text-decoration: none; }
+.kk-pager a.is-active { background: var(--kk-accent); color: #fff; }
+
+/* Book details, authors, inbox */
+.kk-book-head { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+.kk-textarea { height: auto; min-height: 110px; padding: 8px 10px; max-width: 620px; }
+.kk-filter { display: flex; flex-wrap: wrap; gap: 6px; margin: -6px 0 14px; }
+.kk-filter a { padding: 3px 12px; border-radius: 999px; border: 1px solid var(--kk-line); color: var(--kk-mute); text-decoration: none; font-size: 13px; }
+.kk-filter a.is-active { background: var(--kk-accent); border-color: var(--kk-accent); color: #fff; }
+.kk-msg__head { display: flex; justify-content: space-between; gap: 14px; flex-wrap: wrap; align-items: flex-start; }
+.kk-msg__head .kk-note { display: block; }
+.kk-msg__actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.kk-msg__actions .kk-input--short { width: 130px; }
+.kk-msg__body { margin: 12px 0 0; white-space: normal; line-height: 1.6; }
+
+/* Import / covers */
+.kk-inline-form { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 12px; }
+.kk-progress { height: 6px; max-width: 420px; background: var(--kk-soft); border-radius: 3px; overflow: hidden; margin: 6px 0; }
+.kk-progress__bar { height: 100%; width: 0; background: var(--kk-gold); transition: width .2s; }
+
+@media (max-width: 800px) {
+  .kk-scan, .kk-row { grid-template-columns: 1fr; }
+  .kk-panel { padding: 16px; }
+  .kk-list__row { flex-wrap: wrap; }
+}
+@media (prefers-reduced-motion: reduce) { .kk-progress__bar { transition: none; } }
+
+/* Typewriter face for ISBNs in the scanner and review lists */
+.kk-isbn, .kk-manual input { font-family: var(--kk-font-typewriter, ui-monospace, monospace); letter-spacing: .03em; }

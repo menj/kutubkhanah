@@ -1,0 +1,65 @@
+/* Kutubkhanah: public cover shelf. Colours come from Settings > Display. GNU GPL v3 or later. */
+.kk-shelf {
+  --kk-accent: #0e7490; --kk-bg: #fff; --kk-surface: #f4f5f6; --kk-text: #111827; --kk-muted: #6b7280;
+  --kk-radius: 6px; --kk-card: 150px;
+  --kk-line: color-mix(in srgb, var(--kk-text) 12%, transparent);
+  background: var(--kk-surface); color: var(--kk-text); border: 1px solid var(--kk-line); border-radius: calc(var(--kk-radius) + 4px);
+  font: 16px/1.5 var(--kk-font-text, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
+  padding: 24px 20px 32px; box-sizing: border-box;
+}
+.kk-shelf *, .kk-shelf *::before, .kk-shelf *::after { box-sizing: border-box; }
+.kk-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.kk-shelf__title { margin: 0 0 18px; font-size: 1.6rem; font-weight: 600; letter-spacing: -0.01em; color: var(--kk-text); }
+
+/* Compact header when the shelf is the home page, so books show above the fold */
+.kk-home .c-header { min-height: 200px; }
+@media (max-width: 560px) { .kk-home .c-header { min-height: 150px; } }
+
+/* Toolbar */
+.kk-shelf__bar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 14px; }
+.kk-shelf__search { flex: 1 1 240px; margin: 0; }
+.kk-shelf__select { margin: 0; flex: 0 1 180px; }
+.kk-shelf__search input, .kk-shelf__select select {
+  width: 100%; height: 40px; padding: 0 12px; font: inherit; color: var(--kk-text);
+  background: var(--kk-bg); border: 1px solid var(--kk-line); border-radius: var(--kk-radius);
+}
+.kk-shelf__search input:focus, .kk-shelf__select select:focus { outline: 2px solid var(--kk-accent); outline-offset: 1px; }
+.kk-shelf__count { margin-left: auto; color: var(--kk-muted); font-size: .875rem; }
+
+/* A-Z */
+.kk-shelf__az { display: flex; flex-wrap: wrap; gap: 2px; margin-bottom: 6px; }
+.kk-shelf__az a { padding: 2px 8px; border-radius: var(--kk-radius); color: var(--kk-muted); font-size: .875rem; font-weight: 600; text-decoration: none; }
+.kk-shelf__az a:hover, .kk-shelf__az a:focus-visible { background: var(--kk-surface); color: var(--kk-primary); box-shadow: inset 0 -2px 0 var(--kk-accent); outline: none; }
+
+/* Groups and grid */
+.kk-shelf__group { margin-top: 26px; scroll-margin-top: 90px; }
+.kk-shelf__letter { margin: 0 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--kk-line); color: var(--kk-primary); font-family: Georgia, 'Times New Roman', serif; font-size: 1.5rem; font-weight: 700; }
+.kk-shelf__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(var(--kk-card), 1fr)); gap: 24px 20px; }
+
+/* Cards */
+.kk-card { display: flex; flex-direction: column; min-width: 0; color: var(--kk-text); text-decoration: none; border-radius: var(--kk-radius); }
+.kk-card:hover, .kk-card:focus { color: var(--kk-text); text-decoration: none; }
+.kk-card:focus-visible { outline: 2px solid var(--kk-accent); outline-offset: 4px; }
+.kk-card__cover { aspect-ratio: 2 / 3; display: flex; align-items: center; justify-content: center; overflow: hidden;
+  background: var(--kk-surface); border-radius: var(--kk-radius); box-shadow: 0 1px 2px rgba(0,0,0,.12); transition: transform .15s, box-shadow .15s; }
+.kk-card:hover .kk-card__cover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,.18); }
+.kk-card__cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.kk-card__nocover { display: flex; flex-direction: column; align-items: center; gap: 8px; color: var(--kk-muted); font-size: .75rem; letter-spacing: .02em; }
+.kk-card__nocover svg { width: 36px; height: 36px; opacity: .55; }
+.kk-card__title { margin-top: 10px; font-size: .875rem; font-weight: 600; line-height: 1.3;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.kk-card__author { margin-top: 2px; font-size: .8125rem; color: var(--kk-muted); line-height: 1.3;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.kk-shelf__empty, .kk-shelf__none { color: var(--kk-muted); }
+
+@media (max-width: 560px) {
+  .kk-shelf { padding: 16px 12px 24px; }
+  .kk-shelf__grid { grid-template-columns: repeat(auto-fill, minmax(min(var(--kk-card), 42vw), 1fr)); gap: 20px 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .kk-card__cover { transition: none; }
+  .kk-card:hover .kk-card__cover { transform: none; }
+}
+
+.kk-card__title { font-family: var(--kk-font-heading, inherit); font-size: .95rem; unicode-bidi: plaintext; }
+.kk-card__author { unicode-bidi: plaintext; }

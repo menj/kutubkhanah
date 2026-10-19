@@ -1,0 +1,12 @@
+{
+  "name": "Kutubkhanah",
+  "short_name": "KK",
+  "icons": [
+    { "src": "kk-icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "kk-icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ],
+  "theme_color": "#0f172a",
+  "background_color": "#f8f7f4",
+  "display": "browser"
+}

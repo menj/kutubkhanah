@@ -1,0 +1,54 @@
+/*
+ * Kutubkhanah font stack. Files and licences: fonts/kutubkhanah/README.md
+ * GNU GPL v3 or later (this CSS); each font keeps its own licence.
+ *
+ *   --kk-font-text        reading text and interface      Sabon Next LT (local only) > EB Garamond > Noto Naskh Arabic
+ *   --kk-font-heading     headings                        Sabon Next LT (local only) > EB Garamond > Amiri
+ *   --kk-font-display     hero and banner titles          Kagnue (optional, private) > heading stack
+ *   --kk-font-script      hero tagline accent             Ferments (optional, private) > EB Garamond italic
+ *   --kk-font-typewriter  call numbers, ISBNs             Special Elite
+ *   --kk-font-quran       Quranic text (.kk-quran)        KFGQPC HAFS Uthmanic Script > Amiri
+ */
+
+/* EB Garamond: variable weight 400-800, roman and italic (SIL OFL 1.1) */
+@font-face { font-family: "EB Garamond"; src: url("../../fonts/kutubkhanah/EBGaramond-Variable.woff2") format("woff2");
+  font-weight: 400 800; font-style: normal; font-display: swap; }
+@font-face { font-family: "EB Garamond"; src: url("../../fonts/kutubkhanah/EBGaramond-Italic-Variable.woff2") format("woff2");
+  font-weight: 400 800; font-style: italic; font-display: swap; }
+
+/* Arabic faces load only when a page contains Arabic characters (unicode-range). */
+@font-face { font-family: "Noto Naskh Arabic"; src: url("../../fonts/kutubkhanah/NotoNaskhArabic-Variable.woff2") format("woff2");
+  font-weight: 400 700; font-style: normal; font-display: swap;
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F, U+25CC; }
+@font-face { font-family: "Amiri"; src: url("../../fonts/kutubkhanah/Amiri-Regular.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F, U+25CC; }
+@font-face { font-family: "Amiri"; src: url("../../fonts/kutubkhanah/Amiri-Bold.woff2") format("woff2");
+  font-weight: 700; font-style: normal; font-display: swap;
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F, U+25CC; }
+
+/* KFGQPC: original unmodified file, as its licence requires. */
+@font-face { font-family: "KFGQPC HAFS Uthmanic Script"; src: url("../../fonts/kutubkhanah/KFGQPC-HAFS-Uthmanic-Script.ttf") format("truetype");
+  font-weight: 400; font-style: normal; font-display: swap; }
+
+/* Special Elite (Apache 2.0) */
+@font-face { font-family: "Special Elite"; src: url("../../fonts/kutubkhanah/SpecialElite-Regular.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap; }
+
+/* Optional licensed display fonts (Kagnue, Ferments) are not distributed. Their @font-face rules are printed by
+   Library::privateFontFaces() only when you place licensed files in fonts/kutubkhanah/private/. */
+
+:root {
+  --kk-font-text: "Sabon Next LT", "EB Garamond", "Noto Naskh Arabic", Georgia, "Times New Roman", serif;
+  --kk-font-heading: "Sabon Next LT", "EB Garamond", "Amiri", Georgia, "Times New Roman", serif;
+  --kk-font-display: "Kagnue", "Sabon Next LT", "EB Garamond", "Amiri", Georgia, serif;
+  --kk-font-script: "Ferments", "Sabon Next LT", "EB Garamond", "Amiri", Georgia, serif;
+  --kk-font-typewriter: "Special Elite", "Courier New", ui-monospace, monospace;
+  --kk-font-quran: "KFGQPC HAFS Uthmanic Script", "Amiri", "Noto Naskh Arabic", serif;
+  --kk-font-arabic: "Amiri", "Noto Naskh Arabic", serif;
+}
+
+/* Utility classes for content written in the admin (news, FAQ, notes). */
+.kk-quran { font-family: var(--kk-font-quran); font-size: 1.6em; line-height: 2.1; direction: rtl; text-align: right; }
+.kk-arabic, [lang="ar"] { font-family: var(--kk-font-arabic); line-height: 1.9; }
+.kk-typewriter { font-family: var(--kk-font-typewriter); letter-spacing: .02em; }

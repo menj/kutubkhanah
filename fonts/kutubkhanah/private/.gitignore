@@ -1,0 +1,3 @@
+# Licensed fonts you supply yourself (see ../README.md). Never commit these.
+*
+!.gitignore

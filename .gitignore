@@ -1,0 +1,39 @@
+# Kutubkhanah: the shipped tree is tracked; only per-install secrets and runtime data are ignored.
+
+# Per-install configuration written by the installer (contains credentials)
+config/database.php
+config/env.php
+config/auth.php
+config/csp.php
+config/captcha.php
+config/mail.php
+config/url.php
+config/loadbalanced.php
+config/class_alias.php
+config/sysconfig.local.inc.php
+sysconfig.local.inc.php
+.env
+
+# Uploaded and generated content
+images/docs/kk-cover-*
+images/cache/_slims_img_cache_*
+images/barcodes/*.png
+files/backup/*
+!files/backup/index.html
+!files/backup/index.php
+files/cache/
+cache/
+
+# Licensed fonts you supply yourself: see fonts/kutubkhanah/README.md
+# (also covered by fonts/kutubkhanah/private/.gitignore)
+fonts/kutubkhanah/private/*
+!fonts/kutubkhanah/private/.gitignore
+
+# Dependencies and editor/OS files
+/vendor/
+.DS_Store
+._*
+.idea/
+.vscode/
+Thumbs.db
+Desktop.ini
