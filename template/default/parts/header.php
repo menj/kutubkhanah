@@ -29,6 +29,8 @@ $request_uri = urlencode(strip_tags(urldecode($_SERVER['REQUEST_URI'])));
     <?php if (isset($_GET['p']) && ($_GET['p'] == 'show_detail')): ?>
         <meta name="description" content="<?php echo substr($notes, 0, 152) . '...'; ?>">
         <meta name="keywords" content="<?php echo $subject; ?>">
+    <?php elseif (!empty($GLOBALS['kk_meta']['description'])): ?>
+        <meta name="description" content="<?php echo htmlspecialchars($GLOBALS['kk_meta']['description'], ENT_QUOTES); ?>">
     <?php else: ?>
         <meta name="description" content="<?php echo $page_title; ?>">
         <meta name="keywords" content="<?php echo $sysconf['library_subname']; ?>">
@@ -42,6 +44,8 @@ $request_uri = urlencode(strip_tags(urldecode($_SERVER['REQUEST_URI'])));
     <meta property="og:title" content="<?php echo $page_title; ?>"/>
     <?php if (isset($_GET['p']) && ($_GET['p'] == 'show_detail')): ?>
         <meta property="og:description" content="<?php echo substr($notes, 0, 152) . '...'; ?>"/>
+    <?php elseif (!empty($GLOBALS['kk_meta']['description'])): ?>
+        <meta property="og:description" content="<?php echo htmlspecialchars($GLOBALS['kk_meta']['description'], ENT_QUOTES); ?>"/>
     <?php else: ?>
         <meta property="og:description" content="<?php echo $sysconf['library_subname']; ?>"/>
     <?php endif; ?>
@@ -49,6 +53,8 @@ $request_uri = urlencode(strip_tags(urldecode($_SERVER['REQUEST_URI'])));
     <meta property="og:site_name" content="<?php echo $sysconf['library_name']; ?>"/>
     <?php if (isset($_GET['p']) && ($_GET['p'] == 'show_detail')): ?>
         <meta property="og:image" content="//<?php echo $_SERVER["SERVER_NAME"] . SWB . $image_src ?>"/>
+    <?php elseif (!empty($GLOBALS['kk_meta']['image'])): ?>
+        <meta property="og:image" content="//<?php echo $_SERVER["SERVER_NAME"] . htmlspecialchars($GLOBALS['kk_meta']['image'], ENT_QUOTES); ?>"/>
     <?php else: ?>
         <meta property="og:image" content="<?php echo \SLiMS\Kutubkhanah\Library::shareImage(); ?>"/>
         <meta property="og:image:width" content="1200"/><meta property="og:image:height" content="630"/>
@@ -90,6 +96,7 @@ $request_uri = urlencode(strip_tags(urldecode($_SERVER['REQUEST_URI'])));
     <?php // Kutubkhanah: KK favicon set (images/kutubkhanah/) unless a custom web icon is set in System settings ?>
     <?php echo \SLiMS\Kutubkhanah\Library::iconLinks(); ?>
     <?php if (\SLiMS\Kutubkhanah\Settings::get('enable_rss')): ?><link rel="alternate" type="application/rss+xml" title="<?= htmlspecialchars(($sysconf['library_name'] ?? 'Kutubkhanah') . ' · ' . __('New additions'), ENT_QUOTES) ?>" href="index.php?p=kk_rss"><?php endif; ?>
+    <?php if (\SLiMS\Kutubkhanah\Settings::get('enable_rss') && \SLiMS\Kutubkhanah\Settings::get('blog_enable')): ?><link rel="alternate" type="application/rss+xml" title="<?= htmlspecialchars(($sysconf['library_name'] ?? 'Kutubkhanah') . ' · ' . \SLiMS\Kutubkhanah\Blog\Render::title(), ENT_QUOTES) ?>" href="index.php?p=blog_rss"><?php endif; ?>
 
     <!-- // load vue js -->
     <script src="<?php echo assets('js/vue.min.js'); ?>"></script>

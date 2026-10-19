@@ -17,4 +17,13 @@ $menu['kutubkhanah.series']   = array(__('Series'), MWB . 'kutubkhanah/series.ph
 $menu['kutubkhanah.fields']   = array(__('Custom Fields'), MWB . 'kutubkhanah/fields.php', __('Your own details per format, such as signed copy or condition'));
 $menu['kutubkhanah.authors']  = array(__('Authors'), MWB . 'kutubkhanah/authors.php', __('Author details shown on public author pages'));
 $menu['kutubkhanah.inbox']    = array(__('Inbox'), MWB . 'kutubkhanah/inbox.php', __('Access requests and contact messages'));
+$menu['kutubkhanah.header-blog'] = array('Header', __('JOURNAL'));
+$menu['kutubkhanah.posts']    = array(__('Posts'), MWB . 'kutubkhanah/blog.php', __('All journal posts: drafts, scheduled and published'));
+$menu['kutubkhanah.newpost']  = array(__('Write a Post'), MWB . 'kutubkhanah/post.php', __('Start a new post'));
+$menu['kutubkhanah.pages']    = array(__('Pages'), MWB . 'kutubkhanah/blog.php?type=page', __('Standalone pages'));
+$menu['kutubkhanah.terms']    = array(__('Categories & Tags'), MWB . 'kutubkhanah/blog_terms.php', __('Organise posts'));
+$menu['kutubkhanah.comments'] = array(__('Comments'), MWB . 'kutubkhanah/blog_comments.php', __('Approve, reply to or remove comments'));
+$menu['kutubkhanah.media']    = array(__('Media'), MWB . 'kutubkhanah/blog_media.php', __('Images for posts'));
+$menu['kutubkhanah.wpimport'] = array(__('Import from WordPress'), MWB . 'kutubkhanah/blog_import.php', __('Bring posts, pages and comments over from WordPress'));
+$menu['kutubkhanah.header-settings'] = array('Header', __('SETTINGS'));
 $menu['kutubkhanah.settings'] = array(__('Settings'), MWB . 'kutubkhanah/settings.php', __('Shelf page, colours and lookup sources'));

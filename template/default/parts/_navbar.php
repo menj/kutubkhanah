@@ -12,6 +12,9 @@ $main_menus = [
   'shelf' => ['text' => __('Catalogue'), 'url' => 'index.php?p=shelf'],
   'archives' => ['text' => __('Digital Archives'), 'url' => 'index.php?p=shelf&format=Digital+Archive'],
   'news' => ['text' => __('Resources'), 'url' => 'index.php?p=news'],
+];
+if (!empty($kk['blog_enable'])) $main_menus = array_slice($main_menus, 0, 3, true) + ['blog' => ['text' => htmlspecialchars($kk['blog_title'] ?: __('Journal'), ENT_QUOTES, 'UTF-8'), 'url' => 'index.php?p=blog']] + array_slice($main_menus, 3, null, true);
+$main_menus += [
   'faq' => ['text' => __('FAQ'), 'url' => 'index.php?p=faq'],
 ];
 if (!empty($kk['enable_contact'])) $main_menus['contact'] = ['text' => __('Contact'), 'url' => 'index.php?p=contact'];

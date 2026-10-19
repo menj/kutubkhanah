@@ -65,6 +65,15 @@ class Settings
             'sru_custom_index' => 'isbn',
             'google_key'      => '',
             'download_covers' => 1,
+            // Blog
+            'blog_enable'      => 1,
+            'blog_title'       => 'Journal',
+            'blog_intro'       => 'Notes from the library: reading, collecting and the stories behind the books.',
+            'blog_per_page'    => 10,
+            'blog_home_count'  => 3,
+            'blog_comments'    => 1,
+            'blog_moderate'    => 1,
+            'blog_notify'      => 1,
             // Sign-in
             'lockout_enable'   => 1,
             'lockout_attempts' => 5,
@@ -97,6 +106,10 @@ class Settings
                 'src_openlibrary' => 'bool', 'src_loc' => 'bool', 'src_google' => 'bool', 'src_k10plus' => 'bool',
                 'src_custom' => 'bool', 'sru_custom_url' => 'url', 'sru_custom_index' => 'sruindex',
                 'google_key' => 'text', 'download_covers' => 'bool',
+            ],
+            'blog' => [
+                'blog_enable' => 'bool', 'blog_title' => 'text', 'blog_intro' => 'longtext', 'blog_per_page' => 'int:3:50',
+                'blog_home_count' => 'int:0:12', 'blog_comments' => 'bool', 'blog_moderate' => 'bool', 'blog_notify' => 'bool',
             ],
             'security' => [
                 'lockout_enable' => 'bool', 'lockout_attempts' => 'int:3:20', 'lockout_minutes' => 'int:1:1440',

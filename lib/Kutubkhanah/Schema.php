@@ -11,7 +11,7 @@ namespace SLiMS\Kutubkhanah;
 
 class Schema
 {
-    const VERSION = '1.5.0';
+    const VERSION = '1.6.0';
 
     /** Columns of kk_book, in order. Missing ones are added on upgrade. */
     private static function bookColumns(): array
@@ -176,6 +176,100 @@ class Schema
                 ('Provenance', 'text', '', '$books', 1, 3),
                 ('Purchase price', 'text', '', '', 0, 4),
                 ('Issue number', 'text', '', 'Periodical', 1, 5)");
+        }
+
+        // 1.6.0: blog (posts and pages, categories and tags, comments, media, revisions).
+        $db->query("CREATE TABLE IF NOT EXISTS `kk_post` (
+            `id` int(11) NOT NULL auto_increment,
+            `type` varchar(10) NOT NULL default 'post',
+            `title` varchar(300) NOT NULL default '',
+            `slug` varchar(200) NOT NULL default '',
+            `excerpt` text,
+            `content` mediumtext,
+            `status` varchar(10) NOT NULL default 'draft',
+            `author_id` int(11) NOT NULL default '0',
+            `author_name` varchar(100) NOT NULL default '',
+            `featured_media` int(11) NOT NULL default '0',
+            `published_at` datetime default NULL,
+            `created_at` datetime NOT NULL,
+            `updated_at` datetime NOT NULL,
+            `comment_status` tinyint(1) NOT NULL default '1',
+            `comment_count` int(11) NOT NULL default '0',
+            `sticky` tinyint(1) NOT NULL default '0',
+            `meta_description` varchar(300) NOT NULL default '',
+            `menu_order` int(11) NOT NULL default '0',
+            `wp_id` int(11) NOT NULL default '0',
+            PRIMARY KEY (`id`),
+            UNIQUE KEY `type_slug` (`type`, `slug`),
+            KEY `listing` (`type`, `status`, `published_at`),
+            FULLTEXT KEY `search` (`title`, `content`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+        $db->query("CREATE TABLE IF NOT EXISTS `kk_term` (
+            `id` int(11) NOT NULL auto_increment,
+            `taxonomy` varchar(10) NOT NULL default 'category',
+            `name` varchar(150) NOT NULL default '',
+            `slug` varchar(150) NOT NULL default '',
+            `description` text,
+            `parent` int(11) NOT NULL default '0',
+            PRIMARY KEY (`id`),
+            UNIQUE KEY `tax_slug` (`taxonomy`, `slug`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+        $db->query("CREATE TABLE IF NOT EXISTS `kk_post_term` (
+            `post_id` int(11) NOT NULL,
+            `term_id` int(11) NOT NULL,
+            PRIMARY KEY (`post_id`, `term_id`),
+            KEY `term` (`term_id`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+        $db->query("CREATE TABLE IF NOT EXISTS `kk_comment` (
+            `id` int(11) NOT NULL auto_increment,
+            `post_id` int(11) NOT NULL,
+            `parent_id` int(11) NOT NULL default '0',
+            `author` varchar(100) NOT NULL default '',
+            `email` varchar(254) NOT NULL default '',
+            `url` varchar(300) NOT NULL default '',
+            `content` text,
+            `status` varchar(10) NOT NULL default 'pending',
+            `is_owner` tinyint(1) NOT NULL default '0',
+            `ip` varchar(45) NOT NULL default '',
+            `created_at` datetime NOT NULL,
+            PRIMARY KEY (`id`),
+            KEY `post_status` (`post_id`, `status`),
+            KEY `status` (`status`, `created_at`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+        $db->query("CREATE TABLE IF NOT EXISTS `kk_media` (
+            `id` int(11) NOT NULL auto_increment,
+            `file` varchar(255) NOT NULL default '',
+            `mime` varchar(60) NOT NULL default '',
+            `width` int(11) NOT NULL default '0',
+            `height` int(11) NOT NULL default '0',
+            `alt` varchar(300) NOT NULL default '',
+            `caption` text,
+            `title` varchar(200) NOT NULL default '',
+            `created_at` datetime NOT NULL,
+            `uploaded_by` int(11) NOT NULL default '0',
+            PRIMARY KEY (`id`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+        $db->query("CREATE TABLE IF NOT EXISTS `kk_post_revision` (
+            `id` int(11) NOT NULL auto_increment,
+            `post_id` int(11) NOT NULL,
+            `title` varchar(300) NOT NULL default '',
+            `excerpt` text,
+            `content` mediumtext,
+            `author_name` varchar(100) NOT NULL default '',
+            `created_at` datetime NOT NULL,
+            PRIMARY KEY (`id`),
+            KEY `post` (`post_id`, `created_at`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+        // A first category so new posts have a home.
+        $c = $db->query("SELECT COUNT(*) FROM kk_term WHERE taxonomy = 'category'");
+        if ($c && (int)$c->fetch_row()[0] === 0) {
+            $db->query("INSERT INTO kk_term (taxonomy, name, slug, description, parent) VALUES ('category', 'Notes', 'notes', '', 0)");
         }
 
         // Admin module entry and access for the administrator group.

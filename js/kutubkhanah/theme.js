@@ -34,3 +34,24 @@
     });
   });
 })();
+
+/* Journal: reply to a comment */
+(function () {
+  var form = document.getElementById('kk-comment-form');
+  if (!form) { return; }
+  var parent = form.querySelector('input[name="parent"]');
+  var note = form.querySelector('.kk-comment-form__replying');
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest ? e.target.closest('[data-reply]') : null;
+    if (a) {
+      e.preventDefault();
+      parent.value = a.getAttribute('data-reply');
+      note.querySelector('strong').textContent = a.getAttribute('data-name');
+      note.hidden = false;
+      form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      var ta = form.querySelector('textarea'); if (ta) { ta.focus({ preventScroll: true }); }
+      return;
+    }
+    if (e.target.hasAttribute && e.target.hasAttribute('data-cancel-reply')) { parent.value = '0'; note.hidden = true; }
+  });
+}());

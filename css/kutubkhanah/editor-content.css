@@ -1,0 +1,11 @@
+/* Kutubkhanah: text inside the post editor, matching the public post page. GNU GPL v3 or later. */
+body.kk-editor-content { font-family: "Sabon Next LT", "EB Garamond", "Noto Naskh Arabic", Georgia, serif; font-size: 18px; line-height: 1.75; color: #1a1a2e; max-width: 46rem; margin: 1rem auto; padding: 0 1rem; }
+.kk-editor-content h2, .kk-editor-content h3, .kk-editor-content h4 { font-family: "Sabon Next LT", "EB Garamond", "Amiri", Georgia, serif; color: #0f172a; line-height: 1.25; }
+.kk-editor-content h2 { font-size: 1.7em; } .kk-editor-content h3 { font-size: 1.35em; } .kk-editor-content h4 { font-size: 1.1em; }
+.kk-editor-content a { color: #0f172a; text-decoration-color: #d4af37; }
+.kk-editor-content blockquote { margin: 1em 0; padding: .1em 0 .1em 1.2em; border-left: 3px solid #d4af37; font-style: italic; color: #0f172a; }
+.kk-editor-content img { max-width: 100%; height: auto; }
+.kk-editor-content figure { margin: 1em 0; } .kk-editor-content figcaption { font-size: .85em; color: #64748b; text-align: center; font-style: italic; }
+.kk-editor-content pre { background: #0f172a; color: #f1f5f9; padding: .8em 1em; border-radius: 4px; font-size: .85em; }
+.kk-editor-content [dir="rtl"] { font-family: "Amiri", "Noto Naskh Arabic", serif; line-height: 2; }
+.kk-editor-content hr { border: 0; border-top: 1px solid #d4af37; width: 30%; margin: 2em auto; }

@@ -113,7 +113,9 @@
       });
       var out = form.querySelector('.kk-saved');
       out.textContent = t.working;
-      api(form.getAttribute('data-action'), { id: parseInt(form.getAttribute('data-id'), 10), values: values }).then(function (res) {
+      var body = { id: parseInt(form.getAttribute('data-id'), 10), values: values };
+      if (form.getAttribute('data-taxonomy')) { body.taxonomy = form.getAttribute('data-taxonomy'); }
+      api(form.getAttribute('data-action'), body).then(function (res) {
         out.textContent = res.ok ? t.saved : ((res.j && res.j.message) || t.error);
         if (res.ok && form.getAttribute('data-reload')) { reloadPane(form.getAttribute('data-reload')); }
       }).catch(function () { out.textContent = t.error; });
@@ -201,6 +203,38 @@
         }).catch(function () { status.textContent = t.error; go.disabled = false; });
       }
       step();
+    });
+  }
+  /* Blog: media upload page */
+  var mediaForm = document.getElementById('kk-media-upload');
+  if (mediaForm) {
+    mediaForm.querySelector('input[type=file]').addEventListener('change', function () {
+      var files = Array.prototype.slice.call(this.files);
+      var out = mediaForm.querySelector('.kk-saved');
+      if (!files.length) { return; }
+      out.textContent = t.working;
+      Promise.all(files.map(function (f) { var fd = new FormData(); fd.append('file', f); return api('media_upload', fd, true); })).then(function (rs) {
+        var bad = rs.filter(function (r) { return !r.ok; });
+        out.textContent = bad.length ? ((bad[0].j && bad[0].j.message) || t.error) : t.saved;
+        if (!bad.length) { reloadPane(mediaForm.getAttribute('data-reload')); }
+      }).catch(function () { out.textContent = t.error; });
+    });
+  }
+
+  /* Blog: WordPress import */
+  var wxr = document.getElementById('kk-wxr-form');
+  if (wxr) {
+    wxr.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var out = wxr.querySelector('.kk-saved');
+      var btn = wxr.querySelector('button[type=submit]');
+      out.textContent = t.wxrworking; btn.disabled = true;
+      api('wxr_import', new FormData(wxr), true).then(function (res) {
+        btn.disabled = false;
+        if (!res.ok) { out.textContent = (res.j && res.j.message) || t.error; return; }
+        var j = res.j;
+        out.textContent = fmt(t.wxrdone, j.posts, j.pages, j.comments, j.images, j.terms, j.skipped) + (j.errors && j.errors.length ? ' ' + j.errors.join(' · ') : '');
+      }).catch(function () { btn.disabled = false; out.textContent = t.error; });
     });
   }
 })();

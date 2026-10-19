@@ -11,7 +11,7 @@ if (!$kk_can_write) kk_deny();
 
 $s = Settings::all();
 $d = Settings::defaults();
-$tabs = ['library' => __('Library'), 'general' => __('Shelf'), 'display' => __('Display'), 'lookup' => __('Lookup'), 'security' => __('Sign-in')];
+$tabs = ['library' => __('Library'), 'general' => __('Shelf'), 'display' => __('Display'), 'lookup' => __('Lookup'), 'blog' => __('Journal'), 'security' => __('Sign-in')];
 
 $languages = [];
 $lq = $dbs->query('SELECT language_id, language_name FROM mst_language ORDER BY language_name');
@@ -111,6 +111,20 @@ echo kk_head();
         $html .= '</div><button type="button" class="kk-link kk-reset" data-mode="' . $mode . '">' . __('Reset to default') . '</button>';
         kk_row($title, $html);
     }
+    ?>
+    <div class="kk-actions"><button type="submit" class="kk-btn kk-btn--primary"><?= __('Save changes') ?></button><span class="kk-note kk-saved" aria-live="polite"></span></div>
+  </form>
+
+  <!-- Journal (blog) -->
+  <form class="kk-panel kk-settings notAJAX" id="kk-pane-blog" role="tabpanel" aria-labelledby="kk-tab-blog" data-tab="blog" hidden>
+    <?php
+    kk_row(__('Journal'), kk_check('blog_enable', __('Publish the journal (blog) on the public site'), $s));
+    kk_row(__('Name'), '<input type="text" name="blog_title" value="' . kk_e($s['blog_title']) . '" class="kk-input">', __('Shown in the menu and as the page title, e.g. "Journal", "Blog" or "Catatan".'));
+    kk_row(__('Introduction'), '<textarea name="blog_intro" class="kk-input kk-textarea" rows="2">' . kk_e($s['blog_intro']) . '</textarea>');
+    kk_row(__('Posts per page'), '<input type="number" min="3" max="50" name="blog_per_page" value="' . (int)$s['blog_per_page'] . '" class="kk-input kk-input--short">');
+    kk_row(__('On the home page'), '<input type="number" min="0" max="12" name="blog_home_count" value="' . (int)$s['blog_home_count'] . '" class="kk-input kk-input--short"> ' . __('latest posts'), __('0 hides the section.'));
+    kk_row(__('Comments'), kk_check('blog_comments', __('Allow comments on posts'), $s) . kk_check('blog_moderate', __('Hold every comment until I approve it'), $s)
+        . kk_check('blog_notify', __('Email me about new comments (sent to the Notify email on the Library tab)'), $s));
     ?>
     <div class="kk-actions"><button type="submit" class="kk-btn kk-btn--primary"><?= __('Save changes') ?></button><span class="kk-note kk-saved" aria-live="polite"></span></div>
   </form>

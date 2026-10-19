@@ -6,6 +6,12 @@
  * GNU GPL v3 or later.
  */
 
+use SLiMS\Kutubkhanah\Blog\Comments as BlogComments;
+use SLiMS\Kutubkhanah\Blog\Import as BlogImport;
+use SLiMS\Kutubkhanah\Blog\Media;
+use SLiMS\Kutubkhanah\Blog\Posts;
+use SLiMS\Kutubkhanah\Blog\Render as BlogRender;
+use SLiMS\Kutubkhanah\Blog\Terms;
 use SLiMS\Kutubkhanah\Books;
 use SLiMS\Kutubkhanah\Covers;
 use SLiMS\Kutubkhanah\Fields;
@@ -128,6 +134,70 @@ try {
 
         case 'field_delete':
             kk_json(['ok' => Fields::delete((int)($input['id'] ?? 0))]);
+
+        /* ---------- Blog ---------- */
+        case 'post_save':
+            $user = ['id' => (int)($_SESSION['uid'] ?? 0), 'name' => (string)($_SESSION['realname'] ?? '')];
+            $pid = Posts::save((int)($input['id'] ?? 0), (array)($input['values'] ?? []), $user, (string)($input['type'] ?? 'post'));
+            $p = Posts::get($pid);
+            kk_json(['ok' => true, 'id' => $pid, 'status' => $p['status'], 'status_label' => Posts::statusLabels()[$p['status']] ?? $p['status'],
+                     'slug' => $p['slug'], 'view' => Posts::url($p) . ($p['status'] === 'publish' ? '' : '&preview=' . BlogRender::previewKey($pid))]);
+
+        case 'post_status':
+            kk_json(['ok' => Posts::setStatus((int)($input['id'] ?? 0), (string)($input['status'] ?? ''))]);
+
+        case 'post_delete':
+            kk_json(['ok' => Posts::delete((int)($input['id'] ?? 0))]);
+
+        case 'revision_restore':
+            $user = ['id' => (int)($_SESSION['uid'] ?? 0), 'name' => (string)($_SESSION['realname'] ?? '')];
+            kk_json(['ok' => true, 'id' => Posts::restoreRevision((int)($input['id'] ?? 0), $user)]);
+
+        case 'term_save':
+            kk_json(['ok' => true, 'id' => Terms::save((int)($input['id'] ?? 0), (string)($input['taxonomy'] ?? 'category'), (array)($input['values'] ?? []))]);
+
+        case 'term_delete':
+            kk_json(['ok' => Terms::delete((int)($input['id'] ?? 0))]);
+
+        case 'comment_status':
+            kk_json(['ok' => BlogComments::setStatus((int)($input['id'] ?? 0), (string)($input['status'] ?? ''))]);
+
+        case 'comment_delete':
+            kk_json(['ok' => BlogComments::delete((int)($input['id'] ?? 0))]);
+
+        case 'comment_reply':
+            $v = (array)($input['values'] ?? []);
+            kk_json(['ok' => BlogComments::reply((int)($input['id'] ?? 0), (string)($v['reply'] ?? ''), (string)($_SESSION['realname'] ?? 'Librarian'))]);
+
+        case 'media_upload':
+            if (empty($_FILES['file'])) kk_json(['message' => __('No file was uploaded.')], 400);
+            kk_json(['ok' => true] + Media::upload($_FILES['file'], (int)($_SESSION['uid'] ?? 0), (string)($_POST['alt'] ?? '')));
+
+        case 'media_list':
+            kk_json(Media::list((int)($input['page'] ?? 1), 60));
+
+        case 'media_update':
+            kk_json(['ok' => Media::update((int)($input['id'] ?? 0), (array)($input['values'] ?? []))]);
+
+        case 'media_delete':
+            kk_json(['ok' => Media::delete((int)($input['id'] ?? 0))]);
+
+        case 'book_search':
+            $q = trim((string)($input['q'] ?? ''));
+            if ($q === '') kk_json(['rows' => []]);
+            $like = '%' . addcslashes($q, '%_\\') . '%';
+            $st = \SLiMS\DB::getInstance()->prepare("SELECT b.biblio_id AS id, b.title, b.publish_year AS year, b.image,
+                (SELECT GROUP_CONCAT(a.author_name SEPARATOR ', ') FROM biblio_author ba JOIN mst_author a ON a.author_id = ba.author_id WHERE ba.biblio_id = b.biblio_id) AS authors
+                FROM biblio b WHERE b.title LIKE ? OR b.sor LIKE ? OR REPLACE(b.isbn_issn, '-', '') LIKE ? ORDER BY b.title LIMIT 20");
+            $st->execute([$like, $like, '%' . (preg_replace('/[^0-9Xx]/', '', $q) ?: '#') . '%']);
+            $rows = array_map(fn($r) => $r + ['thumb' => $r['image'] ? SWB . 'lib/minigalnano/createthumb.php?filename=images/docs/' . rawurlencode($r['image']) . '&width=80' : ''], $st->fetchAll(\PDO::FETCH_ASSOC));
+            kk_json(['rows' => $rows]);
+
+        case 'wxr_import':
+            if (empty($_FILES['wxr']['tmp_name']) || (int)$_FILES['wxr']['error'] !== UPLOAD_ERR_OK) kk_json(['message' => __('No file was uploaded.')], 400);
+            @set_time_limit(600);
+            kk_json(['ok' => true] + BlogImport::run($_FILES['wxr']['tmp_name'], ['id' => (int)($_SESSION['uid'] ?? 0), 'name' => (string)($_SESSION['realname'] ?? '')],
+                !empty($_POST['images'])));
 
         case 'series_save':
             $v = (array)($input['values'] ?? []);

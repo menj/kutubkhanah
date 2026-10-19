@@ -59,6 +59,8 @@ function kk_head(): string
             'wished'     => __('Already on the wishlist'),
             'owned'      => __('Already in the library'),
             'fromwish'   => __('Added (was on your wishlist)'),
+            'wxrworking' => __('Importing… this can take a few minutes when images are copied.'),
+            'wxrdone'    => __('Done: %1$d posts, %2$d pages, %3$d comments, %4$d images and %5$d categories or tags imported; %6$d skipped (already imported, trashed or drafts that were auto-saved).'),
             'incomplete' => __('Saved, needs details'),
             'duplicate'  => __('Already in the library'),
             'copyadded'  => __('Copy added'),

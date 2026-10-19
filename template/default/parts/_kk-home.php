@@ -79,6 +79,8 @@ $e = [Library::class, 'e'];
         </div>
     </section>
 
+    <?= \SLiMS\Kutubkhanah\Blog\Render::homeSection(); ?>
+
     <?php if ($kkNews) : ?>
     <section class="kk-section">
         <div class="container">
