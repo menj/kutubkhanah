@@ -1,6 +1,12 @@
 Kutubkhanah changelog
 =====================
 
+1.6.0
+- Blog built into Kutubkhanah (modelled on WordPress): posts and pages, categories, tags, featured image,
+  scheduled and draft posts, sticky posts, comments with moderation, media library, RSS feed,
+  WordPress export import, rich-text editor, shortcodes that embed books from your library.
+- Public blog at index.php?p=blog in the Kutubkhanah theme; settings in Settings > Blog.
+
 1.5.1
 - WordPress-style installer: welcome, database details (writes config/database.php, or shows the text to paste),
   then library title, username, generated password and email, with optional sample books and a
