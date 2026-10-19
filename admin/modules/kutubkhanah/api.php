@@ -14,6 +14,9 @@ use SLiMS\Kutubkhanah\Blog\Render as BlogRender;
 use SLiMS\Kutubkhanah\Blog\Terms;
 use SLiMS\Kutubkhanah\Books;
 use SLiMS\Kutubkhanah\Covers;
+use SLiMS\Kutubkhanah\DocSearch;
+use SLiMS\Kutubkhanah\Duplicates;
+use SLiMS\Kutubkhanah\Lists;
 use SLiMS\Kutubkhanah\Fields;
 use SLiMS\Kutubkhanah\Importer;
 use SLiMS\Kutubkhanah\Messages;
@@ -202,6 +205,51 @@ try {
         case 'series_save':
             $v = (array)($input['values'] ?? []);
             Series::save((string)($v['name'] ?? ''), (int)($v['total'] ?? 0), (string)($v['description'] ?? ''));
+            kk_json(['ok' => true]);
+
+        case 'dup_merge':
+            $n = Duplicates::merge((int)($input['keep'] ?? 0), (array)($input['drop'] ?? []));
+            kk_json(['ok' => true, 'merged' => $n]);
+
+        case 'work_link':
+            Duplicates::linkEditions((array)($input['ids'] ?? []));
+            kk_json(['ok' => true]);
+
+        case 'work_unlink':
+            Duplicates::unlink((int)($input['id'] ?? 0));
+            kk_json(['ok' => true]);
+
+        case 'list_save':
+            kk_json(['ok' => true, 'id' => Lists::save((int)($input['id'] ?? 0), (array)($input['values'] ?? []))]);
+
+        case 'list_delete':
+            Lists::delete((int)($input['id'] ?? 0));
+            kk_json(['ok' => true]);
+
+        case 'list_add':
+            Lists::add((int)($input['list'] ?? 0), (int)($input['book'] ?? 0));
+            kk_json(['ok' => true]);
+
+        case 'list_remove':
+            Lists::remove((int)($input['list'] ?? 0), (int)($input['book'] ?? 0));
+            kk_json(['ok' => true]);
+
+        case 'list_move':
+            Lists::move((int)($input['list'] ?? 0), (int)($input['book'] ?? 0), (int)($input['dir'] ?? 0));
+            kk_json(['ok' => true]);
+
+        case 'list_note':
+            Lists::note((int)($input['list'] ?? 0), (int)($input['book'] ?? 0), (string)($input['note'] ?? ''));
+            kk_json(['ok' => true]);
+
+        case 'doc_pending':
+            kk_json(['ids' => DocSearch::pending(), 'counts' => DocSearch::counts()]);
+
+        case 'doc_index':
+            kk_json(['ok' => true] + DocSearch::index((int)($input['id'] ?? 0), empty($input['no_ocr'])));
+
+        case 'doc_forget':
+            DocSearch::forget((int)($input['id'] ?? 0));
             kk_json(['ok' => true]);
 
         case 'loan_save':

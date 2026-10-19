@@ -64,6 +64,23 @@ $setBookmarked = trim(isset($_SESSION['bookmark'][$biblio_id]) ? 'bg-success tex
                         } ?></div>
                 </dd>
 
+                <?php
+                $kkEditions = \SLiMS\Kutubkhanah\Duplicates::editionsOf((int)$biblio_id);
+                $kkLists = \SLiMS\Kutubkhanah\Settings::get('enable_lists') ? \SLiMS\Kutubkhanah\Lists::containing((int)$biblio_id) : [];
+                $kkEsc = fn($s) => htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8');
+                if ($kkEditions) : ?>
+                <dt class="col-sm-3"><?= __('Other editions'); ?></dt>
+                <dd class="col-sm-9"><ul class="kk-inline-list"><?php foreach ($kkEditions as $ed) :
+                    $edLabel = trim(($ed['publisher_name'] ?? '') . ' ' . ($ed['publish_year'] ?? '') . ' ' . ($ed['edition'] ?? '')) ?: $ed['title']; ?>
+                    <li><a href="index.php?p=show_detail&amp;id=<?= (int)$ed['biblio_id'] ?>" dir="auto"><?= $kkEsc($edLabel) ?></a></li>
+                <?php endforeach; ?></ul></dd>
+                <?php endif; if ($kkLists) : ?>
+                <dt class="col-sm-3"><?= __('Reading lists'); ?></dt>
+                <dd class="col-sm-9"><ul class="kk-inline-list"><?php foreach ($kkLists as $l) : ?>
+                    <li><a href="<?= \SLiMS\Kutubkhanah\Lists::url($l['slug']) ?>" dir="auto"><?= $kkEsc($l['title']) ?></a></li>
+                <?php endforeach; ?></ul></dd>
+                <?php endif; ?>
+
                 <dt class="col-sm-3"><?= __('Call Number'); ?></dt>
                 <dd class="col-sm-9">
                     <div class="kk-detail-call"><?php echo ($call_number) ? $call_number : '-'; ?></div>

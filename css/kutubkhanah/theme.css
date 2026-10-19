@@ -477,3 +477,15 @@ body.kk-theme[data-scheme="dark"] .kk-badge--loan { color: #fbbf24; }
   .kk-theme .kk-entry__adjacent a[rel="next"] { text-align: start; }
 }
 @media (prefers-reduced-motion: reduce) { .kk-theme .kk-post-card__img { transition: none; } .kk-theme .kk-post-card:hover .kk-post-card__img { transform: none; } }
+
+/* Search inside books, reading lists, editions */
+.kk-inside__form { display: flex; gap: 8px; max-width: 640px; margin: 0 0 20px; }
+.kk-inside__form .kk-input { flex: 1; }
+.kk-inside, .kk-inside ul { list-style: none; margin: 0; padding: 0; }
+.kk-inside__book { padding: 14px 0; border-bottom: 1px solid var(--kk-line, #e5e2da); }
+.kk-inside__title { font-weight: 600; font-size: 1.05rem; }
+.kk-inside ul { margin-top: 8px; }
+.kk-inside ul li { padding: 4px 0; font-size: .92rem; }
+.kk-inside mark { background: color-mix(in srgb, var(--kk-gold, #d4af37) 35%, transparent); color: inherit; padding: 0 2px; border-radius: 2px; }
+.kk-book__note { margin: 6px 0 0; font-size: .85rem; font-style: italic; color: var(--kk-muted, #6b7280); }
+.kk-inline-list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 14px; }

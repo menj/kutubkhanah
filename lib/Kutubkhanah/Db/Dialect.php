@@ -148,7 +148,7 @@ final class Dialect
     private function ident(string $s): string { return '"' . str_replace('"', '""', $s) . '"'; }
 
     /** PostgreSQL words that cannot be used bare as names; the SLiMS schema uses some of them. */
-    private const PG_QUOTE = ['user' => 1, 'order' => 1, 'group' => 1, 'limit' => 1, 'offset' => 1, 'end' => 1, 'both' => 1, 'check' => 1, 'default' => 1, 'desc' => 0];
+    private const PG_QUOTE = ['user' => 1, 'order' => 1, 'group' => 1, 'limit' => 1, 'offset' => 1, 'end' => 1, 'both' => 1, 'check' => 1, 'default' => 1, 'collation' => 1, 'desc' => 0];
 
     private const ALIAS_KEYWORDS = ['index' => 1, 'key' => 1, 'user' => 1, 'order' => 1, 'group' => 1, 'table' => 1, 'values' => 1, 'column' => 1, 'check' => 1, 'default' => 1, 'limit' => 1, 'end' => 1];
 
@@ -321,8 +321,8 @@ final class Dialect
             }
 
             // PostgreSQL: reserved words used as bare names (the "user" table) must be quoted.
-            if ($this->isPg() && !$isCall && strtolower($val) === 'user') {
-                $out .= '"user"'; $i++; continue;
+            if ($this->isPg() && !$isCall && in_array(strtolower($val), ['user', 'collation'], true)) {
+                $out .= '"' . strtolower($val) . '"'; $i++; continue;
             }
 
             // Alias case: pg folds unquoted aliases to lower case; keep the case the code asks for.

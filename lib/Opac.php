@@ -153,7 +153,7 @@ class Opac
             extract($this->definedVariable);
             
             // Kutubkhanah: the blog, pages, series and author pages are meant to be found by search engines too.
-            if (!in_array($this->path, ['show_detail', 'blog', 'page', 'series', 'author', 'shelf'], true)) {
+            if (!in_array($this->path, ['show_detail', 'blog', 'page', 'series', 'author', 'shelf', 'lists', 'inside'], true)) {
                 $this->definedVariable['metadata'] = '<meta name="robots" content="noindex, follow">';
             }
 

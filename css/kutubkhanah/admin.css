@@ -109,3 +109,13 @@
 .kk-subhead { margin: 18px 0 4px; padding-top: 14px; border-top: 1px solid var(--kk-line); font-size: 15px; }
 .kk-list--compact .kk-list__row { padding: 6px 0; }
 .kk-mode { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; margin-top: 8px; }
+
+/* Reading lists, merge, picker, search inside */
+.kk-list--ordered { list-style: decimal; padding-left: 24px; }
+.kk-list__note { margin-top: 6px; font-size: 13px; }
+.kk-btn--danger { color: #b42318; border-color: #f0c2bd; }
+.kk-picker { position: relative; max-width: 480px; margin-top: 14px; }
+.kk-picker__results { list-style: none; margin: 4px 0 0; padding: 4px; background: var(--kk-surface, #fff); border: 1px solid var(--kk-line); border-radius: var(--kk-radius, 4px); max-height: 260px; overflow: auto; }
+.kk-picker__item { display: block; width: 100%; text-align: start; background: none; border: 0; padding: 8px 10px; border-radius: 3px; cursor: pointer; color: inherit; font: inherit; }
+.kk-picker__item:hover, .kk-picker__item:focus-visible { background: var(--kk-soft); outline: none; }
+.kk-merge .kk-check { display: flex; gap: 10px; align-items: flex-start; }

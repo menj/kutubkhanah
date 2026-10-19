@@ -66,6 +66,10 @@ echo kk_head();
     kk_row(__('Ratings'), kk_check('show_ratings', __('Show your star ratings to visitors (reviews are public only when you tick it on the book)'), $s));
     kk_row(__('Wishlist'), kk_check('enable_wishlist', __('Show the public Wishlist page (only wishes marked public)'), $s));
     kk_row(__('RSS feed'), kk_check('enable_rss', __('Publish a "New additions" RSS feed'), $s));
+    kk_row(__('Reading lists'), kk_check('enable_lists', __('Show the public Reading lists page'), $s));
+    kk_row(__('Search inside books'), kk_check('enable_inside', __('Show the public page that searches the text of digital books'), $s)
+        . '<input type="text" name="ocr_lang" value="' . kk_e($s['ocr_lang']) . '" class="kk-input kk-input--short" aria-label="OCR"> ',
+        __('Language codes for reading scanned pages (OCR), such as eng, ara, msa or eng+ara. Install the matching tesseract language data on the server.'));
     kk_row(__('Lending period'), '<input type="number" min="0" max="365" name="loan_days" value="' . (int)$s['loan_days'] . '" class="kk-input kk-input--short"> ' . __('days'),
         __('Default due date when you lend a book. 0 means no due date.'));
     ?>

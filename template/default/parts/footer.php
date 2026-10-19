@@ -31,6 +31,8 @@ $kkE = fn($v) => htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
                     <li><a href="index.php?p=shelf"><?= __('Browse All Books'); ?></a></li>
                     <li><a href="index.php?p=shelf&amp;format=Digital+Archive"><?= __('Digital Archives'); ?></a></li>
                     <li><a href="index.php?p=series"><?= __('Series'); ?></a></li>
+                    <?php if (!empty($kk['enable_lists'])) : ?><li><a href="index.php?p=lists"><?= __('Reading lists'); ?></a></li><?php endif; ?>
+                    <?php if (!empty($kk['enable_inside'])) : ?><li><a href="index.php?p=inside"><?= __('Search inside books'); ?></a></li><?php endif; ?>
                     <?php if (!empty($kk['enable_wishlist'])) : ?><li><a href="index.php?p=wishlist"><?= __('Wishlist'); ?></a></li><?php endif; ?>
                     <li><a href="index.php?p=news"><?= __('Resources & Guides'); ?></a></li>
                     <?php if (!empty($kk['enable_rss'])) : ?><li><a href="index.php?p=kk_rss"><?= __('New additions (RSS)'); ?></a></li><?php endif; ?>

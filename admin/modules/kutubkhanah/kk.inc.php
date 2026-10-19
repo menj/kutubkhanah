@@ -28,7 +28,7 @@ if (empty($_SESSION['kk_token'])) {
     $_SESSION['kk_token'] = bin2hex(random_bytes(16));
 }
 
-const KK_VERSION = '1.6.0';
+const KK_VERSION = '1.7.0';
 
 function kk_e($s): string
 {
@@ -59,6 +59,10 @@ function kk_head(): string
             'wished'     => __('Already on the wishlist'),
             'owned'      => __('Already in the library'),
             'fromwish'   => __('Added (was on your wishlist)'),
+            'mergeconfirm' => __('Merge these records? The others are removed and cannot be restored.'),
+            'nothingnew' => __('Everything is already indexed.'),
+            'indexdone'  => __('%d files indexed'),
+            'failed'     => __('failed'),
             'wxrworking' => __('Importing… this can take a few minutes when images are copied.'),
             'wxrdone'    => __('Done: %1$d posts, %2$d pages, %3$d comments, %4$d images and %5$d categories or tags imported; %6$d skipped (already imported, trashed or drafts that were auto-saved).'),
             'incomplete' => __('Saved, needs details'),

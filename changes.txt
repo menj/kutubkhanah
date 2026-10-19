@@ -2,6 +2,13 @@ Kutubkhanah changelog
 =====================
 
 1.7.0
+- Reading lists: ordered lists of books with notes, a public page each (index.php?p=lists) and links from book pages.
+- Duplicates & Editions: finds books entered twice (same ISBN, or same title, author and year) and merges them,
+  moving copies, authors, subjects, files, loans and notes into the record you keep. Editions of one work can be
+  linked, and each edition's page then lists the others.
+- Search Inside: indexes the text of PDF digital copies (pdftotext, with tesseract OCR for scanned pages) and adds a
+  public "search inside books" page showing the page number and a highlighted snippet. Private files are never searched.
+- Settings: switches for Reading lists and Search inside books, and the OCR language.
 - Runs on MySQL/MariaDB, SQLite or PostgreSQL. Pick the database type in the installer; SQLite needs no server.
 - A built-in translation layer (lib/Kutubkhanah/Db) converts the MySQL-style SQL used across the code base
   for SQLite and PostgreSQL, so existing modules keep working. Verified by installing and crawling

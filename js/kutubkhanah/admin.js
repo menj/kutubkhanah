@@ -237,4 +237,121 @@
       }).catch(function () { btn.disabled = false; out.textContent = t.error; });
     });
   }
+
+  /* Duplicates & editions: merge or link a group */
+  each('[data-merge]', function (box) {
+    var out = box.querySelector('.kk-saved');
+    var ids = box.querySelector('[data-ids]').value.split(',').map(function (x) { return parseInt(x, 10); });
+    var root = document.querySelector('.kk[data-reload]');
+    function done(res, btn) {
+      btn.disabled = false;
+      if (!res.ok) { out.textContent = (res.j && res.j.message) || t.error; return; }
+      out.textContent = t.saved;
+      reloadPane(root && root.getAttribute('data-reload'));
+    }
+    var go = box.querySelector('[data-merge-go]');
+    if (go) {
+      go.addEventListener('click', function () {
+        var sel = box.querySelector('input[type=radio]:checked');
+        if (!sel) { return; }
+        var keep = parseInt(sel.value, 10);
+        if (!window.confirm(t.mergeconfirm || 'Merge?')) { return; }
+        go.disabled = true; out.textContent = t.working;
+        api('dup_merge', { keep: keep, drop: ids.filter(function (x) { return x !== keep; }) }).then(function (r) { done(r, go); })
+          .catch(function () { go.disabled = false; out.textContent = t.error; });
+      });
+    }
+    var link = box.querySelector('[data-merge-link]');
+    if (link) {
+      link.addEventListener('click', function () {
+        link.disabled = true; out.textContent = t.working;
+        api('work_link', { ids: ids }).then(function (r) { done(r, link); })
+          .catch(function () { link.disabled = false; out.textContent = t.error; });
+      });
+    }
+  });
+
+  /* Reading lists: reorder, note, remove, add */
+  each('ol[data-list]', function (ol) {
+    var list = parseInt(ol.getAttribute('data-list'), 10);
+    var url = window.location.href;
+    ol.addEventListener('click', function (e) {
+      var li = e.target.closest('li[data-book]');
+      if (!li) { return; }
+      var book = parseInt(li.getAttribute('data-book'), 10);
+      var mv = e.target.closest('[data-list-move]');
+      if (mv) {
+        var dir = parseInt(mv.getAttribute('data-list-move'), 10);
+        api('list_move', { list: list, book: book, dir: dir }).then(function (r) {
+          if (!r.ok) { return; }
+          var sib = dir < 0 ? li.previousElementSibling : li.nextElementSibling;
+          if (sib) { ol.insertBefore(dir < 0 ? li : sib, dir < 0 ? sib : li); }
+        });
+      } else if (e.target.closest('[data-list-remove]')) {
+        api('list_remove', { list: list, book: book }).then(function (r) { if (r.ok) { li.parentNode.removeChild(li); } });
+      }
+    });
+    ol.addEventListener('change', function (e) {
+      var inp = e.target.closest('[data-list-note]');
+      var li = e.target.closest('li[data-book]');
+      if (inp && li) { api('list_note', { list: list, book: parseInt(li.getAttribute('data-book'), 10), note: inp.value }); }
+    });
+  });
+  each('[data-picker]', function (box) {
+    var input = box.querySelector('input');
+    var results = box.querySelector('.kk-picker__results');
+    var timer = null;
+    input.addEventListener('input', function () {
+      window.clearTimeout(timer);
+      var q = input.value.trim();
+      if (q.length < 2) { results.hidden = true; return; }
+      timer = window.setTimeout(function () {
+        api('book_search', { q: q }).then(function (r) {
+          results.innerHTML = '';
+          (r.j.rows || []).forEach(function (row) {
+            var li = document.createElement('li');
+            var b = document.createElement('button');
+            b.type = 'button'; b.className = 'kk-picker__item'; b.setAttribute('dir', 'auto');
+            b.textContent = row.title + (row.authors ? ' — ' + row.authors : '') + (row.year ? ' (' + row.year + ')' : '');
+            b.addEventListener('click', function () {
+              api(box.getAttribute('data-picker'), { list: parseInt(box.getAttribute('data-list'), 10), book: row.id }).then(function (res) {
+                if (res.ok) { reloadPane(window.location.pathname + '?tab=' + box.getAttribute('data-list')); } else { window.alert((res.j && res.j.message) || t.error); }
+              });
+            });
+            li.appendChild(b); results.appendChild(li);
+          });
+          results.hidden = !results.children.length;
+        });
+      }, 250);
+    });
+  });
+
+  /* Search inside: index the pending files one at a time */
+  each('[data-inside]', function (box) {
+    var run = box.querySelector('[data-inside-run]');
+    var status = box.querySelector('[data-inside-status]');
+    var bar = box.querySelector('[data-inside-bar]');
+    if (!run) { return; }
+    run.addEventListener('click', function () {
+      run.disabled = true; status.textContent = t.working;
+      api('doc_pending', {}).then(function (r) {
+        var ids = (r.j && r.j.ids) || [];
+        if (!ids.length) { status.textContent = t.nothingnew || t.saved; run.disabled = false; return; }
+        var wrap = box.querySelector('.kk-progress'); wrap.hidden = false;
+        var i = 0, failed = 0;
+        (function next() {
+          if (i >= ids.length) {
+            status.textContent = fmt(t.indexdone || '%d files', ids.length - failed) + (failed ? ' · ' + failed + ' ' + (t.failed || 'failed') : '');
+            bar.style.width = '100%'; run.disabled = false;
+            window.setTimeout(function () { reloadPane(window.location.pathname); }, 1200);
+            return;
+          }
+          status.textContent = (i + 1) + ' / ' + ids.length;
+          api('doc_index', { id: ids[i], no_ocr: box.querySelector('[data-inside-noocr]').checked ? 1 : 0 }).then(function (x) {
+            if (!x.ok) { failed++; }
+          }).catch(function () { failed++; }).then(function () { i++; bar.style.width = Math.round(i / ids.length * 100) + '%'; next(); });
+        })();
+      }).catch(function () { status.textContent = t.error; run.disabled = false; });
+    });
+  });
 })();

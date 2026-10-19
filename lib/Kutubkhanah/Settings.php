@@ -31,6 +31,9 @@ class Settings
             'show_ratings'    => 1,
             'enable_wishlist' => 1,
             'enable_rss'      => 1,
+            'enable_lists'    => 1,
+            'enable_inside'   => 1,
+            'ocr_lang'        => 'eng',
             'loan_days'       => 30,
             // General (shelf)
             'shelf_title'     => '',
@@ -89,7 +92,7 @@ class Settings
                 'tagline' => 'text', 'mission' => 'longtext', 'footer_desc' => 'longtext', 'location' => 'text',
                 'home_layout' => 'layout', 'recent_count' => 'int:0:30',
                 'enable_contact' => 'bool', 'enable_access' => 'bool', 'notify_email' => 'email', 'show_reading' => 'bool',
-                'show_ratings' => 'bool', 'enable_wishlist' => 'bool', 'enable_rss' => 'bool', 'loan_days' => 'int:0:365',
+                'show_ratings' => 'bool', 'enable_wishlist' => 'bool', 'enable_rss' => 'bool', 'enable_lists' => 'bool', 'enable_inside' => 'bool', 'ocr_lang' => 'text', 'loan_days' => 'int:0:365',
             ],
             'general' => [
                 'shelf_title' => 'text', 'show_authors' => 'bool', 'group_letters' => 'bool',

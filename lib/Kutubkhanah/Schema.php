@@ -11,7 +11,7 @@ namespace SLiMS\Kutubkhanah;
 
 class Schema
 {
-    const VERSION = '1.6.0';
+    const VERSION = '1.7.0';
 
     /** Columns of kk_book, in order. Missing ones are added on upgrade. */
     private static function bookColumns(): array
@@ -264,6 +264,55 @@ class Schema
             `created_at` datetime NOT NULL,
             PRIMARY KEY (`id`),
             KEY `post` (`post_id`, `created_at`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+        $db->query("CREATE TABLE IF NOT EXISTS `kk_list` (
+            `id` int(11) NOT NULL auto_increment,
+            `title` varchar(200) NOT NULL default '',
+            `slug` varchar(200) NOT NULL default '',
+            `description` text,
+            `is_public` tinyint(1) NOT NULL default '1',
+            `created_at` datetime NOT NULL,
+            PRIMARY KEY (`id`),
+            KEY `slug` (`slug`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+        $db->query("CREATE TABLE IF NOT EXISTS `kk_list_item` (
+            `list_id` int(11) NOT NULL,
+            `biblio_id` int(11) NOT NULL,
+            `pos` int(11) NOT NULL default '0',
+            `note` varchar(500) NOT NULL default '',
+            PRIMARY KEY (`list_id`, `biblio_id`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+        // Editions of one work: every edition carries the same work_id (the lowest biblio_id of the group).
+        $db->query("CREATE TABLE IF NOT EXISTS `kk_work_link` (
+            `biblio_id` int(11) NOT NULL,
+            `work_id` int(11) NOT NULL,
+            PRIMARY KEY (`biblio_id`),
+            KEY `work` (`work_id`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+        // Text of digital copies for "search inside books".
+        $db->query("CREATE TABLE IF NOT EXISTS `kk_doc_index` (
+            `file_id` int(11) NOT NULL,
+            `biblio_id` int(11) NOT NULL default '0',
+            `pages` int(11) NOT NULL default '0',
+            `method` varchar(10) NOT NULL default '',
+            `status` varchar(10) NOT NULL default 'done',
+            `file_mtime` int(11) NOT NULL default '0',
+            `indexed_at` datetime NOT NULL,
+            PRIMARY KEY (`file_id`),
+            KEY `biblio` (`biblio_id`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+        $db->query("CREATE TABLE IF NOT EXISTS `kk_doc_text` (
+            `file_id` int(11) NOT NULL,
+            `page` int(11) NOT NULL,
+            `biblio_id` int(11) NOT NULL default '0',
+            `content` mediumtext,
+            PRIMARY KEY (`file_id`, `page`),
+            KEY `biblio` (`biblio_id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
 
         // A first category so new posts have a home.
