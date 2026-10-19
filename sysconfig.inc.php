@@ -42,6 +42,13 @@ if ($envExists) require $envFile;
 define('ENVIRONMENT', $env??'unavailable');
 
 if (ENVIRONMENT === 'unavailable' && file_exists(__DIR__ . '/config/database.php') && php_sapi_name() !== 'cli') {
+  // Config written but installation unfinished (WordPress-style flow): continue in the installer.
+  if (is_file(__DIR__ . '/install/index.php')) {
+    $kkBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/')), '/');
+    $kkBase = preg_replace('#/(admin(/.*)?|install)$#', '', $kkBase);
+    header('Location: ' . $kkBase . '/install/index.php?step=ready');
+    exit;
+  }
   header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
   include __DIR__ . DIRECTORY_SEPARATOR . 'template' . DIRECTORY_SEPARATOR . 'serviceunavailable.php';
   exit(1); // EXIT_ERROR

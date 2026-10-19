@@ -1,0 +1,53 @@
+/* Kutubkhanah installer: single column, quiet, KK navy and gold. Colours are variables so they can be re-themed. */
+:root {
+    --kk-bg: #f4f1ea; --kk-card: #ffffff; --kk-ink: #14213d; --kk-muted: #5b6477;
+    --kk-accent: #14213d; --kk-gold: #b8913c; --kk-line: #e2ddd0; --kk-ok: #2f7d4f; --kk-bad: #b3261e;
+}
+@media (prefers-color-scheme: dark) {
+    :root { --kk-bg: #0f1626; --kk-card: #17213a; --kk-ink: #eef0f5; --kk-muted: #a3adc2; --kk-accent: #d7b25a; --kk-line: #2a3656; --kk-ok: #6fcf97; --kk-bad: #ff8a80; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--kk-bg); color: var(--kk-ink); font: 16px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif; }
+.kk-install { max-width: 560px; margin: 0 auto; padding: 48px 16px 64px; }
+.kk-install > :not(.kk-install__brand) { background: var(--kk-card); }
+.kk-install__brand { display: flex; flex-direction: column; align-items: center; margin-bottom: 24px; }
+.kk-install__brand h1 { margin: 12px 0 0; font-size: 1.6rem; font-weight: 600; letter-spacing: .02em; }
+.kk-install { display: block; }
+.kk-install > p, .kk-install > ol, .kk-install > h2, .kk-install > form, .kk-install > details, .kk-install > table, .kk-install > textarea, .kk-install > div { padding-left: 32px; padding-right: 32px; }
+.kk-install h2 { margin: 0; padding-top: 24px; font-size: 1.2rem; }
+.kk-install > p:first-of-type, .kk-install > h2:first-of-type { padding-top: 28px; margin: 0; }
+.kk-install p { margin: 0; padding-top: 14px; padding-bottom: 2px; }
+.kk-install ol { margin: 0; padding-top: 10px; padding-bottom: 4px; padding-left: 52px; }
+.kk-install code { background: rgba(127,127,127,.15); padding: .1em .4em; border-radius: 4px; font-size: .9em; }
+.kk-form label { display: block; margin-top: 18px; font-weight: 600; }
+.kk-form small { display: block; font-weight: 400; color: var(--kk-muted); margin-top: 4px; line-height: 1.4; }
+.kk-form input[type=text], .kk-form input[type=password], .kk-form input[type=email] {
+    display: block; width: 100%; margin-top: 6px; padding: 10px 12px; font: inherit; color: inherit;
+    background: transparent; border: 1px solid var(--kk-line); border-radius: 6px;
+}
+.kk-form input:focus { outline: 2px solid var(--kk-gold); outline-offset: 1px; }
+.kk-check { font-weight: 400 !important; }
+.kk-check input { margin-right: 8px; }
+.kk-pass { display: flex; gap: 8px; margin-top: 6px; }
+.kk-pass input { margin-top: 0 !important; font-family: ui-monospace, Menlo, Consolas, monospace; }
+.kk-actions { padding-top: 24px !important; padding-bottom: 32px !important; }
+.kk-button { display: inline-block; padding: 10px 22px; font: inherit; font-weight: 600; color: #fff; background: var(--kk-accent); border: 1px solid var(--kk-accent); border-radius: 6px; text-decoration: none; cursor: pointer; }
+@media (prefers-color-scheme: dark) { .kk-button { color: #14213d; } }
+.kk-button:hover { filter: brightness(1.1); }
+.kk-button--ghost { background: transparent; color: var(--kk-ink); border-color: var(--kk-line); }
+.kk-notice { margin: 0 0 16px; padding: 12px 32px !important; border-left: 4px solid var(--kk-bad); }
+.kk-notice p { padding: 4px 0 !important; }
+.kk-checks { margin: 16px 0 0; padding-top: 12px; }
+.kk-checks summary { cursor: pointer; font-weight: 600; }
+.kk-checks ul { list-style: none; margin: 8px 0 0; padding: 0; }
+.kk-checks li { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; border-top: 1px solid var(--kk-line); font-size: .9rem; }
+.kk-checks li em { font-style: normal; color: var(--kk-muted); }
+.kk-checks .is-ok span::before { content: "\2713  "; color: var(--kk-ok); }
+.kk-checks .is-bad span::before { content: "\2717  "; color: var(--kk-bad); }
+.kk-checks .is-bad em { color: var(--kk-bad); }
+.kk-code { display: block; width: calc(100% - 64px); margin: 16px 32px 0; padding: 12px; font: 13px/1.5 ui-monospace, Menlo, Consolas, monospace; color: inherit; background: rgba(127,127,127,.1); border: 1px solid var(--kk-line); border-radius: 6px; }
+.kk-table { width: calc(100% - 64px); margin: 16px 32px 0; border-collapse: collapse; }
+.kk-table th, .kk-table td { text-align: left; padding: 8px 0; border-top: 1px solid var(--kk-line); }
+.kk-table th { width: 35%; color: var(--kk-muted); font-weight: 600; }
+.kk-small { color: var(--kk-muted); font-size: .9rem; padding-bottom: 28px !important; }
+@media (max-width: 480px) { .kk-install > * { padding-left: 20px !important; padding-right: 20px !important; } .kk-code, .kk-table { width: calc(100% - 40px); margin-left: 20px; margin-right: 20px; } }

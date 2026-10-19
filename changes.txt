@@ -1,6 +1,12 @@
 Kutubkhanah changelog
 =====================
 
+1.5.1
+- WordPress-style installer: welcome, database details (writes config/database.php, or shows the text to paste),
+  then library title, username, generated password and email, with optional sample books and a
+  "discourage search engines" switch. No JavaScript framework; the old upgrade wizard is gone
+  (Kutubkhanah upgrades itself when files are replaced). Unfinished installs redirect to the installer.
+
 1.5.0
 - Lending log (kk_loan): lend, return, overdue list, per-book history, public "On loan" badge.
 - Ratings (1-5) and reviews with a public switch; stars on book pages and cards.

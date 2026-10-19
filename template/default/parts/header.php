@@ -18,6 +18,7 @@ $request_uri = urlencode(strip_tags(urldecode($_SERVER['REQUEST_URI'])));
     <meta charset="utf-8">
     <title><?php echo $page_title; ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<?php if (!empty($sysconf['kk_discourage_search'])) echo '    <meta name="robots" content="noindex, nofollow">' . "\n"; ?>
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
