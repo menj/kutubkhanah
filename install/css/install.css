@@ -25,6 +25,8 @@ body { margin: 0; background: var(--kk-bg); color: var(--kk-ink); font: 16px/1.6
     display: block; width: 100%; margin-top: 6px; padding: 10px 12px; font: inherit; color: inherit;
     background: transparent; border: 1px solid var(--kk-line); border-radius: 6px;
 }
+.kk-form select { display: block; width: 100%; margin-top: 6px; padding: 10px 12px; font: inherit; color: inherit; background: var(--kk-card); border: 1px solid var(--kk-line); border-radius: 6px; }
+.kk-form [hidden] { display: none; }
 .kk-form input:focus { outline: 2px solid var(--kk-gold); outline-offset: 1px; }
 .kk-check { font-weight: 400 !important; }
 .kk-check input { margin-right: 8px; }

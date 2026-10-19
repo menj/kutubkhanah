@@ -90,8 +90,8 @@ switch ($chart) {
         $stat_query = $dbs->query('SELECT coll_type_name, COUNT(item_id) AS total_items
             FROM `item` AS i
             INNER JOIN mst_coll_type AS ct ON i.coll_type_id = ct.coll_type_id
-            GROUP BY i.coll_type_id
-            HAVING total_items >0
+            GROUP BY i.coll_type_id, ct.coll_type_name
+            HAVING COUNT(item_id) >0
             ORDER BY COUNT(item_id) DESC');
         // set plot data and colors
         while ($data = $stat_query->fetch_row()) {
@@ -111,7 +111,7 @@ switch ($chart) {
         $report_q = $dbs->query('SELECT member_type_name, COUNT(member_id) FROM mst_member_type AS mt
             LEFT JOIN member AS m ON mt.member_type_id=m.member_type_id
             WHERE TO_DAYS(expire_date)>TO_DAYS(\''.date('Y-m-d').'\')
-            GROUP BY m.member_type_id ORDER BY COUNT(member_id) DESC');
+            GROUP BY m.member_type_id, mt.member_type_name ORDER BY COUNT(member_id) DESC');
         while ($data = $report_q->fetch_row()) {
             if($sysconf['chart']['mode'] == 'plot') {
                 $plot_data[] = array($data[0], $data[1]);
@@ -128,7 +128,7 @@ switch ($chart) {
             INNER JOIN item AS i ON l.item_code=i.item_code
             INNER JOIN biblio AS b ON i.biblio_id=b.biblio_id
             INNER JOIN mst_gmd AS gmd ON b.gmd_id=gmd.gmd_id
-            GROUP BY b.gmd_id ORDER BY COUNT(loan_id) DESC');
+            GROUP BY b.gmd_id, gmd.gmd_name ORDER BY COUNT(loan_id) DESC');
         $report_d = '';
         while ($data = $report_q->fetch_row()) {
             if($sysconf['chart']['mode'] == 'plot') {
@@ -145,7 +145,7 @@ switch ($chart) {
         $report_q = $dbs->query('SELECT coll_type_name, COUNT(loan_id) FROM loan AS l
             INNER JOIN item AS i ON l.item_code=i.item_code
             INNER JOIN mst_coll_type AS ct ON i.coll_type_id=ct.coll_type_id
-            GROUP BY i.coll_type_id ORDER BY COUNT(loan_id) DESC');
+            GROUP BY i.coll_type_id, ct.coll_type_name ORDER BY COUNT(loan_id) DESC');
         while ($data = $report_q->fetch_row()) {
             if($sysconf['chart']['mode'] == 'plot') {
                 $plot_data[] = array($data[0], $data[1]);
@@ -160,7 +160,7 @@ switch ($chart) {
         $stat_query = $dbs->query('SELECT gmd_name, COUNT(biblio_id) AS total_titles
             FROM `biblio` AS b
             INNER JOIN mst_gmd AS gmd ON b.gmd_id = gmd.gmd_id
-            GROUP BY b.gmd_id HAVING total_titles>0 ORDER BY COUNT(biblio_id) DESC');
+            GROUP BY b.gmd_id, gmd.gmd_name HAVING COUNT(biblio_id)>0 ORDER BY COUNT(biblio_id) DESC');
         // set plot data and colors
         while ($data = $stat_query->fetch_row()) {
             if($sysconf['chart']['mode'] == 'plot') {

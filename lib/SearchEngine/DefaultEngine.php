@@ -97,7 +97,7 @@ class DefaultEngine extends Contract
         $sql_join .= 'left join mst_topic AS mt ON bt.topic_id=mt.topic_id ';
 
         // location
-        $sql_group = 'group by b.biblio_id';
+        $sql_group = 'group by b.biblio_id, mp.publisher_name, mpl.place_name, mg.gmd_name';
         if (!is_null($this->criteria->location) || !is_null($this->criteria->colltype)
             || !is_null($this->filter->location) || !is_null($this->filter->colltype)
             || !is_null($this->filter->availability)) {

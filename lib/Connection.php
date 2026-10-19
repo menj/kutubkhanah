@@ -25,6 +25,17 @@ class Connection {
 
     private function connect()
     {
+        // Kutubkhanah: SQLite and PostgreSQL go through the dialect translating layer.
+        $portable = \SLiMS\Kutubkhanah\Db\Dialect::normaliseDriver((string)($this->detail['driver'] ?? 'mysql'));
+        if ($portable !== 'mysql') {
+            $this->dsnPrefix = $portable;
+            if ($this->conn === null) {
+                $pdo = new \SLiMS\Kutubkhanah\Db\Pdo($this->detail, $this->driver === 'mysqli');
+                $this->conn = $this->driver === 'mysqli' ? new \SLiMS\Kutubkhanah\Db\Mysqli($pdo) : $pdo;
+            }
+            return;
+        }
+
         if ($this->driver === 'pdo' && $this->conn === null) {       
             $this->conn = new PDO(...$this->buildConnectionArgument());
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, ENVIRONMENT == 'development' ? PDO::ERRMODE_EXCEPTION : PDO::ERRMODE_SILENT);

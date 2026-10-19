@@ -25,6 +25,8 @@ return [
      */
     'nodes' => [
         'SLiMS' => [
+            // mysql (MySQL or MariaDB), pgsql (PostgreSQL) or sqlite (then `database` is the file path)
+            'driver' => '_DB_DRIVER_',
             'host' => '_DB_HOST_',
             'database' => '_DB_NAME_',
             'port' => '_DB_PORT_',

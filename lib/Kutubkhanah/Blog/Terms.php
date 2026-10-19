@@ -135,7 +135,7 @@ class Terms
     public static function setForPost(int $postId, string $tax, array $ids): void
     {
         $db = self::db();
-        $db->prepare('DELETE pt FROM kk_post_term pt JOIN kk_term t ON t.id = pt.term_id WHERE pt.post_id = ? AND t.taxonomy = ?')->execute([$postId, $tax]);
+        $db->prepare('DELETE FROM kk_post_term WHERE post_id = ? AND term_id IN (SELECT id FROM kk_term WHERE taxonomy = ?)')->execute([$postId, $tax]);
         $ins = $db->prepare('INSERT IGNORE INTO kk_post_term (post_id, term_id) SELECT ?, id FROM kk_term WHERE id = ? AND taxonomy = ?');
         foreach (array_unique($ids) as $tid) $ins->execute([$postId, (int)$tid, $tax]);
     }

@@ -93,7 +93,7 @@ class Messages
     public static function counts(): array
     {
         $out = ['contact' => 0, 'access' => 0, 'new' => 0];
-        $q = DB::getInstance()->query("SELECT type, SUM(status = 'new') AS n FROM kk_message GROUP BY type");
+        $q = DB::getInstance()->query("SELECT type, SUM(CASE WHEN status = 'new' THEN 1 ELSE 0 END) AS n FROM kk_message GROUP BY type");
         foreach ($q ? $q->fetchAll(\PDO::FETCH_ASSOC) : [] as $r) {
             $out[$r['type']] = (int)$r['n'];
             $out['new'] += (int)$r['n'];

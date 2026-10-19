@@ -110,8 +110,8 @@ The public design follows the "Private Library CMS" WordPress theme. The barcode
 html5-qrcode 2.3.8 (Apache-2.0, `js/kutubkhanah/vendor/`). Font licences: `fonts/kutubkhanah/README.md`.
 
 ### System requirements
-- PHP 8.4 or later (tested on 8.4) with GD, gettext, intl, mbstring and mysqli
-- MySQL 5.7 or MariaDB 10.3 or later
+- PHP 8.4 or later (tested on 8.4) with GD, gettext, intl and mbstring
+- One database: MySQL 5.7 / MariaDB 10.3 or later (mysqli), PostgreSQL 13 or later (pdo_pgsql), or SQLite 3.35 or later (pdo_sqlite, no server needed)
 
 ### Docker (development)
 Copy `.env.example` to `.env` (HTTP and database ports), then run:

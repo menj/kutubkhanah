@@ -36,26 +36,29 @@ elseif (!in_array($step, ['config', 'welcome'], true)) $step = 'welcome';
 
 // ---- Actions ---------------------------------------------------------------------------------
 if ($post && $step === 'config') {
-    $old = ['name' => trim($_POST['dbname'] ?? ''), 'user' => trim($_POST['uname'] ?? ''), 'pass' => (string)($_POST['pwd'] ?? ''), 'host' => trim($_POST['dbhost'] ?? '') ?: 'localhost'];
-    if ($old['name'] === '' || !preg_match('/^[\w$\-]{1,64}$/u', $old['name'])) $errors[] = 'Enter a database name using letters, numbers, underscore or hyphen.';
-    if ($old['user'] === '') $errors[] = 'Enter the database username.';
+    $driver = array_key_exists($_POST['dbtype'] ?? '', Installer::DRIVERS) ? $_POST['dbtype'] : 'mysql';
+    $old = ['driver' => $driver, 'name' => trim($_POST['dbname'] ?? ''), 'user' => trim($_POST['uname'] ?? ''), 'pass' => (string)($_POST['pwd'] ?? ''),
+            'host' => trim($_POST['dbhost'] ?? '') ?: 'localhost', 'file' => trim($_POST['dbfile'] ?? '')];
+    if (!in_array($driver, Installer::availableDrivers(), true)) $errors[] = 'This PHP has no driver for ' . Installer::DRIVERS[$driver] . '.';
+    if ($driver === 'sqlite') {
+        $target = $old['file'] !== '' ? $old['file'] : 'files/db/kutubkhanah-' . bin2hex(random_bytes(6)) . '.sqlite';
+    } else {
+        $target = $old['name'];
+        if ($target === '' || !preg_match('/^[\w$\-]{1,63}$/u', $target)) $errors[] = 'Enter a database name using letters, numbers, underscore or hyphen.';
+        if ($old['user'] === '') $errors[] = 'Enter the database username.';
+    }
     if (!$errors) {
         try {
-            $c = Installer::connect($old['host'], $old['user'], $old['pass']);
-            if (!$c->select_db($old['name'])) {
-                // Same as the old installer: create the database when the user is allowed to.
-                if (!$c->query('CREATE DATABASE `' . $c->real_escape_string($old['name']) . '` CHARACTER SET utf8mb4 COLLATE utf8mb4_bin')) {
-                    $errors[] = 'Connected to the server, but the database "' . $old['name'] . '" does not exist and could not be created (' . $c->error . ').';
-                }
-            }
+            $c = Installer::connect($driver, $old['host'], $old['user'], $old['pass'], $target, 0, true);
+            if (method_exists($c, 'close')) $c->close();
         } catch (Exception $e) {
-            $errors[] = 'Cannot connect to the database: ' . $e->getMessage() . '. Check the username, password and host.';
+            $errors[] = 'Cannot connect to the database: ' . $e->getMessage() . ($driver === 'sqlite' ? '' : '. Check the username, password and host.');
         }
     }
     if (!$errors) {
-        $port = 3306; $host = $old['host'];
+        $port = 0; $host = $old['host'];
         if (preg_match('/^(.+):(\d+)$/', $host, $m) && !str_contains($host, '[')) { $host = $m[1]; $port = (int)$m[2]; }
-        $source = Installer::configSource($host, $old['name'], $old['user'], $old['pass'], $port);
+        $source = Installer::configSource($driver, $driver === 'sqlite' ? '' : $host, $target, $old['user'], $old['pass'], $port);
         if (Installer::writeConfig($source)) { header('Location: index.php?step=ready'); exit; }
         $_SESSION['kk_config_source'] = $source;
         $step = 'manual';
@@ -111,10 +114,8 @@ $titles = ['welcome' => 'Welcome', 'config' => 'Database details', 'manual' => '
 <?php if ($step === 'welcome'): $reqs = Installer::requirements(); $ok = Installer::requirementsMet(); ?>
     <p>Welcome to Kutubkhanah. Before we get started, we need some information about your database. You will need to know the following:</p>
     <ol>
-        <li>Database name</li>
-        <li>Database username</li>
-        <li>Database password</li>
-        <li>Database host</li>
+        <li>Database type: MySQL or MariaDB, PostgreSQL, or SQLite</li>
+        <li>Database name, username, password and host (not needed for SQLite)</li>
     </ol>
     <p>We will use this to create a <code>config/database.php</code> file. If that does not work for any reason, we will show you the text to paste into it by hand. Most of the time this information comes from your web host. If you do not have it, ask them first.</p>
     <details class="kk-checks" <?= $ok ? '' : 'open' ?>>
@@ -129,20 +130,35 @@ $titles = ['welcome' => 'Welcome', 'config' => 'Database details', 'manual' => '
 
 <?php elseif ($step === 'config'): ?>
     <p>Enter your database connection details below. If you are not sure about these, contact your host.</p>
-    <form method="post" action="index.php?step=config" class="kk-form">
+    <form method="post" action="index.php?step=config" class="kk-form" id="kk-db-form">
         <input type="hidden" name="csrf" value="<?= $h($token) ?>">
-        <label>Database Name
-            <input name="dbname" type="text" value="<?= $h($old['name'] ?? 'kutubkhanah') ?>" required autocomplete="off">
-            <small>The name of the database you want to use with Kutubkhanah. It is created for you if it does not exist and your user may create it.</small></label>
-        <label>Username
-            <input name="uname" type="text" value="<?= $h($old['user'] ?? '') ?>" required autocomplete="off">
-            <small>Your database username.</small></label>
-        <label>Password
-            <input name="pwd" type="password" value="" autocomplete="new-password">
-            <small>Your database password.</small></label>
-        <label>Database Host
-            <input name="dbhost" type="text" value="<?= $h($old['host'] ?? 'localhost') ?>" required autocomplete="off">
-            <small>If <code>localhost</code> does not work, ask your host. A port can be added like <code>127.0.0.1:3307</code>.</small></label>
+        <?php $avail = Installer::availableDrivers(); $cur = $old['driver'] ?? ($avail[0] ?? 'mysql'); ?>
+        <label>Database Type
+            <select name="dbtype" id="kk-dbtype">
+                <?php foreach (Installer::DRIVERS as $k => $label): ?>
+                    <option value="<?= $h($k) ?>" <?= $cur === $k ? 'selected' : '' ?> <?= in_array($k, $avail, true) ? '' : 'disabled' ?>><?= $h($label) ?><?= in_array($k, $avail, true) ? '' : ' (not available on this server)' ?></option>
+                <?php endforeach; ?>
+            </select>
+            <small>MySQL or MariaDB and PostgreSQL run on a database server. SQLite is a single file and needs no server, which suits a small home library.</small></label>
+        <div data-for="mysql pgsql">
+            <label>Database Name
+                <input name="dbname" type="text" value="<?= $h($old['name'] ?? 'kutubkhanah') ?>" autocomplete="off">
+                <small>The database to use. It is created for you if it does not exist and your user may create it.</small></label>
+            <label>Username
+                <input name="uname" type="text" value="<?= $h($old['user'] ?? '') ?>" autocomplete="off">
+                <small>Your database username.</small></label>
+            <label>Password
+                <input name="pwd" type="password" value="" autocomplete="new-password">
+                <small>Your database password.</small></label>
+            <label>Database Host
+                <input name="dbhost" type="text" value="<?= $h($old['host'] ?? 'localhost') ?>" autocomplete="off">
+                <small>If <code>localhost</code> does not work, ask your host. A port can be added like <code>127.0.0.1:5433</code>.</small></label>
+        </div>
+        <div data-for="sqlite">
+            <label>Database File
+                <input name="dbfile" type="text" value="<?= $h($old['file'] ?? '') ?>" placeholder="files/db/kutubkhanah-….sqlite" autocomplete="off">
+                <small>Leave empty to create a file with a random name in <code>files/db</code>. That folder is closed to browsers on Apache; on nginx, deny access to it.</small></label>
+        </div>
         <p class="kk-actions"><button class="kk-button" type="submit">Submit</button></p>
     </form>
 

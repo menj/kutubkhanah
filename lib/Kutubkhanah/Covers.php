@@ -90,8 +90,8 @@ class Covers
     public static function resetTried(): void
     {
         DB::getInstance()->exec(
-            "UPDATE kk_book k JOIN biblio b ON b.biblio_id = k.biblio_id
-             SET k.cover_tried = NULL WHERE b.image IS NULL OR b.image = ''"
+            "UPDATE kk_book SET cover_tried = NULL
+             WHERE biblio_id IN (SELECT biblio_id FROM biblio WHERE image IS NULL OR image = '')"
         );
     }
 }

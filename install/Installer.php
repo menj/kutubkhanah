@@ -12,6 +12,18 @@ class Installer
 {
     const MIN_PHP = '8.4.0';
 
+    public const DRIVERS = ['mysql' => 'MySQL / MariaDB', 'pgsql' => 'PostgreSQL', 'sqlite' => 'SQLite'];
+
+    /** @return string[] driver keys that this PHP can use */
+    public static function availableDrivers(): array
+    {
+        $d = [];
+        if (extension_loaded('mysqli')) $d[] = 'mysql';
+        if (extension_loaded('pdo_pgsql')) $d[] = 'pgsql';
+        if (extension_loaded('pdo_sqlite')) $d[] = 'sqlite';
+        return $d;
+    }
+
     public static function root(): string { return dirname(__DIR__); }
 
     public static function configExists(): bool { return is_file(self::root() . '/config/database.php'); }
@@ -23,7 +35,9 @@ class Installer
     {
         $rows = [];
         $rows[] = ['label' => 'PHP ' . self::MIN_PHP . ' or newer', 'ok' => version_compare(PHP_VERSION, self::MIN_PHP, '>='), 'note' => 'This server runs PHP ' . PHP_VERSION];
-        foreach (['mysqli', 'pdo_mysql', 'gd', 'mbstring', 'curl', 'xml', 'dom', 'json'] as $ext) {
+        $drivers = self::availableDrivers();
+        $rows[] = ['label' => 'A database driver: MySQL, PostgreSQL or SQLite', 'ok' => (bool)$drivers, 'note' => $drivers ? implode(', ', array_map(fn($d) => self::DRIVERS[$d], $drivers)) : 'None found: enable mysqli, pdo_pgsql or pdo_sqlite'];
+        foreach (['gd', 'mbstring', 'curl', 'xml', 'dom', 'json'] as $ext) {
             $rows[] = ['label' => 'PHP extension: ' . $ext, 'ok' => extension_loaded($ext), 'note' => extension_loaded($ext) ? 'Loaded' : 'Missing'];
         }
         foreach (['config', 'files', 'images', 'repository'] as $dir) {
@@ -42,29 +56,89 @@ class Installer
         return true;
     }
 
-    /** Open a connection to the server (and the database when $name is given). @throws \Exception */
-    public static function connect(string $host, string $user, string $pass, ?string $name = null, int $port = 3306): \mysqli
+    /**
+     * Open a connection. For MySQL and PostgreSQL the database is created when missing.
+     * SQLite: $name is the file path (created with its folder if needed).
+     * @throws \Exception
+     */
+    public static function connect(string $driver, string $host, string $user, string $pass, string $name, int $port = 0, bool $create = false): object
     {
         mysqli_report(MYSQLI_REPORT_OFF);
         if (str_contains($host, ':') && !str_contains($host, '[')) {
             [$h, $p] = explode(':', $host, 2);
             if (ctype_digit($p)) { $host = $h; $port = (int)$p; }
         }
-        $db = @new \mysqli($host, $user, $pass, $name ?: null, $port);
-        if ($db->connect_errno) throw new \Exception($db->connect_error);
-        $db->set_charset('utf8mb4');
-        return $db;
+        if ($driver === 'mysql') {
+            $port = $port ?: 3306;
+            $db = @new \mysqli($host, $user, $pass, '', $port);
+            if ($db->connect_errno) throw new \Exception($db->connect_error);
+            $db->set_charset('utf8mb4');
+            if (!$db->select_db($name)) {
+                if (!$create || !$db->query('CREATE DATABASE `' . $db->real_escape_string($name) . '` CHARACTER SET utf8mb4 COLLATE utf8mb4_bin')) {
+                    throw new \Exception('The database "' . $name . '" does not exist and could not be created (' . $db->error . ')');
+                }
+                $db->select_db($name);
+            }
+            return $db;
+        }
+        self::loadPortable();
+        if ($driver === 'sqlite') {
+            $path = self::sqlitePath($name);
+            $dir = dirname($path);
+            if (!is_dir($dir) && !@mkdir($dir, 0775, true)) throw new \Exception('Cannot create the folder ' . $dir);
+            if (!is_writable($dir)) throw new \Exception('The folder ' . $dir . ' is not writable');
+            self::protectDirectory($dir);
+            try { $pdo = new \SLiMS\Kutubkhanah\Db\Pdo(['driver' => 'sqlite', 'database' => $path], true); }
+            catch (\Throwable $e) { throw new \Exception($e->getMessage()); }
+            return new \SLiMS\Kutubkhanah\Db\Mysqli($pdo);
+        }
+        // PostgreSQL
+        $port = $port ?: 5432;
+        try {
+            $node = ['driver' => 'pgsql', 'host' => $host, 'port' => $port, 'username' => $user, 'password' => $pass, 'database' => $name];
+            try {
+                $pdo = new \SLiMS\Kutubkhanah\Db\Pdo($node, true);
+            } catch (\Throwable $e) {
+                if (!$create || !preg_match('/does not exist|3D000/i', $e->getMessage())) throw $e;
+                $admin = new \PDO('pgsql:host=' . $host . ';port=' . $port . ';dbname=postgres', $user, $pass, [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION]);
+                $admin->exec('CREATE DATABASE "' . str_replace('"', '', $name) . '" ENCODING \'UTF8\' TEMPLATE template0');
+                $pdo = new \SLiMS\Kutubkhanah\Db\Pdo($node, true);
+            }
+        } catch (\Throwable $e) {
+            throw new \Exception(preg_replace('/^SQLSTATE\[[^\]]+\]( \[\d+\])?:?\s*/', '', $e->getMessage()));
+        }
+        return new \SLiMS\Kutubkhanah\Db\Mysqli($pdo);
+    }
+
+    public static function loadPortable(): void
+    {
+        foreach (['Dialect', 'Ddl', 'Statement', 'Pdo', 'Result', 'Stmt', 'Mysqli'] as $c) require_once self::root() . '/lib/Kutubkhanah/Db/' . $c . '.php';
+    }
+
+    /** Absolute path for an SQLite file given as typed (relative paths are inside the site folder). */
+    public static function sqlitePath(string $name): string
+    {
+        $name = trim($name);
+        if ($name === '' ) $name = 'files/db/kutubkhanah-' . bin2hex(random_bytes(6)) . '.sqlite';
+        if ($name[0] === '/' || preg_match('#^[A-Za-z]:[\\/]#', $name)) return $name;
+        return self::root() . '/' . ltrim($name, './');
+    }
+
+    /** Keep the database file away from browsers (Apache). Other servers must be told in their config. */
+    public static function protectDirectory(string $dir): void
+    {
+        if (!is_file($dir . '/.htaccess')) @file_put_contents($dir . '/.htaccess', "Require all denied\n<IfModule !mod_authz_core.c>\nOrder allow,deny\nDeny from all\n</IfModule>\n");
+        if (!is_file($dir . '/index.html')) @file_put_contents($dir . '/index.html', '');
     }
 
     /** The contents of config/database.php for these credentials (safely quoted). */
-    public static function configSource(string $host, string $name, string $user, string $pass, int $port = 3306): string
+    public static function configSource(string $driver, string $host, string $name, string $user, string $pass, int $port = 0): string
     {
         $sample = file_get_contents(self::root() . '/config/database.sample.php');
         $q = fn($v) => var_export((string)$v, true);
-        $sample = str_replace(["'_DB_HOST_'", "'_DB_NAME_'", "'_DB_USER_'", "'_DB_PASSWORD_'", "'_DB_PORT_'", "'_STORAGE_ENGINE_'"],
-                              [$q($host), $q($name), $q($user), $q($pass), (string)$port, $q('InnoDB')], $sample);
-        // The sample wraps values in quotes already: normalise any doubled quoting.
-        return $sample;
+        $port = $port ?: ($driver === 'pgsql' ? 5432 : 3306);
+        return str_replace(["'_DB_DRIVER_'", "'_DB_HOST_'", "'_DB_NAME_'", "'_DB_USER_'", "'_DB_PASSWORD_'", "'_DB_PORT_'", "'_STORAGE_ENGINE_'"],
+                           [$q($driver), $q($host), $q($name), $q($user), $q($pass), (string)$port, $q('InnoDB')], $sample);
     }
 
     public static function writeConfig(string $source): bool
@@ -83,24 +157,25 @@ class Installer
     }
 
     /** Has this database got Kutubkhanah tables already? */
-    public static function isInstalled(\mysqli $db): bool
+    public static function isInstalled(object $db): bool
     {
         $r = $db->query("SHOW TABLES LIKE 'biblio'");
         return $r && $r->num_rows > 0;
     }
 
-    public static function dbFromConfig(): \mysqli
+    public static function dbFromConfig(): object
     {
+        self::loadPortable();
         $profile = require self::root() . '/config/database.php';
         $n = $profile['nodes'][$profile['default_profile'] ?? 'SLiMS'] ?? reset($profile['nodes']);
-        return self::connect((string)$n['host'], (string)$n['username'], (string)$n['password'], (string)$n['database'], (int)($n['port'] ?: 3306));
+        return self::connect(\SLiMS\Kutubkhanah\Db\Dialect::normaliseDriver((string)($n['driver'] ?? 'mysql')), (string)($n['host'] ?? ''), (string)($n['username'] ?? ''), (string)($n['password'] ?? ''), (string)($n['database'] ?? ''), (int)($n['port'] ?: 0), false);
     }
 
     /**
      * Create the tables and the first administrator.
      * @return string[] error messages (empty on success)
      */
-    public static function install(\mysqli $db, array $site): array
+    public static function install(object $db, array $site): array
     {
         if (!defined('ACTION')) define('ACTION', 'install');
         if (!defined('INDEX_AUTH')) define('INDEX_AUTH', '1');
@@ -118,6 +193,8 @@ class Installer
             $errors = $slims->query($sample_sql, ['create', 'insert', 'alter', 'update', 'delete', 'truncate', 'drop']);
             if ($errors) return array_map(fn($e) => is_array($e) ? json_encode($e) : (string)$e, $errors);
         }
+
+        if ($db instanceof \SLiMS\Kutubkhanah\Db\Mysqli) $db->pdo()->resetSequences();   // explicit ids were inserted
 
         if (!$slims->updateAdmin($site['username'], $site['password'])) return ['Could not create the administrator: ' . $db->error];
         $email = $db->real_escape_string($site['email']);
@@ -143,6 +220,8 @@ class Installer
             require_once self::root() . '/admin/modules/system/biblio_indexer.inc.php';
             (new \biblio_indexer($db))->createFullIndex();
         }
+
+        if ($db instanceof \SLiMS\Kutubkhanah\Db\Mysqli) $db->pdo()->resetSequences();
 
         $slims->createEnvFile();   // marks the site as installed
         return [];

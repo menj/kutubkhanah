@@ -1,6 +1,13 @@
 Kutubkhanah changelog
 =====================
 
+1.7.0
+- Runs on MySQL/MariaDB, SQLite or PostgreSQL. Pick the database type in the installer; SQLite needs no server.
+- A built-in translation layer (lib/Kutubkhanah/Db) converts the MySQL-style SQL used across the code base
+  for SQLite and PostgreSQL, so existing modules keep working. Verified by installing and crawling
+  1,500 pages and exercising the library features on all three.
+- Not yet portable: database backup export (MySQL only).
+
 1.6.0
 - Blog built into Kutubkhanah (modelled on WordPress): posts and pages, categories, tags, featured image,
   scheduled and draft posts, sticky posts, comments with moderation, media library, RSS feed,

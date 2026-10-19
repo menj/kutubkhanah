@@ -47,7 +47,7 @@ class Schema
         ];
     }
 
-    public static function ensure(\mysqli $db): void
+    public static function ensure(object $db): void
     {
         $cols = '';
         foreach (self::bookColumns() as $name => $def) $cols .= "`$name` $def,\n";
@@ -305,7 +305,7 @@ class Schema
      * Replace the stock pages that earlier installs inherited (about_slims, lisensi_slims, modul_tersedia,
      * opensource) with Kutubkhanah's own, and refresh Library Information and Homepage Info if never edited.
      */
-    private static function rebrandContent(\mysqli $db): void
+    private static function rebrandContent(object $db): void
     {
         $now = date('Y-m-d H:i:s');
         $pages = [

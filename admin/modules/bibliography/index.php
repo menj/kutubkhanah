@@ -549,7 +549,7 @@ if (isset($_POST['saveData']) AND $can_read AND $can_write) {
         // check if this biblio data still have an item
         $_sql_biblio_item_q = sprintf('SELECT b.title, COUNT(item_id) FROM biblio AS b
       LEFT JOIN item AS i ON b.biblio_id=i.biblio_id
-      WHERE b.biblio_id=%d GROUP BY title', $itemID);
+      WHERE b.biblio_id=%d GROUP BY b.biblio_id, title', $itemID);
         $biblio_item_q = $dbs->query($_sql_biblio_item_q);
         $biblio_item_d = $biblio_item_q->fetch_row();
 
