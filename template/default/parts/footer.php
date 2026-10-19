@@ -30,7 +30,10 @@ $kkE = fn($v) => htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
                 <ul class="kk-footer__links">
                     <li><a href="index.php?p=shelf"><?= __('Browse All Books'); ?></a></li>
                     <li><a href="index.php?p=shelf&amp;format=Digital+Archive"><?= __('Digital Archives'); ?></a></li>
+                    <li><a href="index.php?p=series"><?= __('Series'); ?></a></li>
+                    <?php if (!empty($kk['enable_wishlist'])) : ?><li><a href="index.php?p=wishlist"><?= __('Wishlist'); ?></a></li><?php endif; ?>
                     <li><a href="index.php?p=news"><?= __('Resources & Guides'); ?></a></li>
+                    <?php if (!empty($kk['enable_rss'])) : ?><li><a href="index.php?p=kk_rss"><?= __('New additions (RSS)'); ?></a></li><?php endif; ?>
                 </ul>
             </div>
             <div>
@@ -53,7 +56,7 @@ $kkE = fn($v) => htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
         </div>
         <div class="kk-footer__bottom">
             <span>&copy; <?= date('Y'); ?> <?= $kkE($sysconf['library_name']); ?>. <?= __('All rights reserved.'); ?></span>
-            <span><?= __('Powered by'); ?> Kutubkhanah &middot; <?= __('built on'); ?> <a href="https://slims.web.id" target="_blank" rel="noopener">SLiMS</a></span>
+            <span><?= __('Powered by'); ?> <a href="https://github.com/menj/kutubkhanah" target="_blank" rel="noopener">Kutubkhanah</a></span>
         </div>
     </div>
 </footer>
@@ -85,7 +88,7 @@ include LIB . "contents/chat.php"; ?>
 <script src="<?php echo assets(v('js/app.js')); ?>"></script>
 <script src="<?php echo assets(v('js/app_jquery.js')); ?>"></script>
 <?php if (\SLiMS\Kutubkhanah\Settings::get('home_layout') === 'classic') include __DIR__ . "/../assets/js/vegas.js.php"; ?>
-<script src="<?= SWB; ?>js/kutubkhanah/theme.js?v=1.4.0"></script>
+<script src="<?= SWB; ?>js/kutubkhanah/theme.js?v=1.5.0"></script>
 <?php if ($sysconf['chat_system']['enabled'] && $sysconf['chat_system']['opac']) : ?>
     <script>
         $('#show-pchat').click(() => {

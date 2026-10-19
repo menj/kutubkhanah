@@ -1,7 +1,26 @@
-Kutubkhanah 1.4.0
+Kutubkhanah 1.5.0
 =================
 A home library system that brings together three open-source library systems, **SLiMS**, **PMB**
 and **OpenBiblio**, licensed under the GNU GPL v3.
+
+### New in 1.5.0: home-library features from PMB and OpenBiblio
+- **Lending** (Admin > Kutubkhanah > Lending): "lent to Ahmad on 3 March, due back 2 April", what is
+  out and what is overdue, history per book, and an "On loan" badge on the public book page.
+- **Ratings and reviews**: a 1–5 star rating and your own review on Book Details; the review is public
+  only when you tick it, and star ratings can be hidden in Settings > Library.
+- **Wishlist**: books you want, kept out of the catalogue. Add them on the Wishlist page (an ISBN alone is
+  enough) or scan with "Add to: Wishlist". Scanning a wished book into the library marks it as acquired.
+  Optional public Wishlist page.
+- **Series with volume numbers**: series pages (index.php?p=series) list the volumes you own and the gaps;
+  set the number of volumes in Admin > Kutubkhanah > Series. Lookups split "Series ; 3" automatically.
+- **Custom fields per format** (Admin > Kutubkhanah > Custom Fields): text, long text, number, date,
+  yes/no, choice list or link, for chosen formats, public or private. Starter fields: Signed copy,
+  Condition, Provenance, Purchase price (private) and Issue number (periodicals).
+- **"New additions" RSS feed** (index.php?p=kk_rss), linked from every page and the footer.
+- **Sign-in lockout** (Settings > Sign-in): after 5 wrong passwords (adjustable) sign-in is paused for
+  15 minutes for that username and address, on the staff login and the member area.
+- **Password reset emails** are now sent from your own server (System > Mail Setting) instead of an
+  outside mail service that received your email address and reset link.
 
 ### New in 1.4.0: more book databases
 - **Five free sources**, asked at the same time when you scan: Open Library, the Library of Congress,

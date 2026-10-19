@@ -79,21 +79,19 @@ if (isset($_POST['resetPass'])) {
                 // force scheme to https
                 if (Url::getPort() == '443') Url::$forceHttps = true;
 
-                // set hook process variable
-                $hookProcess = Client::withHeaders([
-                    "X-API-KEY" => $salt
-                ])->post('https://slims.web.id/mailer/forgot.php', [
-                    'url' => (string)Url::getSlimsFullUri(),
-                    'salt' => $salt,
-                    'email' => $email,
-                    'name' => $name
-                ]);
-
-                if ($hookProcess->getStatusCode() !== 200 || $hookProcess->getContent() == 'false') {
-                    $error = (isDev() ? ' ' . __('Error') . ' : ' . $hookProcess->getError() : ' ' . __('Error not available'));
-                    throw new Exception(__('Cannot send the email. Please try again.') . $error);
+                // Kutubkhanah: send the reset link from this server (System > Mail Setting),
+                // instead of handing the email address and reset token to an outside mail service.
+                $resetLink = rtrim((string)Url::getSlimsFullUri(), '/') . '/index.php?p=newpass&email=' . rawurlencode($email) . '&salt=' . rawurlencode($salt);
+                $mailBody = sprintf(__('Hello %s,'), htmlspecialchars($name, ENT_QUOTES, 'UTF-8')) . '<br><br>'
+                    . __('Someone asked to reset the password for your account. If it was you, open this link to choose a new password:') . '<br><br>'
+                    . '<a href="' . htmlspecialchars($resetLink, ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars($resetLink, ENT_QUOTES, 'UTF-8') . '</a><br><br>'
+                    . __('If you did not ask for this, you can ignore this email; your password stays the same.');
+                try {
+                    \SLiMS\Mail::to($email, $name)->subject(__('Reset your password') . ' - ' . ($sysconf['library_name'] ?? 'Kutubkhanah'))->message($mailBody)->send();
+                } catch (\Throwable $mailError) {
+                    throw new Exception(__('Cannot send the email. Check System > Mail Setting, then try again.') . (isDev() ? ' ' . $mailError->getMessage() : ''));
                 }
-                    
+
                 flash('resetSuccess', __('<strong>Congratulations! </strong>An instruction has been sent to your email. Please check your inbox.'));
             } catch (Exception $e) {
                 flash('resetFailed', $e->getMessage());

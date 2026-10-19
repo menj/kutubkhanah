@@ -25,6 +25,11 @@ echo kk_head();
       </div>
       <label class="kk-check"><input type="checkbox" id="kk-continuous" checked> <?= __('Keep scanning after each book') ?></label>
       <label class="kk-check"><input type="checkbox" id="kk-copy"> <?= __('Add a copy if the book is already in the library') ?></label>
+      <div class="kk-mode" role="radiogroup" aria-label="<?= __('Add scanned books to') ?>">
+        <span class="kk-note"><?= __('Add to') ?></span>
+        <label class="kk-check kk-check--inline"><input type="radio" name="kk-mode" value="library" checked> <?= __('Library') ?></label>
+        <label class="kk-check kk-check--inline"><input type="radio" name="kk-mode" value="wish"> <?= __('Wishlist') ?></label>
+      </div>
       <form id="kk-manual" class="kk-manual notAJAX" autocomplete="off">
         <label class="kk-sr" for="kk-isbn"><?= __('ISBN') ?></label>
         <input type="text" id="kk-isbn" inputmode="numeric" placeholder="<?= __('Type or paste an ISBN') ?>">

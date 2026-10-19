@@ -25,6 +25,37 @@
 
   function each(sel, fn) { Array.prototype.forEach.call(document.querySelectorAll(sel), fn); }
 
+  /* Reload an admin page inside SLiMS's content pane (or the whole window outside it). */
+  function reloadPane(url) {
+    if (!url) { return; }
+    if (window.jQuery && window.jQuery('#mainContent').length && window.jQuery.fn.simbioAJAX) {
+      window.jQuery('#mainContent').simbioAJAX(url);
+    } else {
+      window.location.href = url;
+    }
+  }
+
+  /* Generic action buttons: data-kk-action, data-id, optional data-confirm, data-values (JSON), data-remove, data-reload. */
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest ? e.target.closest('[data-kk-action]') : null;
+    if (!btn) { return; }
+    e.preventDefault();
+    if (btn.getAttribute('data-confirm') && !window.confirm(btn.getAttribute('data-confirm'))) { return; }
+    var body = {};
+    try { body = JSON.parse(btn.getAttribute('data-values') || '{}'); } catch (err) { body = {}; }
+    body.id = parseInt(btn.getAttribute('data-id') || '0', 10);
+    btn.disabled = true;
+    api(btn.getAttribute('data-kk-action'), body).then(function (res) {
+      btn.disabled = false;
+      if (!res.ok) { window.alert((res.j && res.j.message) || t.error); return; }
+      if (btn.hasAttribute('data-remove')) {
+        var row = btn.closest('li, tr, .kk-panel');
+        if (row) { row.parentNode.removeChild(row); }
+      }
+      if (btn.getAttribute('data-reload')) { reloadPane(btn.getAttribute('data-reload')); }
+    }).catch(function () { btn.disabled = false; window.alert(t.error); });
+  });
+
   /* Settings tabs */
   each('.kk-tabs [role="tab"]', function (tab) {
     tab.addEventListener('click', function () {
@@ -84,6 +115,7 @@
       out.textContent = t.working;
       api(form.getAttribute('data-action'), { id: parseInt(form.getAttribute('data-id'), 10), values: values }).then(function (res) {
         out.textContent = res.ok ? t.saved : ((res.j && res.j.message) || t.error);
+        if (res.ok && form.getAttribute('data-reload')) { reloadPane(form.getAttribute('data-reload')); }
       }).catch(function () { out.textContent = t.error; });
     });
   });

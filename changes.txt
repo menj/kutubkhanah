@@ -1,6 +1,18 @@
 Kutubkhanah changelog
 =====================
 
+1.5.0
+- Lending log (kk_loan): lend, return, overdue list, per-book history, public "On loan" badge.
+- Ratings (1-5) and reviews with a public switch; stars on book pages and cards.
+- Wishlist (kk_wish): admin page, scanner Wishlist mode, ISBN lookup, local covers, acquired on scan,
+  optional public page.
+- Series pages with volume numbers and missing volumes (kk_series); lookups split "Series ; 3".
+- Custom fields per format (kk_field, kk_field_value) with seven field types.
+- "New additions" RSS 2.0 feed.
+- Sign-in lockout for staff and members (kk_login_attempt), Settings > Sign-in.
+- Password reset mail sent locally instead of through an outside mailer.
+- Footer credit reads "Powered by Kutubkhanah".
+
 1.4.0
 - Lookups from Open Library (edition + work), Library of Congress (SRU), Google Books, K10plus (SRU)
   and a custom SRU catalogue, fetched in parallel and merged by trust order.

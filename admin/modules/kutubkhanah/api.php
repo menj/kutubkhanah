@@ -8,10 +8,14 @@
 
 use SLiMS\Kutubkhanah\Books;
 use SLiMS\Kutubkhanah\Covers;
+use SLiMS\Kutubkhanah\Fields;
 use SLiMS\Kutubkhanah\Importer;
 use SLiMS\Kutubkhanah\Messages;
 use SLiMS\Kutubkhanah\Library;
+use SLiMS\Kutubkhanah\Loans;
+use SLiMS\Kutubkhanah\Series;
 use SLiMS\Kutubkhanah\Settings;
+use SLiMS\Kutubkhanah\Wishlist;
 
 require __DIR__ . '/kk.inc.php';
 
@@ -50,7 +54,23 @@ session_write_close();
 try {
     switch ($action) {
         case 'scan':
+            if (($input['mode'] ?? '') === 'wish') kk_json(Wishlist::addFromIsbn((string)($input['isbn'] ?? '')));
             kk_json(Books::createFromIsbn((string)($input['isbn'] ?? ''), !empty($input['add_copy'])));
+
+        case 'wish_save':
+            $v = (array)($input['values'] ?? []);
+            if ((int)($input['id'] ?? 0) === 0 && trim((string)($v['title'] ?? '')) === '' && trim((string)($v['isbn'] ?? '')) !== '') {
+                $r = Wishlist::addFromIsbn((string)$v['isbn']);
+                if ($r['status'] === 'owned') kk_json(['message' => __('That book is already in the library.')], 400);
+                kk_json(['ok' => true] + $r);
+            }
+            kk_json(['ok' => true, 'id' => Wishlist::save((int)($input['id'] ?? 0), $v)]);
+
+        case 'wish_delete':
+            kk_json(['ok' => Wishlist::delete((int)($input['id'] ?? 0))]);
+
+        case 'wish_acquire':
+            kk_json(['ok' => true] + Wishlist::moveToLibrary((int)($input['id'] ?? 0)));
 
         case 'retry':
             kk_json(Books::retry((int)($input['id'] ?? 0)));
@@ -81,6 +101,7 @@ try {
             $id = (int)($input['id'] ?? 0);
             if (!$id || Books::title($id) === '') kk_json(['message' => __('Book not found.')], 404);
             Books::setMeta($id, Books::sanitizeExtras((array)($input['values'] ?? [])));
+            Fields::saveFromInput($id, (array)($input['values'] ?? []));
             Books::reindex($id);
             kk_json(['ok' => true]);
 
@@ -101,6 +122,26 @@ try {
             )->execute([$id, $t('birth_year', 10), $t('death_year', 10), $t('nationality', 120), $t('discipline', 200), $url,
                         mb_substr(trim(strip_tags((string)($v['notes'] ?? ''))), 0, 5000), empty($v['notes_public']) ? 0 : 1]);
             kk_json(['ok' => true]);
+
+        case 'field_save':
+            kk_json(['ok' => true, 'id' => Fields::save((int)($input['id'] ?? 0), (array)($input['values'] ?? []))]);
+
+        case 'field_delete':
+            kk_json(['ok' => Fields::delete((int)($input['id'] ?? 0))]);
+
+        case 'series_save':
+            $v = (array)($input['values'] ?? []);
+            Series::save((string)($v['name'] ?? ''), (int)($v['total'] ?? 0), (string)($v['description'] ?? ''));
+            kk_json(['ok' => true]);
+
+        case 'loan_save':
+            kk_json(['ok' => true, 'id' => Loans::lend((int)($input['id'] ?? 0), (array)($input['values'] ?? []))]);
+
+        case 'loan_return':
+            kk_json(['ok' => Loans::giveBack((int)($input['id'] ?? 0), (string)($input['on'] ?? ''))]);
+
+        case 'loan_delete':
+            kk_json(['ok' => Loans::delete((int)($input['id'] ?? 0))]);
 
         case 'message_status':
             kk_json(['ok' => Messages::setStatus((int)($input['id'] ?? 0), (string)($input['status'] ?? ''))]);

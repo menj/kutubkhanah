@@ -28,7 +28,7 @@ if (empty($_SESSION['kk_token'])) {
     $_SESSION['kk_token'] = bin2hex(random_bytes(16));
 }
 
-const KK_VERSION = '1.4.0';
+const KK_VERSION = '1.5.0';
 
 function kk_e($s): string
 {
@@ -55,6 +55,10 @@ function kk_head(): string
             'looking'    => __('Looking up…'),
             'created'    => __('Added'),
             'from'       => __('from'),
+            'wishadded'  => __('Added to the wishlist'),
+            'wished'     => __('Already on the wishlist'),
+            'owned'      => __('Already in the library'),
+            'fromwish'   => __('Added (was on your wishlist)'),
             'incomplete' => __('Saved, needs details'),
             'duplicate'  => __('Already in the library'),
             'copyadded'  => __('Copy added'),

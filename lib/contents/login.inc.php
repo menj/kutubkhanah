@@ -102,7 +102,14 @@ if (isset($_POST['logMeIn'])) {
     // Empty username or password
     if (empty($username) or empty($password)) redirect()->withMessage('empty_field', __('Please supply valid username and password'))->back();
 
+    // Kutubkhanah: lockout after repeated failures
+    if ($kkLock = \SLiMS\Kutubkhanah\Throttle::lockedFor('admin', $username)) {
+        writeLog('staff', $username, 'Login', 'Login BLOCKED (too many failures) for user ' . $username . ' from address ' . ip());
+        redirect()->withMessage('wrong_password', \SLiMS\Kutubkhanah\Throttle::message($kkLock))->back();
+    }
+
     if ($logon->process('admin')) {
+        \SLiMS\Kutubkhanah\Throttle::clear('admin', $username);
         // remember me
         if (isset($_POST['remember']) && $_POST['remember'] == 1) {
             $_SESSION['remember_me'] = true;
@@ -144,6 +151,7 @@ if (isset($_POST['logMeIn'])) {
     } else {
         // write log
         writeLog('staff', $username, 'Login', 'Login FAILED for user ' . $username . ' from address ' . ip());
+        \SLiMS\Kutubkhanah\Throttle::fail('admin', $username);
 
         // message
         simbio_security::destroySessionCookie($logon->getError(), COOKIES_NAME, SWB . 'admin', false);

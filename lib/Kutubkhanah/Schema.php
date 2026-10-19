@@ -11,7 +11,7 @@ namespace SLiMS\Kutubkhanah;
 
 class Schema
 {
-    const VERSION = '1.4.0';
+    const VERSION = '1.5.0';
 
     /** Columns of kk_book, in order. Missing ones are added on upgrade. */
     private static function bookColumns(): array
@@ -40,6 +40,10 @@ class Schema
             'openlibrary_id'   => "varchar(20) NOT NULL default ''",
             'alt_title'        => "varchar(500) NOT NULL default ''",
             'sources'          => "varchar(120) NOT NULL default ''",
+            // 1.5.0: ratings and reviews
+            'rating'           => "tinyint(1) unsigned NOT NULL default '0'",
+            'review'           => 'text',
+            'review_public'    => "tinyint(1) NOT NULL default '0'",
         ];
     }
 
@@ -91,6 +95,88 @@ class Schema
             PRIMARY KEY (`id`),
             KEY `type_status` (`type`, `status`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+        // 1.5.0: login lockout, lending log, wishlist, series, custom fields.
+        $db->query("CREATE TABLE IF NOT EXISTS `kk_login_attempt` (
+            `id` int(11) NOT NULL auto_increment,
+            `scope` varchar(10) NOT NULL default 'admin',
+            `username` varchar(100) NOT NULL default '',
+            `ip` varchar(45) NOT NULL default '',
+            `attempted_at` datetime NOT NULL,
+            PRIMARY KEY (`id`),
+            KEY `lookup` (`scope`, `username`, `ip`, `attempted_at`),
+            KEY `by_ip` (`scope`, `ip`, `attempted_at`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+        $db->query("CREATE TABLE IF NOT EXISTS `kk_loan` (
+            `id` int(11) NOT NULL auto_increment,
+            `biblio_id` int(11) NOT NULL,
+            `borrower` varchar(150) NOT NULL default '',
+            `contact` varchar(150) NOT NULL default '',
+            `lent_on` date NOT NULL,
+            `due_on` date default NULL,
+            `returned_on` date default NULL,
+            `notes` text,
+            `created_at` datetime NOT NULL,
+            PRIMARY KEY (`id`),
+            KEY `biblio` (`biblio_id`),
+            KEY `open` (`returned_on`, `due_on`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+        $db->query("CREATE TABLE IF NOT EXISTS `kk_wish` (
+            `id` int(11) NOT NULL auto_increment,
+            `isbn` varchar(13) NOT NULL default '',
+            `title` varchar(500) NOT NULL default '',
+            `authors` varchar(255) NOT NULL default '',
+            `publisher` varchar(100) NOT NULL default '',
+            `publish_date` varchar(20) NOT NULL default '',
+            `cover_url` varchar(500) NOT NULL default '',
+            `image` varchar(100) NOT NULL default '',
+            `notes` text,
+            `priority` tinyint(1) NOT NULL default '2',
+            `is_public` tinyint(1) NOT NULL default '1',
+            `added` date NOT NULL,
+            `acquired_biblio_id` int(11) default NULL,
+            PRIMARY KEY (`id`),
+            KEY `isbn` (`isbn`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+        $db->query("CREATE TABLE IF NOT EXISTS `kk_series` (
+            `name` varchar(200) NOT NULL,
+            `total` smallint(5) unsigned NOT NULL default '0',
+            `description` text,
+            PRIMARY KEY (`name`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+        $hadFields = ($t = $db->query("SHOW TABLES LIKE 'kk_field'")) && $t->num_rows > 0;
+        $db->query("CREATE TABLE IF NOT EXISTS `kk_field` (
+            `id` int(11) NOT NULL auto_increment,
+            `label` varchar(100) NOT NULL default '',
+            `type` varchar(10) NOT NULL default 'text',
+            `options` text,
+            `formats` varchar(255) NOT NULL default '',
+            `is_public` tinyint(1) NOT NULL default '1',
+            `sort` smallint(5) NOT NULL default '0',
+            PRIMARY KEY (`id`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+        $db->query("CREATE TABLE IF NOT EXISTS `kk_field_value` (
+            `biblio_id` int(11) NOT NULL,
+            `field_id` int(11) NOT NULL,
+            `value` text,
+            PRIMARY KEY (`biblio_id`, `field_id`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+        // Starter custom fields, only when the table is new (deleting them later is respected).
+        if (!$hadFields) {
+            $books = "Hardcover,Paperback";
+            $db->query("INSERT INTO kk_field (label, type, options, formats, is_public, sort) VALUES
+                ('Signed copy', 'bool', '', '$books', 1, 1),
+                ('Condition', 'select', 'Fine\nVery good\nGood\nFair\nPoor', '$books', 1, 2),
+                ('Provenance', 'text', '', '$books', 1, 3),
+                ('Purchase price', 'text', '', '', 0, 4),
+                ('Issue number', 'text', '', 'Periodical', 1, 5)");
+        }
 
         // Admin module entry and access for the administrator group.
         $q = $db->query("SELECT module_id FROM mst_module WHERE module_path = 'kutubkhanah' LIMIT 1");

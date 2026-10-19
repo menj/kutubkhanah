@@ -101,3 +101,11 @@
 
 /* Typewriter face for ISBNs in the scanner and review lists */
 .kk-isbn, .kk-manual input { font-family: var(--kk-font-typewriter, ui-monospace, monospace); letter-spacing: .03em; }
+
+/* 1.5.0 */
+.kk-bad { color: var(--kk-bad); }
+.kk-list__row.is-overdue { background: color-mix(in srgb, var(--kk-bad) 6%, transparent); }
+.kk-list__body > span { display: block; }
+.kk-subhead { margin: 18px 0 4px; padding-top: 14px; border-top: 1px solid var(--kk-line); font-size: 15px; }
+.kk-list--compact .kk-list__row { padding: 6px 0; }
+.kk-mode { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; margin-top: 8px; }

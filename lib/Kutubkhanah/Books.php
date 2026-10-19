@@ -167,6 +167,7 @@ class Books
             'tags' => '', 'digital_link' => '', 'oclc' => '', 'google_books_id' => '', 'goodreads_id' => '',
             'reading_progress' => 0, 'notes' => '', 'notes_public' => 0,
             'lcc' => '', 'lccn' => '', 'openlibrary_id' => '', 'alt_title' => '', 'sources' => '',
+            'rating' => 0, 'review' => '', 'review_public' => 0,
         ];
     }
 
@@ -174,7 +175,7 @@ class Books
     {
         $allowed = ['needs_details', 'reading_status', 'cover_url', 'cover_tried', 'source', 'added',
             'format', 'volume', 'tags', 'digital_link', 'oclc', 'google_books_id', 'goodreads_id',
-            'reading_progress', 'notes', 'notes_public', 'lcc', 'lccn', 'openlibrary_id', 'alt_title', 'sources'];
+            'reading_progress', 'notes', 'notes_public', 'lcc', 'lccn', 'openlibrary_id', 'alt_title', 'sources', 'rating', 'review', 'review_public'];
         $kv = array_intersect_key($kv, array_flip($allowed));
         if (!$kv) return;
         $cols = array_keys($kv);
@@ -205,6 +206,9 @@ class Books
             'reading_progress' => max(0, min(100, (int)($in['reading_progress'] ?? 0))),
             'notes'            => mb_substr(trim(strip_tags((string)($in['notes'] ?? ''))), 0, 5000),
             'notes_public'     => empty($in['notes_public']) ? 0 : 1,
+            'rating'           => max(0, min(5, (int)($in['rating'] ?? 0))),
+            'review'           => mb_substr(trim(strip_tags((string)($in['review'] ?? ''))), 0, 10000),
+            'review_public'    => empty($in['review_public']) ? 0 : 1,
         ];
     }
 
@@ -224,6 +228,7 @@ class Books
         $year = preg_match('/(\d{4})/', (string)($d['publish_date'] ?? ''), $m) ? $m[1] : '';
         $isbn = (string)($d['isbn13'] ?? '') !== '' ? $d['isbn13'] : (string)($d['isbn10'] ?? '');
         $needs = !empty($d['needs_details']) ? 1 : 0;
+        [$seriesName, $seriesVol] = Series::split((string)($d['series'] ?? ''));
 
         $db = self::db();
         $db->prepare(
@@ -239,7 +244,7 @@ class Books
             $publisherId,
             $year,
             self::collation($d),
-            mb_substr((string)($d['series'] ?? ''), 0, 200),
+            mb_substr($seriesName, 0, 200),
             self::languageId((string)($d['language'] ?? '')) ?: (Settings::get('default_language') ?: 'en'),
             self::placeId((string)($d['place'] ?? '')),
             mb_substr((string)($d['dewey'] ?? ''), 0, 40),
@@ -260,7 +265,7 @@ class Books
             'cover_url'      => (string)($d['cover_url'] ?? ''),
             'source'         => (string)($d['source'] ?? ''),
             'added'          => substr($added, 0, 10),
-        ]));
+        ] + ($seriesVol !== '' ? ['volume' => $seriesVol] : [])));
         return $id;
     }
 
@@ -348,10 +353,12 @@ class Books
             'needs_details' => !$found,
             'copies'        => 1,
         ]));
+        $fromWish = Wishlist::acquired($isbn, $id);
         if (Settings::get('download_covers')) Covers::fetch($id);
         self::reindex($id);
 
         return [
+            'from_wishlist' => $fromWish,
             'status'  => $found ? 'created' : 'incomplete',
             'id'      => $id,
             'isbn'    => $isbn,
@@ -383,7 +390,11 @@ class Books
         if (trim((string)$b['publish_year']) === '' && preg_match('/(\d{4})/', $data['publish_date'], $m)) { $set[] = 'publish_year = ?'; $args[] = $m[1]; }
         if (trim((string)$b['collation']) === '' && ($c = self::collation($data)) !== '') { $set[] = 'collation = ?'; $args[] = $c; }
         if (trim((string)$b['edition']) === '' && $data['edition'] !== '') { $set[] = 'edition = ?'; $args[] = mb_substr($data['edition'], 0, 50); }
-        if (trim((string)$b['series_title']) === '' && $data['series'] !== '') { $set[] = 'series_title = ?'; $args[] = mb_substr($data['series'], 0, 200); }
+        $seriesVol = '';
+        if (trim((string)$b['series_title']) === '' && $data['series'] !== '') {
+            [$sn, $seriesVol] = Series::split($data['series']);
+            $set[] = 'series_title = ?'; $args[] = mb_substr($sn, 0, 200);
+        }
         if (trim((string)$b['classification']) === '' && $data['dewey'] !== '') { $set[] = 'classification = ?'; $args[] = mb_substr($data['dewey'], 0, 40); }
         if (empty($b['publish_place_id']) && $data['place'] !== '') { $set[] = 'publish_place_id = ?'; $args[] = self::placeId($data['place']); }
         if ($data['language'] !== '' && in_array((string)$b['language_id'], ['', (string)(Settings::get('default_language') ?: 'en')], true)
@@ -402,7 +413,9 @@ class Books
         $hasTopics->execute([$id]);
         if (!$hasTopics->fetchColumn() && $data['subjects']) self::attachSubjects($id, $data['subjects']);
 
-        $meta = array_merge(self::lookupMeta($data, self::meta($id)), ['needs_details' => 0, 'cover_tried' => null, 'source' => $data['source']]);
+        $current = self::meta($id);
+        $meta = array_merge(self::lookupMeta($data, $current), ['needs_details' => 0, 'cover_tried' => null, 'source' => $data['source']]);
+        if ($seriesVol !== '' && trim((string)$current['volume']) === '') $meta['volume'] = $seriesVol;
         if ($data['cover_url'] !== '') $meta['cover_url'] = $data['cover_url'];
         self::setMeta($id, $meta);
         if (empty($b['image']) && Settings::get('download_covers')) Covers::fetch($id);

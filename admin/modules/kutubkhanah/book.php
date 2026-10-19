@@ -10,6 +10,8 @@
 
 use SLiMS\DB;
 use SLiMS\Kutubkhanah\Books;
+use SLiMS\Kutubkhanah\Fields;
+use SLiMS\Kutubkhanah\Loans;
 use SLiMS\Kutubkhanah\Settings;
 
 require __DIR__ . '/kk.inc.php';
@@ -90,7 +92,7 @@ echo kk_head();
           <?php foreach (Settings::formats() as $f): ?><option value="<?= kk_e($f) ?>"<?= $m['format'] === $f ? ' selected' : '' ?>><?= kk_e($f) ?></option><?php endforeach; ?>
         </select><p class="kk-note"><?= __('"Digital Archive" books appear under Digital Archives on the public site.') ?></p></div></div>
       <?php
-      $text('volume', __('Volume'));
+      $text('volume', __('Volume in series'), __('The number of this book in its series (set the series name in Bibliography > Series Title). Used for the series page.'));
       $text('tags', __('Tags'), __('Comma separated, e.g. Signed Copy, First Edition, Rare.'));
       $text('digital_link', __('Digital copy link'), __('A full https:// address. Shows a "View digital copy" button.'), 'url');
       $text('oclc', __('OCLC / WorldCat number'));
@@ -104,6 +106,25 @@ echo kk_head();
       <div class="kk-row"><div class="kk-row__label"><label for="kk-f-reading_progress"><?= __('Reading progress') ?></label></div><div class="kk-row__field">
         <input class="kk-input kk-input--short" type="number" min="0" max="100" id="kk-f-reading_progress" name="reading_progress" value="<?= (int)$m['reading_progress'] ?>"> %
         <p class="kk-note"><?= __('Shown as a progress bar while the status is "Reading".') ?></p></div></div>
+      <div class="kk-row"><div class="kk-row__label"><label for="kk-f-rating"><?= __('Your rating') ?></label></div><div class="kk-row__field">
+        <select class="kk-input kk-input--mid" id="kk-f-rating" name="rating">
+          <?php foreach ([0 => __('— Not rated —'), 5 => '★★★★★', 4 => '★★★★☆', 3 => '★★★☆☆', 2 => '★★☆☆☆', 1 => '★☆☆☆☆'] as $v => $l): ?>
+            <option value="<?= $v ?>"<?= (int)$m['rating'] === $v ? ' selected' : '' ?>><?= kk_e($l) ?></option>
+          <?php endforeach; ?>
+        </select></div></div>
+      <div class="kk-row"><div class="kk-row__label"><label for="kk-f-review"><?= __('Your review') ?></label></div><div class="kk-row__field">
+        <textarea class="kk-input kk-textarea" id="kk-f-review" name="review" rows="5" dir="auto"><?= kk_e($m['review']) ?></textarea>
+        <label class="kk-check"><input type="checkbox" name="review_public" value="1"<?= !empty($m['review_public']) ? ' checked' : '' ?>> <?= __('Show this review to visitors') ?></label></div></div>
+      <?php
+      $cfs = Fields::forFormat((string)$m['format']);
+      if ($cfs):
+          $cvals = Fields::values($id); ?>
+        <h3 class="kk-subhead"><?= __('Custom fields') ?></h3>
+        <?php foreach ($cfs as $cf): ?>
+          <div class="kk-row"><div class="kk-row__label"><label for="kk-cf-<?= (int)$cf['id'] ?>"><?= kk_e($cf['label']) ?></label></div><div class="kk-row__field">
+            <?= Fields::input($cf, (string)($cvals[$cf['id']] ?? '')) ?><?php if (empty($cf['is_public'])): ?><p class="kk-note"><?= __('Private: not shown to visitors.') ?></p><?php endif; ?></div></div>
+        <?php endforeach; ?>
+      <?php endif; ?>
       <div class="kk-row"><div class="kk-row__label"><label for="kk-f-notes"><?= __("Curator's notes") ?></label></div><div class="kk-row__field">
         <textarea class="kk-input kk-textarea" id="kk-f-notes" name="notes" rows="5"><?= kk_e($m['notes']) ?></textarea>
         <label class="kk-check"><input type="checkbox" name="notes_public" value="1"<?= !empty($m['notes_public']) ? ' checked' : '' ?>> <?= __('Show these notes to visitors') ?></label></div></div>
@@ -111,6 +132,26 @@ echo kk_head();
         <a class="kk-btn" href="<?= MWB ?>kutubkhanah/book.php"><?= __('Find another book') ?></a>
         <span class="kk-note kk-saved" aria-live="polite"></span></div>
     </form>
+
+    <?php $loans = Loans::forBook($id); $cur = Loans::current($id); ?>
+    <div class="kk-panel">
+      <h3><?= __('Lending') ?></h3>
+      <?php if ($cur): ?>
+        <p><?= sprintf(__('Out with %s since %s.'), '<strong>' . kk_e($cur['borrower']) . '</strong>', kk_e($cur['lent_on'])) ?>
+          <?= $cur['due_on'] ? kk_e(sprintf(__('Due back %s.'), $cur['due_on'])) : '' ?></p>
+        <button type="button" class="kk-btn kk-btn--primary" data-kk-action="loan_return" data-id="<?= (int)$cur['id'] ?>" data-reload="<?= kk_e(MWB . 'kutubkhanah/book.php?id=' . $id) ?>"><?= __('Mark as returned') ?></button>
+      <?php else: ?>
+        <p class="kk-note"><?= __('This book is at home.') ?></p>
+        <a class="kk-btn" href="<?= MWB ?>kutubkhanah/loans.php?id=<?= $id ?>"><?= __('Lend this book') ?></a>
+      <?php endif; ?>
+      <?php if (count($loans) > ($cur ? 1 : 0)): ?>
+        <ul class="kk-list kk-list--compact">
+          <?php foreach ($loans as $l): if ($cur && (int)$l['id'] === (int)$cur['id']) continue; ?>
+            <li class="kk-list__row"><span class="kk-list__body"><?= kk_e(sprintf(__('%1$s: %2$s to %3$s'), $l['borrower'], $l['lent_on'], $l['returned_on'] ?: '…')) ?></span></li>
+          <?php endforeach; ?>
+        </ul>
+      <?php endif; ?>
+    </div>
   <?php endif; ?>
 </div>
 <?= kk_script('admin.js') ?>

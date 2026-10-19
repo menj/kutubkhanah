@@ -28,6 +28,10 @@ class Settings
             'enable_access'   => 1,
             'notify_email'    => '',
             'show_reading'    => 1,
+            'show_ratings'    => 1,
+            'enable_wishlist' => 1,
+            'enable_rss'      => 1,
+            'loan_days'       => 30,
             // General (shelf)
             'shelf_title'     => '',
             'show_authors'    => 1,
@@ -61,6 +65,10 @@ class Settings
             'sru_custom_index' => 'isbn',
             'google_key'      => '',
             'download_covers' => 1,
+            // Sign-in
+            'lockout_enable'   => 1,
+            'lockout_attempts' => 5,
+            'lockout_minutes'  => 15,
         ];
     }
 
@@ -72,6 +80,7 @@ class Settings
                 'tagline' => 'text', 'mission' => 'longtext', 'footer_desc' => 'longtext', 'location' => 'text',
                 'home_layout' => 'layout', 'recent_count' => 'int:0:30',
                 'enable_contact' => 'bool', 'enable_access' => 'bool', 'notify_email' => 'email', 'show_reading' => 'bool',
+                'show_ratings' => 'bool', 'enable_wishlist' => 'bool', 'enable_rss' => 'bool', 'loan_days' => 'int:0:365',
             ],
             'general' => [
                 'shelf_title' => 'text', 'show_authors' => 'bool', 'group_letters' => 'bool',
@@ -88,6 +97,9 @@ class Settings
                 'src_openlibrary' => 'bool', 'src_loc' => 'bool', 'src_google' => 'bool', 'src_k10plus' => 'bool',
                 'src_custom' => 'bool', 'sru_custom_url' => 'url', 'sru_custom_index' => 'sruindex',
                 'google_key' => 'text', 'download_covers' => 'bool',
+            ],
+            'security' => [
+                'lockout_enable' => 'bool', 'lockout_attempts' => 'int:3:20', 'lockout_minutes' => 'int:1:1440',
             ],
         ];
     }

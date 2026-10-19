@@ -111,10 +111,17 @@ if (isset($_POST['logMeIn']) && !$is_member_login) {
     }
     # <!-- Captcha form processing - end -->
 
+    // Kutubkhanah: lockout after repeated failures
+    if ($kkLock = \SLiMS\Kutubkhanah\Throttle::lockedFor('member', $username)) {
+        writeLog('member', $username, 'Login', 'Login BLOCKED (too many failures) for member ' . $username . ' from address ' . ip());
+        redirect()->withMessage('wrong_password', \SLiMS\Kutubkhanah\Throttle::message($kkLock))->to('?p=member');
+    }
+
     // regenerate session ID to prevent session hijacking
     session_regenerate_id(true);
 
     if ($logon->process('member')) {
+        \SLiMS\Kutubkhanah\Throttle::clear('member', $username);
         // write log
         writeLog('member', $username, 'Login', sprintf(__('Login success for member %s from address %s'),$username,ip()));
         if (isset($_GET['destination']) && Url::isValid($_GET['destination']) && Url::isSelf($_GET['destination'])) {
@@ -126,6 +133,7 @@ if (isset($_POST['logMeIn']) && !$is_member_login) {
     } else {
         // write log
         writeLog('member', $username, 'Login', sprintf(__('Login FAILED for member %s from address %s'),$username,ip()));
+        \SLiMS\Kutubkhanah\Throttle::fail('member', $username);
         // message
         //simbio_security::destroySessionCookie($msg, MEMBER_COOKIES_NAME, SWB, false);
         CSRF::generateToken();

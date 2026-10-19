@@ -20,7 +20,7 @@ class Library
         return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8');
     }
 
-    private static function rows(string $sql, array $args = []): array
+    public static function rows(string $sql, array $args = []): array
     {
         $st = DB::getInstance()->prepare($sql);
         if (!$st || !$st->execute($args)) return [];
@@ -53,6 +53,7 @@ class Library
         return self::rows(
             "SELECT b.biblio_id, b.title, b.image, b.publish_year, b.call_number,
                     COALESCE(k.format, '') AS format, COALESCE(k.reading_status, '') AS reading_status,
+                    COALESCE(k.volume, '') AS volume, COALESCE(k.rating, 0) AS rating,
                     (SELECT GROUP_CONCAT(a.author_name ORDER BY ba.level, a.author_name SEPARATOR ', ')
                        FROM biblio_author ba JOIN mst_author a ON a.author_id = ba.author_id WHERE ba.biblio_id = b.biblio_id) AS authors
              FROM biblio b LEFT JOIN kk_book k ON k.biblio_id = b.biblio_id
@@ -89,6 +90,16 @@ class Library
         return '<span class="kk-badge kk-badge--' . self::e($status) . '">' . self::e($labels[$status]) . '</span>';
     }
 
+    /** Star rating (1–5) for visitors, when ratings are shown. */
+    public static function stars(int $rating, bool $force = false): string
+    {
+        if ($rating < 1 || (!$force && !Settings::get('show_ratings'))) return '';
+        $rating = min(5, $rating);
+        return '<span class="kk-stars" role="img" aria-label="' . self::e(sprintf(__('Rated %d out of 5'), $rating)) . '">'
+            . '<span class="kk-stars__on" aria-hidden="true">' . str_repeat('★', $rating) . '</span>'
+            . '<span class="kk-stars__off" aria-hidden="true">' . str_repeat('★', 5 - $rating) . '</span></span>';
+    }
+
     public static function cover(string $image, int $width = 300): string
     {
         return SWB . 'lib/minigalnano/createthumb.php?filename=images/docs/' . rawurlencode($image) . '&amp;width=' . $width;
@@ -112,7 +123,10 @@ class Library
         if (!empty($b['call_number'])) $out .= '<span class="kk-book__call">' . $e($b['call_number']) . '</span>';
         $out .= '<h3 class="kk-book__title"><a href="' . $url . '">' . $e($b['title']) . '</a></h3>';
         if (!empty($b['authors'])) $out .= '<p class="kk-book__author">' . $e($b['authors']) . '</p>';
-        $badge = self::readingBadge((string)$b['reading_status']);
+        $badge = self::readingBadge((string)$b['reading_status']) . self::stars((int)($b['rating'] ?? 0));
+        if (!empty($b['show_volume']) && ($b['volume'] ?? '') !== '') {
+            $out .= '<span class="kk-book__vol">' . $e(sprintf(__('Volume %s'), $b['volume'])) . '</span>';
+        }
         if (!empty($b['publish_year']) || $badge) {
             $out .= '<div class="kk-book__meta"><span class="kk-book__year">' . $e($b['publish_year']) . '</span>' . $badge . '</div>';
         }

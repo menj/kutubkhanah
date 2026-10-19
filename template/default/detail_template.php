@@ -53,7 +53,15 @@ $setBookmarked = trim(isset($_SESSION['bookmark'][$biblio_id]) ? 'bg-success tex
                 <dt class="col-sm-3"><?= __('Series Title'); ?></dt>
                 <dd class="col-sm-9">
                     <div itemprop="alternativeHeadline"
-                         property="alternativeHeadline"><?php echo ($series_title) ? $series_title : '-'; ?></div>
+                         property="alternativeHeadline"><?php
+                        if ($series_title) {
+                            $kkSeries = trim(html_entity_decode(strip_tags($series_title), ENT_QUOTES, 'UTF-8'));
+                            $kkVol = \SLiMS\Kutubkhanah\Books::meta((int)$biblio_id)['volume'] ?? '';
+                            echo '<a href="' . htmlspecialchars(\SLiMS\Kutubkhanah\Series::url($kkSeries), ENT_QUOTES) . '">' . $series_title . '</a>'
+                                . ($kkVol !== '' ? ' · ' . htmlspecialchars(sprintf(__('Volume %s'), $kkVol), ENT_QUOTES) : '');
+                        } else {
+                            echo '-';
+                        } ?></div>
                 </dd>
 
                 <dt class="col-sm-3"><?= __('Call Number'); ?></dt>

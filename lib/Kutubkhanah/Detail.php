@@ -64,6 +64,9 @@ class Detail
         $badges = '';
         if ($m['format'] !== '') $badges .= '<span class="kk-badge kk-badge--navy">' . $e($m['format']) . '</span>';
         $badges .= Library::readingBadge((string)$m['reading_status']);
+        if ($loan = Loans::current($id)) {
+            $badges .= '<span class="kk-badge kk-badge--loan">' . $e($loan['due_on'] ? sprintf(__('On loan · due back %s'), date('j M Y', strtotime($loan['due_on']))) : __('On loan')) . '</span>';
+        }
         if ($m['volume'] !== '') $badges .= '<span class="kk-badge kk-badge--muted">' . $e(__('Vol.') . ' ' . $m['volume']) . '</span>';
         if ($badges) $out .= '<div class="kk-detail-extra__badges">' . $badges . '</div>';
 
@@ -88,6 +91,24 @@ class Detail
                 $out .= '<span class="kk-badge kk-badge--muted">#' . $e($t) . '</span>';
             }
             $out .= '</div>';
+        }
+
+        if ($cf = Fields::publicFor($id)) {
+            $out .= '<dl class="kk-fields">';
+            foreach ($cf as $row) {
+                $val = $row['type'] === 'url'
+                    ? '<a href="' . $e($row['value']) . '" target="_blank" rel="noopener noreferrer">' . $e(parse_url($row['value'], PHP_URL_HOST) ?: $row['value']) . '</a>'
+                    : nl2br($e($row['value']));
+                $out .= '<div class="kk-fields__row"><dt>' . $e($row['label']) . '</dt><dd dir="auto">' . $val . '</dd></div>';
+            }
+            $out .= '</dl>';
+        }
+
+        $stars = Library::stars((int)($m['rating'] ?? 0));
+        $review = !empty($m['review_public']) ? trim((string)($m['review'] ?? '')) : '';
+        if ($stars || $review !== '') {
+            $out .= '<div class="kk-review"><p class="kk-review__label">' . __("Owner's review") . ' ' . $stars . '</p>'
+                . ($review !== '' ? '<div class="kk-review__body" dir="auto">' . nl2br($e($review)) . '</div>' : '') . '</div>';
         }
 
         if (trim((string)$m['notes']) !== '' && !empty($m['notes_public'])) {

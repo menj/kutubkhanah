@@ -11,7 +11,7 @@ if (!$kk_can_write) kk_deny();
 
 $s = Settings::all();
 $d = Settings::defaults();
-$tabs = ['library' => __('Library'), 'general' => __('Shelf'), 'display' => __('Display'), 'lookup' => __('Lookup')];
+$tabs = ['library' => __('Library'), 'general' => __('Shelf'), 'display' => __('Display'), 'lookup' => __('Lookup'), 'security' => __('Sign-in')];
 
 $languages = [];
 $lq = $dbs->query('SELECT language_id, language_name FROM mst_language ORDER BY language_name');
@@ -63,6 +63,11 @@ echo kk_head();
     kk_row(__('Notify email'), '<input type="email" name="notify_email" value="' . kk_e($s['notify_email']) . '" class="kk-input">',
         __('Optional. Also email new submissions here. Needs mail set up in System > Mail Setting.'));
     kk_row(__('Reading status'), kk_check('show_reading', __('Show Unread / Reading / Read and reading progress to visitors'), $s));
+    kk_row(__('Ratings'), kk_check('show_ratings', __('Show your star ratings to visitors (reviews are public only when you tick it on the book)'), $s));
+    kk_row(__('Wishlist'), kk_check('enable_wishlist', __('Show the public Wishlist page (only wishes marked public)'), $s));
+    kk_row(__('RSS feed'), kk_check('enable_rss', __('Publish a "New additions" RSS feed'), $s));
+    kk_row(__('Lending period'), '<input type="number" min="0" max="365" name="loan_days" value="' . (int)$s['loan_days'] . '" class="kk-input kk-input--short"> ' . __('days'),
+        __('Default due date when you lend a book. 0 means no due date.'));
     ?>
     <div class="kk-actions"><button type="submit" class="kk-btn kk-btn--primary"><?= __('Save changes') ?></button><span class="kk-note kk-saved" aria-live="polite"></span></div>
   </form>
@@ -106,6 +111,17 @@ echo kk_head();
         $html .= '</div><button type="button" class="kk-link kk-reset" data-mode="' . $mode . '">' . __('Reset to default') . '</button>';
         kk_row($title, $html);
     }
+    ?>
+    <div class="kk-actions"><button type="submit" class="kk-btn kk-btn--primary"><?= __('Save changes') ?></button><span class="kk-note kk-saved" aria-live="polite"></span></div>
+  </form>
+
+  <!-- Sign-in security (lockout from OpenBiblio) -->
+  <form class="kk-panel kk-settings notAJAX" id="kk-pane-security" role="tabpanel" aria-labelledby="kk-tab-security" data-tab="security" hidden>
+    <?php
+    kk_row(__('Lockout'), kk_check('lockout_enable', __('Lock sign-in after repeated wrong passwords'), $s),
+        __('Applies to the staff login and the member area. Wrong attempts are counted per username and address; an address that tries many usernames is locked too.'));
+    kk_row(__('Attempts allowed'), '<input type="number" min="3" max="20" name="lockout_attempts" value="' . (int)$s['lockout_attempts'] . '" class="kk-input kk-input--short">');
+    kk_row(__('Lockout time'), '<input type="number" min="1" max="1440" name="lockout_minutes" value="' . (int)$s['lockout_minutes'] . '" class="kk-input kk-input--short"> ' . __('minutes'));
     ?>
     <div class="kk-actions"><button type="submit" class="kk-btn kk-btn--primary"><?= __('Save changes') ?></button><span class="kk-note kk-saved" aria-live="polite"></span></div>
   </form>

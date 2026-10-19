@@ -76,20 +76,31 @@
     }
   }
 
+  function modeValue() {
+    var r = document.querySelector('input[name="kk-mode"]:checked');
+    return r ? r.value : 'library';
+  }
+
   function send(isbn) {
     var li = addItem(isbn);
     chain = chain.then(function () {
       return fetch(cfg.api + '?action=scan', {
         method: 'POST', credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json', 'X-KK-Token': cfg.token },
-        body: JSON.stringify({ isbn: isbn, add_copy: !!elCopy.checked })
+        body: JSON.stringify({ isbn: isbn, add_copy: !!elCopy.checked, mode: modeValue() })
       }).then(function (r) {
         return r.json().then(function (j) { return { ok: r.ok, j: j }; });
       }).then(function (res) {
         var j = res.j || {};
         if (!res.ok) { fill(li, 'error', isbn, j.message || t.failed); return; }
+        if (j.status === 'wish_added') {
+          fill(li, 'created', j.title, t.wishadded + (j.authors ? ' · ' + j.authors : ''), '', 0);
+          return;
+        }
+        if (j.status === 'wished') { fill(li, 'duplicate', j.title, t.wished, '', 0); return; }
+        if (j.status === 'owned') { fill(li, 'duplicate', j.title, t.owned, '', j.id); return; }
         if (j.status === 'created') {
-          fill(li, 'created', j.title, t.created + (j.authors ? ' · ' + j.authors : '') + (j.sources ? ' · ' + t.from + ' ' + j.sources : ''), j.cover, j.id);
+          fill(li, 'created', j.title, (j.from_wishlist ? t.fromwish : t.created) + (j.authors ? ' · ' + j.authors : '') + (j.sources ? ' · ' + t.from + ' ' + j.sources : ''), j.cover, j.id);
         } else if (j.status === 'incomplete') {
           fill(li, 'incomplete', j.isbn, t.incomplete, j.cover, j.id);
         } else {

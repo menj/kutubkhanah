@@ -81,13 +81,14 @@ $request_uri = urlencode(strip_tags(urldecode($_SERVER['REQUEST_URI'])));
     <link rel="stylesheet" href="<?php echo assets('css/style.css?v=' . date('Ymd-his')); ?>">
     <!-- // Kutubkhanah theme (navy and gold, from the Private Library design); colours from Kutubkhanah > Settings > Display -->
     <link rel="preload" href="<?php echo SWB; ?>fonts/kutubkhanah/EBGaramond-Variable.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="<?php echo SWB; ?>css/kutubkhanah/fonts.css?v=1.4.0">
+    <link rel="stylesheet" href="<?php echo SWB; ?>css/kutubkhanah/fonts.css?v=1.5.0">
     <?php echo \SLiMS\Kutubkhanah\Library::privateFontFaces(); ?>
-    <link rel="stylesheet" href="<?php echo SWB; ?>css/kutubkhanah/theme.css?v=1.4.0">
+    <link rel="stylesheet" href="<?php echo SWB; ?>css/kutubkhanah/theme.css?v=1.5.0">
     <style><?php echo \SLiMS\Kutubkhanah\Settings::cssVars('body.kk-theme'); ?></style>
 
     <?php // Kutubkhanah: KK favicon set (images/kutubkhanah/) unless a custom web icon is set in System settings ?>
     <?php echo \SLiMS\Kutubkhanah\Library::iconLinks(); ?>
+    <?php if (\SLiMS\Kutubkhanah\Settings::get('enable_rss')): ?><link rel="alternate" type="application/rss+xml" title="<?= htmlspecialchars(($sysconf['library_name'] ?? 'Kutubkhanah') . ' · ' . __('New additions'), ENT_QUOTES) ?>" href="index.php?p=kk_rss"><?php endif; ?>
 
     <!-- // load vue js -->
     <script src="<?php echo assets('js/vue.min.js'); ?>"></script>

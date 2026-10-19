@@ -43,20 +43,27 @@ class Covers
         return $ok;
     }
 
-    private static function save(string $url, int $id): bool
+    /** Download an image into images/docs as "<base>.<ext>"; returns the file name or '' (placeholders and tiny images are rejected). */
+    public static function download(string $url, string $base): string
     {
-        if (!preg_match('#^https?://#i', $url)) return false;
+        if (!preg_match('#^https?://#i', $url)) return '';
         [$code, $body] = Http::get($url, 20);
-        if ($code !== 200 || $body === '') return false;
+        if ($code !== 200 || $body === '') return '';
         $info = @getimagesizefromstring($body);
         // Reject placeholders and tracking pixels.
-        if (!$info || $info[0] < 80 || $info[1] < 80) return false;
+        if (!$info || $info[0] < 80 || $info[1] < 80) return '';
         $ext = [IMAGETYPE_JPEG => 'jpg', IMAGETYPE_PNG => 'png', IMAGETYPE_GIF => 'gif', IMAGETYPE_WEBP => 'webp'][$info[2]] ?? null;
-        if (!$ext) return false;
-
-        $file = 'kk-cover-' . $id . '.' . $ext;
+        if (!$ext) return '';
+        $file = preg_replace('/[^a-z0-9_-]/i', '', $base) . '.' . $ext;
         $dir = IMGBS . 'docs' . DS;
-        if (!is_dir($dir) || file_put_contents($dir . $file, $body) === false) return false;
+        if (!is_dir($dir) || file_put_contents($dir . $file, $body) === false) return '';
+        return $file;
+    }
+
+    private static function save(string $url, int $id): bool
+    {
+        $file = self::download($url, 'kk-cover-' . $id);
+        if ($file === '') return false;
         DB::getInstance()->prepare('UPDATE biblio SET image = ?, last_update = ? WHERE biblio_id = ?')
             ->execute([$file, date('Y-m-d H:i:s'), $id]);
         return true;
