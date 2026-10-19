@@ -486,14 +486,14 @@ if (isset($_POST['detail']) OR (isset($_GET['action']) AND $_GET['action'] == 'd
     }
     $str_input .= '</div>';
     $str_input .= '</div>';
-    
+
     $str_input .= '<div class="custom-file col-4">';
     $str_input .= simbio_form_element::textField('file', 'image', '', 'id="image" class="custom-file-input" accept="'.implode(',', $sysconf['allowed_images']).'"');
     $str_input .= '<label class="custom-file-label" for="image">'.__('Choose file').'</label>';
     $str_input .= '</div>';
     $str_input .= ' <div class="mt-2 ml-2">'.__('Maximum').' '.$sysconf['max_image_upload'].' KB</div>';
     $str_input .= '</div>';
-    
+
     if ($sysconf['webcam'] !== false) {
         $str_input .= '<textarea id="base64picstring" name="base64picstring" style="display: none;"></textarea>';
         if ($sysconf['webcam'] == 'flex') {

@@ -72,9 +72,15 @@ if ((bool) ini_get('safe_mode')) {
     define('SENAYAN_IN_SAFE_MODE', 1);
 }
 
+// Kutubkhanah needs PHP 8.4 or later.
+if (PHP_VERSION_ID < 80400) {
+    http_response_code(500);
+    exit('Kutubkhanah needs PHP 8.4 or later. This server runs PHP ' . PHP_VERSION . '.');
+}
+
 // Kutubkhanah version. SENAYAN_VERSION_TAG is an internal database schema marker used by the upgrade routine; it is never shown.
-define('KUTUBKHANAH_VERSION', '1.2.2');
-define('SENAYAN_VERSION', 'Kutubkhanah 1.2.2');
+define('KUTUBKHANAH_VERSION', '1.3.0');
+define('SENAYAN_VERSION', 'Kutubkhanah 1.3.0');
 define('SENAYAN_VERSION_TAG', 'v9.8.0');
 
 // senayan session cookies name

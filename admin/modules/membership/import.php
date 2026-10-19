@@ -189,20 +189,20 @@ if (isset($_POST['doImport'])) {
                 // skip first line if it is column header
                 if ($_SESSION['csv']['header'] && $row_count == 0) {
                     // pass and continue to next loop
-                    $field = fgetcsv($file, $max_chars, $field_sep, $field_enc);
+                    $field = fgetcsv($file, $max_chars, $field_sep, $field_enc, '\\');
                     $_SESSION['csv']['header'] = false;
                     continue;
                 }
                 // go to offset
                 if ($row_count < $record_offset) {
                     // pass and continue to next loop
-                    $field = fgetcsv($file, $max_chars, $field_sep, $field_enc);
+                    $field = fgetcsv($file, $max_chars, $field_sep, $field_enc, '\\');
                     $row_count++;
                     continue;
                 }
 
                 // get an array of field
-                $field = fgetcsv($file, $max_chars, $field_sep, $field_enc);
+                $field = fgetcsv($file, $max_chars, $field_sep, $field_enc, '\\');
                 if ($field) {
                     // pre-process some fields
                     $field[3] = utility::getID($dbs, 'mst_member_type', 'member_type_id', 'member_type_name', $field[3], $mtype_id_cache);

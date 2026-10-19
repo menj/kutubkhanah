@@ -1437,7 +1437,7 @@ trait Date
      *
      * @return int|static
      */
-    public function utcOffset(int $minuteOffset = null)
+    public function utcOffset(?int $minuteOffset = null)
     {
         if (\func_num_args() < 1) {
             return $this->offsetMinutes;

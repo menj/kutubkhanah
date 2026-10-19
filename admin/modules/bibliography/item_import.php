@@ -193,12 +193,12 @@ if (isset($_POST['doImport'])) {
                 // go to offset
                 if ($row_count < $record_offset) {
                     // pass and continue to next loop
-                    $field = fgetcsv($file, $max_chars, $field_sep, $field_enc);
+                    $field = fgetcsv($file, $max_chars, $field_sep, $field_enc, '\\');
                     $row_count++;
                     continue;
                 } else {
                     // get an array of field
-                    $field = fgetcsv($file, $max_chars, $field_sep, $field_enc);
+                    $field = fgetcsv($file, $max_chars, $field_sep, $field_enc, '\\');
                     if ($field) {
                         // preprocess fields
                         $item_code = $field[0];
@@ -219,7 +219,7 @@ if (isset($_POST['doImport'])) {
                         if($b_q->num_rows < 1) continue;
                         $b_d = $b_q->fetch_row();
                         $biblio_id = $b_d[0];
-        
+
                         // sql insert string
                         if (!isItemExists($item_code)) {
                             // prepend biblio id
@@ -262,19 +262,19 @@ if (isset($_POST['doImport'])) {
                         $input_date = $field[16]?'\''.$field[16].'\'':'\''.date('Y-m-d H:i:s').'\'';
                         $last_update = $field[17]?'\''.$field[17].'\'':'\''.date('Y-m-d H:i:s').'\'';
                         $title = $field[18];
-    
+
                         // first field is header
                         if (isset($_POST['header']) && $n < 1) {
                           $n++;
                           continue;
                         } else {
-    
+
                             // get biblio_id
                             $b_q = $dbs->query(sprintf("select biblio_id from biblio where title = '%s'", $title));
                             if($b_q->num_rows < 1) continue;
                             $b_d = $b_q->fetch_row();
                             $biblio_id = $b_d[0];
-        
+
                             // sql insert string
                             if (!isItemExists($item_code)) {
                                 // echo '<script>console.log(\'Insert\')</script>';
@@ -296,7 +296,7 @@ if (isset($_POST['doImport'])) {
                                         source=$source, invoice=$invoice, price=$price, price_currency=$price_currency, invoice_date=$invoice_date,
                                         input_date=$input_date, last_update=$last_update WHERE item_code LIKE $item_code";
                             }
-    
+
                             // send query
                             $dbs->query($sql_str);
                             if ($dbs->affected_rows > 0) { $updated_row++; }

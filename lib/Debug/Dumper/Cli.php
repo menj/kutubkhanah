@@ -33,7 +33,7 @@ class Cli extends CliDumper
 
     private bool $handlesHrefGracefully;
 
-    public function __construct($output = null, string $charset = null, int $flags = 0)
+    public function __construct($output = null, ?string $charset = null, int $flags = 0)
     {
         parent::__construct($output, $charset, $flags);
         $this->styles['label'] = '38;5;105';

@@ -22,7 +22,7 @@ final class Error
     ];
 
     const DEV_REPORT = -1;
-    const PROD_REPORT = E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT & ~E_USER_NOTICE & ~E_USER_DEPRECATED;
+    const PROD_REPORT = E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_USER_NOTICE & ~E_USER_DEPRECATED;
 
     /**
      * @param array $info

@@ -62,7 +62,7 @@ class SLiMS
     $message .= $this->isGdOk() ? '<span>GD : installed</span>' : '<div>GD : <strong class="text-red-500">not installed. PHP GD required for image processing!</strong></div>';
     $message .= $this->isMbStringOk() ? '<span>Mbstring : installed</span>' : '<divMbstring : <strong class="text-red-500">not installed. PHP Mbstring is used to convert strings to different encodings.</strong></div>';
     $message .= $this->isGettextOk() ? '<span>Gettext : installed</span>' : '<div>Gettext : <strong class="text-red-500">not installed. PHP gettext required for translation to other language.</strong></div>';
-    $message .= $this->isPdoOk() ? '<span>PDO MySQL : installed</span>' : '<div>PDO : <strong class="text-red-500">not installed. PHP pdo required by some feature in SLiMS.</strong></div>';
+    $message .= $this->isPdoOk() ? '<span>PDO MySQL : installed</span>' : '<div>PDO : <strong class="text-red-500">not installed. PHP PDO is needed by some Kutubkhanah features.</strong></div>';
     // Yaz is optional
     $message .= $this->isYazOk() ? '<span>YAZ : installed</span>' : '<div>YAZ : <strong class="text-red-500">not installed. It\'s optional, but will be needed if you want to use Z39.50 protocol.</strong></div>';
     $message .= '</div>';

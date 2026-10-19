@@ -20,7 +20,7 @@ class VarDumper
      *
      * @return mixed
      */
-    public static function dump(mixed $var, string $label = null)
+    public static function dump(mixed $var, ?string $label = null)
     {
         if (null === self::$handler) {
             self::setHandler();

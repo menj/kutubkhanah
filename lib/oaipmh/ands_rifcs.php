@@ -61,7 +61,7 @@ class ANDS_RIFCS {
 		$this->working_node->setAttribute('xmlns:xsi',"http://www.w3.org/2001/XMLSchema-instance");
 		$this->working_node->setAttribute('xsi:schemaLocation','http://ands.org.au/standards/rif-cs/registryObjects http://services.ands.org.au/documentation/rifcs/1.2.0/schema/registryObjects.xsd');
 	}
-	
+
 	/** Create a single registryObject node. Each set has its own structure but they all have an attribute of group, a key node and an originatingSource node. The newly created node will be used as the working node.
 	 *
 	 * \param $group string, group attribute of the new registryObject node .
@@ -75,7 +75,7 @@ class ANDS_RIFCS {
 		$this->addChild($regObj_node,'originatingSource',$originatingSource);
 		$this->working_node = $regObj_node;
 	}
-	
+
 	/** RIF-CS node is the content node of RIF-CS metadata node which starts from regObjects.
 	* Each set supportted in RIF-CS has its own content model. The created node will be used as the 
 	* root node of this record for following nodes will be created.
@@ -100,7 +100,7 @@ class ANDS_RIFCS {
 		$c->setAttribute('type', $name_type);
 		return $c;
 	}
-	
+
    /**
    * Create a namePart of a name node. 
    * @param $name_node
@@ -118,7 +118,7 @@ class ANDS_RIFCS {
 			$c->setAttribute('type', $part_type);
 		}
 	}
-	
+
 	/** Create related object. One RIF-CS can have more than one related object nodes,
 	 * each object is described by one node.
 	 * \param $key
@@ -135,7 +135,7 @@ class ANDS_RIFCS {
 		// $c = $this->addChild($c, 'relation','     ');
 		$c->setAttribute('type', $relation_type);
 	}
-	
+
 	/** Create description node. One RIF-CS can have more than one description nodes.
 	 * Each description node has only one description.
 	 * \param $value Type: string. The content of the description.
@@ -156,14 +156,14 @@ class ANDS_RIFCS {
 		$c = $this->addChild($this->working_node, 'identifier',$key);
 		$c->setAttribute('type', $i_type);
 	}
-	
+
 	/** Location node is a holder node for either address or spatial nodes
 	 * \return DOMElement node, for adding address or spatial nodes.
 	*/
 	protected 	function create_location_node() {
 		return $this->addChild($this->working_node, 'location');
 	}
-	
+
 	/** Address node is a holder node for phiscal or electrical nodes.
 	 * \param $location_node Type: DOMElement. Location node created previously.
 	 * \return DOMElement
@@ -171,7 +171,7 @@ class ANDS_RIFCS {
 	protected 	function create_address_node($location_node) {
 		return $this->addChild($location_node, 'address');
 	}
-	
+
 	/** Electrical address node.	Used for email, url, etc
 	 * \param $addr_node Type: DOMElement. Previously created address node.
 	 * \param $e_node Type: string. The content of the adding node.
@@ -246,7 +246,7 @@ class ANDS_RIFCS {
 		if (isset($value['format'])) $d->setAttribute('dateFormat',$value['format']);
 		else $d->setAttribute('dateFormat','W3CDTF');
 	}
-	
+
 	/** Create a subject node for a researcher, project, project, etc
 	 * \param $value Type: string. A string representing the new namePart.
 	 * \param $subject_type Type: string. A string representing the type of subject. The default value is anzsrc-for.

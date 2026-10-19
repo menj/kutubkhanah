@@ -62,10 +62,12 @@ final class Extension
 
     private function pearValidator()
     {
+        // Kutubkhanah bundles File_MARC and PEAR_Exception (admin/modules/bibliography), so no system PEAR is needed.
         try {
-            include 'System.php';
-            include 'File/MARC.php';
-            return class_exists('System') && class_exists('File_MARC');
+            if (!class_exists('File_MARC', false)) {
+                require_once __DIR__ . '/../admin/modules/bibliography/File/MARC.php';
+            }
+            return class_exists('File_MARC', false);
         } catch (\Throwable $th) {
             return false;
         }

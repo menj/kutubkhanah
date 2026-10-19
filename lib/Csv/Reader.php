@@ -59,7 +59,7 @@ class Reader
             if ($this->limit > 0 && ($this->limit + 1) === $row) break;
 
             // Get csv data
-            $csv = fgetcsv($this->resource, $length, $this->standart['separator'], $this->standart['enclosed_with']);
+            $csv = fgetcsv($this->resource, $length, $this->standart['separator'], $this->standart['enclosed_with'], '\\');
 
             // data must be an array
             if (!is_array($csv)) continue;

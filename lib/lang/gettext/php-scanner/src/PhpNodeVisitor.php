@@ -18,7 +18,7 @@ class PhpNodeVisitor implements NodeVisitor
     protected $functions = [];
     protected $bufferComments;
 
-    public function __construct(string $filename, array $validFunctions = null)
+    public function __construct(string $filename, ?array $validFunctions = null)
     {
         $this->filename = $filename;
         $this->validFunctions = $validFunctions;

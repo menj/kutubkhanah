@@ -498,15 +498,15 @@ class SphinxSearchEngine extends Contract {
 
         foreach ($this->documents as $document) {
             $xml->startElement('item');
-            
+
             $xml->startElement('title');
             $xml->text($document['title']);
             $xml->endElement();
-            
+
             $xml->startElement('link');
             $xml->text('http://' . $_SERVER['SERVER_NAME'] . SWB . 'index.php?p=show_detail&id=' . $document['biblio_id']);
             $xml->endElement();
-            
+
             $description = '';
             if (!empty($document['author'])) {
                 $description .= 'Author: ' . $document['author'] . '<br/>';
@@ -517,17 +517,17 @@ class SphinxSearchEngine extends Contract {
             if (!empty($document['publish_year'])) {
                 $description .= 'Year: ' . $document['publish_year'] . '<br/>';
             }
-            
+
             $xml->startElement('description');
             $xml->text($description);
             $xml->endElement();
-            
+
             if (!empty($document['isbn_issn'])) {
                 $xml->startElement('isbn');
                 $xml->text($document['isbn_issn']);
                 $xml->endElement();
             }
-            
+
             $xml->endElement(); // item
         }
 

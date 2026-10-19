@@ -118,7 +118,7 @@ export default {
     <p class="text-lg text-gray-700 tracking-wide mb-4">Please follow the instructions and fill the form if required</p>
     
     <h2 class="font-medium text-lg">Your current version</h2>
-    <p class="mb-2">Select the version your database comes from. For an earlier Kutubkhanah, choose "Kutubkhanah 1.0 to 1.2.1".</p>
+    <p class="mb-2">Select the version your database comes from. For an earlier Kutubkhanah, choose "Kutubkhanah 1.0 to 1.2.x".</p>
     
     <div v-if="!isPass && message !== ''" class="rounded border bg-pink-200 border-pink-500 text-pink-500 px-4 py-2 my-2 md:w-1/2">
         <h2 class="text-xl font-medium">Oops! Something error</h2>

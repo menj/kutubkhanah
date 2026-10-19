@@ -146,7 +146,7 @@ if (isset($_POST['saveData']) AND $can_read AND $can_write) {
     $still_used_biblio = [];
     foreach ($_POST['itemID'] as $itemID) {
         $itemID = (integer)$itemID;
-        
+
         // check if this author data still used biblio
         $delete = true;
         if (!$in_orphaned) {
@@ -156,13 +156,13 @@ if (isset($_POST['saveData']) AND $can_read AND $can_write) {
             WHERE ma.author_id=%d GROUP BY b.title', $itemID);
             $biblio_author_q = $dbs->query($_sql_biblio_author_q);
             $biblio_author_d = $biblio_author_q->fetch_assoc();
-            
+
             if ($biblio_author_d && $biblio_author_d['total'] > 0) {
                 $_log_authors[] = $biblio_author_d['author_name'].', ';
                 $delete = false;
             }
         }
-        
+
 
         if ($delete) {
             if (!$sql_op->delete('mst_author', 'author_id='.$itemID)) {
@@ -325,7 +325,7 @@ if (isset($_POST['detail']) OR (isset($_GET['action']) AND $_GET['action'] == 'd
        $keywords = utility::filterData('keywords', 'get', true, true, true);
        $sql_criteria .= " AND a.author_name LIKE '%$keywords%'";
     }
-    
+
     $datagrid->setSQLCriteria($sql_criteria);
 
     // set table and table header attributes

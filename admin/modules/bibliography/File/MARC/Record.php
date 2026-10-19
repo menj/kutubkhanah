@@ -624,7 +624,7 @@ class File_MARC_Record
             $this->marcxml->startElement("record");
             $this->marcxml->writeAttribute("xmlns", "http://www.loc.gov/MARC21/slim");
         }
-        
+
 
         // MARCXML schema has some strict requirements
         // We'll set reasonable defaults to avoid invalid MARCXML

@@ -48,7 +48,7 @@ class ANDS_TPA extends ANDS_RIFCS {
 		$this->db = $db;
   }
 
-	
+
 	/**
 	 * This is the general entrence of creating actual content. It calls different functions for different type of RIF-CS model.
 	 * When anything goes wrong, e.g. found no record, or $set_name is not recognised, an exception will be thrown.
@@ -82,7 +82,7 @@ class ANDS_TPA extends ANDS_RIFCS {
 			throw new Exception('Wrong set name was used: '.$set_name);
 		}
 	}
-	
+
 	/** The processor for creating metadata node of Activity. Called from create_obj_node.
 	 * \param $table_name Type: string. The table name will be used to retrieve data from.
 	 * \param $id_project Type: integer. Internal project id associated to this activity-project.
@@ -98,14 +98,14 @@ class ANDS_TPA extends ANDS_RIFCS {
 #		$id_project = $record['ori_id'];
 		// Get the content using the previously obtained infor:
 		$query = sprintf("select inter_no,start_date, end_date,pub_descrip from %s where id_project = %s",$table_name,$id_project);
-		
+
 		try {
 			$res = exec_pdo_query($db,$query);
 			$record = $res->fetch(PDO::FETCH_ASSOC);
 		} catch (Exception $e) {
 			echo $e->getMessage();
 		}
-		
+
 		$this->create_rifcs_node('activity','project');
 		$c = $this->create_name_node();
 		$this->create_namePart($c,'The Plant Accelerator Project '.$record['inter_no']);
@@ -138,7 +138,7 @@ class ANDS_TPA extends ANDS_RIFCS {
 			process_pdo_error($query, $e);
 		}// end of try-catch block
 	} // end of function create_activity($key, $id_project) 
-	
+
 	/** The processor for creating metadata node of Collection. Called from create_obj_node.
 	 * \param $table_name Type: string. The table name will be used to retrieve data from.
 	 * \param $id_collect Type: integer. Internal collection id associated to this collection-dataset.
@@ -153,11 +153,11 @@ class ANDS_TPA extends ANDS_RIFCS {
 
 			$res = exec_pdo_query($db, $query);
 			$record = $res->fetch(PDO::FETCH_ASSOC);
-			
+
 			$query = 'select id_rep, inter_no, id_project from tpa_project_ids where id_collect = '.$id_collect;
 			$res = exec_pdo_query($db, $query);
 			$prj_info = $res->fetch(PDO::FETCH_ASSOC);
-			
+
 			$query = 'select email from tpa_person where id_rep = '.$prj_info['id_rep'];
 			$res = exec_pdo_query($db, $query);
 			$email = $res->fetch(PDO::FETCH_ASSOC);
@@ -165,12 +165,12 @@ class ANDS_TPA extends ANDS_RIFCS {
 			echo $query.' was failed\n';
 			echo $e->getMessage();
 		}
-		
+
 		$this->create_rifcs_node('collection','dataset');
 		// Get the project inter_no as the name of this dataset
 		$c = $this->create_name_node();
 		$this->create_namePart($c,'Data set of Plant Accelerator Project '.$prj_info['inter_no']);
-	
+
 		// locatin node: contact person
 		$l_node = $this->create_location_node();
 		$a_node = $this->create_address_node($l_node);
@@ -204,7 +204,7 @@ class ANDS_TPA extends ANDS_RIFCS {
 		} catch (PDOException $e) {
 			process_pdo_error($query, $e);
 		}// end of try-catch block
-		
+
 		// right of accessing
 		$this->create_description_node('For information on rights and access to this dataset, please contact the owner.','accessRights');
 
@@ -238,7 +238,7 @@ class ANDS_TPA extends ANDS_RIFCS {
 		// imaging frequency
 		$this->create_description_node('Imaging frequency: '.$dataset['img_freq'],'note');
 	} // end of function create_collection($key,$id_collect)
-	
+
 	/** The processor for creating metadata node of Party. Called from create_obj_node. As party-person is different to party-group, there are two sub-functions are called accordingly.
 	 * \param $table_name Type: string. The table name will be used to retrieve data from.
 	 * \param $id_party Type: integer. Internal party id associated to this party.
@@ -249,7 +249,7 @@ class ANDS_TPA extends ANDS_RIFCS {
 		$query = sprintf("SELECT set_type FROM oai_headers WHERE ori_table_name = '%s' AND ori_id = %s",$table_name,$id_party);
 		$res = exec_pdo_query($db, $query);
 		$party_type = $res->fetch(PDO::FETCH_ASSOC);
-		
+
 		if (in_array($party_type['set_type'],array('person','group'))) {
 			$this->create_rifcs_node('party',$party_type['set_type']);
 
@@ -276,7 +276,7 @@ class ANDS_TPA extends ANDS_RIFCS {
 		if (!empty($info['title'])) $this->create_namePart($c,$info['title'],'title');
 		$this->create_namePart($c,$info['family_name'],'family');
 		$this->create_namePart($c,$info['first_name'],'given');
-		
+
 		// locatin node: contact person
 		$l_node = $this->create_location_node();
 		$a_node = $this->create_address_node($l_node);
@@ -287,14 +287,14 @@ class ANDS_TPA extends ANDS_RIFCS {
 		$add_txt = trim($info['address']).', '.$info['city'].' '.$info['state'].' '.$info['post_code'].', '.$info['country'];
 		// the strlength of ',   , ' is 6
 		if (strlen($add_txt)>6) $this->create_physcial_addr_txt($a_node,$add_txt);
-		
+
 		// related objects:
 		// their group: id_customer is a foreign key of tpa_organisation
 		$query = sprintf("SELECT get_identifier('tpa_organisation',%s)",$info['id_org']);
 		$res = exec_pdo_query($db, $query);
 		$info = $res->fetch(PDO::FETCH_NUM);
 		$this->create_relatedObject($info[0],'isMemberOf');
-							
+
 		// their activities
 		$query = "SELECT list_persons_objs($id_party,'project')";
 		$res = exec_pdo_query($db, $query);
@@ -310,7 +310,7 @@ class ANDS_TPA extends ANDS_RIFCS {
 			$this->create_relatedObject($item,'isOwnerOf');
 		}
 	}
-	
+
 	/** The processor for creating metadata node of Party. Called from create_obj_node. As party-person is different to party-group, there are two sub-functions are called accordingly.
 	 * \param $table_name Type: string. The table name will be used to retrieve data from.
 	 * \param $id_party Type: integer. Internal party id associated to this party-group.
@@ -328,14 +328,14 @@ class ANDS_TPA extends ANDS_RIFCS {
 		if (!empty($info['abn'])) $this->create_identifier_node($info['abn'],'abn');
 
 		if (!empty($info['description'])) $this->create_description_node($info['description']);
-		
+
 		$l_node = $this->create_location_node();
 		$a_node = $this->create_address_node($l_node);
 		$this->create_physcial_fone_fax($a_node, $info['tel'],'telephoneNumber');
 		$this->create_physcial_fone_fax($a_node, $info['fax'],'faxNumber');
 		$add_txt = trim($info['address']).', '.$info['city'].' '.$info['state'].' '.$info['post_code'].', '.$info['country'];
 		$this->create_physcial_addr_txt($a_node,$add_txt);
-		
+
 		// related objects:
 		// their members:
 		$query = "SELECT list_pub_members($id_party)";

@@ -109,14 +109,14 @@ if (isset($_GET['versionlist'])) {
     'SLiMS 9.7.2 | Bulian D. Roger',
     // Index 39: any earlier Kutubkhanah release. Its database is already current,
     // so only Kutubkhanah's own schema step runs.
-    'Kutubkhanah 1.0 to 1.2.1',
+    'Kutubkhanah 1.0 to 1.2.x',
   ];
   die(json_encode(['status' => true, 'data' => $versionList]));
 }
 
 switch ($action) {
   case 'system-requirement':
-    $php_minimum_version = '8.1';
+    $php_minimum_version = '8.4';
     $check_dir = $slims->chkDir();
     $data = [
       'is_pass' => $slims->isPhpOk($php_minimum_version) &&
@@ -128,13 +128,13 @@ switch ($action) {
           'title' => 'PHP Version',
           'status' => $slims->isPhpOk($php_minimum_version),
           'version' => phpversion(),
-          'message' => 'Minimum PHP version to install SLiMS is ' . $php_minimum_version . '. Please upgrade it first!'
+          'message' => 'Kutubkhanah needs PHP ' . $php_minimum_version . ' or later. Please upgrade PHP first.'
         ],
         'database' => [
           'title' => 'Database driver',
           'status' => $slims->databaseDriverType(),
           'version' => $slims->databaseDriverType(),
-          'message' => 'SLiMS required MySQLi and PDO MySQL extension for database management. Please install it first!'
+          'message' => 'Kutubkhanah needs the MySQLi and PDO MySQL extensions. Please install them first.'
         ],
         'phpextension' => [
           'title' => 'PHP Extension',
@@ -194,7 +194,7 @@ switch ($action) {
       // check if database already have table for make sure this database is empty
       foreach ($slims->getTables() as $table) {
         if ($table === 'biblio') {
-          throw new Exception('Database ' . $_SESSION['db_name'] . ' not empty. You appear to have already installed SLiMS. To reinstall please clear your old database tables first.', 5003);
+          throw new Exception('Database ' . $_SESSION['db_name'] . ' not empty. Kutubkhanah appears to be installed already. To reinstall please clear your old database tables first.', 5003);
           break;
         }
       }

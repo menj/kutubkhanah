@@ -1,7 +1,16 @@
-Kutubkhanah 1.2.2
+Kutubkhanah 1.3.0
 =================
 A home library system that brings together three open-source library systems, **SLiMS**, **PMB**
 and **OpenBiblio**, licensed under the GNU GPL v3.
+
+### New in 1.3.0: PHP 8.4
+- **PHP 8.4 is now the minimum.** The installer checks for it, and an older PHP gets a clear message
+  instead of a broken page. Tested end to end on PHP 8.4 (fresh install, upgrade, catalogue, admin,
+  ISBN scanning, Libib import and export).
+- Every PHP 8.4 deprecation is fixed, in Kutubkhanah's own code and in the bundled libraries
+  (explicit nullable types, CSV escape arguments, LDAP connection strings, `E_STRICT`).
+- **Fixed along the way:** EAN and UPC barcode labels (the barcode library used syntax PHP removed in 8.0),
+  and MARC import, export and the per-book MARC download, which now work without a system PEAR install.
 
 ### New in 1.2.2
 - One name everywhere: the version reads "Kutubkhanah 1.2.2" in the admin, installer, footer and
@@ -72,7 +81,7 @@ The public design follows the "Private Library CMS" WordPress theme. The barcode
 html5-qrcode 2.3.8 (Apache-2.0, `js/kutubkhanah/vendor/`). Font licences: `fonts/kutubkhanah/README.md`.
 
 ### System requirements
-- PHP 8.1 or later with GD, gettext and mbstring
+- PHP 8.4 or later (tested on 8.4) with GD, gettext, intl, mbstring and mysqli
 - MySQL 5.7 or MariaDB 10.3 or later
 
 ### Docker (development)

@@ -18,7 +18,7 @@ class Importer
         @set_time_limit(600);
         $fh = fopen($path, 'r');
         if (!$fh) throw new \RuntimeException(__('The file could not be read.'));
-        $head = fgetcsv($fh);
+        $head = fgetcsv($fh, null, ',', '"', '');
         if (!$head) { fclose($fh); throw new \RuntimeException(__('The CSV is empty.')); }
         $head[0] = preg_replace('/^\xEF\xBB\xBF/', '', (string)$head[0]);
         $head = array_map(fn($h) => strtolower(trim((string)$h)), $head);
@@ -29,7 +29,7 @@ class Importer
 
         $counts = ['created' => 0, 'updated' => 0, 'skipped' => 0];
         $created = [];
-        while (($row = fgetcsv($fh)) !== false) {
+        while (($row = fgetcsv($fh, null, ',', '"', '')) !== false) {
             if (count($row) < 2) continue;
             $row = array_combine($head, array_pad(array_slice($row, 0, count($head)), count($head), ''));
             [$result, $id] = self::importRow($row);
@@ -97,7 +97,7 @@ class Importer
         header('Content-Disposition: attachment; filename="kutubkhanah-' . date('Ymd-His') . '.csv"');
         $out = fopen('php://output', 'w');
         fwrite($out, "\xEF\xBB\xBF");
-        fputcsv($out, ['item_type', 'title', 'creators', 'ean_isbn13', 'upc_isbn10', 'description', 'publisher', 'publish_date', 'length', 'status', 'added', 'copies']);
+        fputcsv($out, ['item_type', 'title', 'creators', 'ean_isbn13', 'upc_isbn10', 'description', 'publisher', 'publish_date', 'length', 'status', 'added', 'copies'], ',', '"', '');
         $rows = $db->query(
             "SELECT b.biblio_id, b.title, b.isbn_issn, b.notes, b.publish_year, b.collation, DATE(b.input_date) AS added,
                     p.publisher_name, k.reading_status,
@@ -116,7 +116,7 @@ class Importer
                 strip_tags((string)$r['notes']), (string)$r['publisher_name'], (string)$r['publish_year'],
                 preg_match('/(\d+)/', (string)$r['collation'], $m) ? $m[1] : '',
                 $labels[$r['reading_status'] ?? ''] ?? '', $r['added'], max(1, (int)$r['copies']),
-            ]);
+            ], ',', '"', '');
         }
         fclose($out);
     }

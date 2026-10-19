@@ -270,7 +270,7 @@ if (isset($_POST['saveData']) AND $can_read AND $can_write) {
 
             })->as('docs/' . strtolower('cover_'. preg_replace("/[^a-zA-Z0-9]+/", "-", $img_title)));
 
-            
+
             if ($image_upload->getUploadStatus()) {
                 $data['image'] = $dbs->escape_string($image_upload->getUploadedFileName());
                 // write log
@@ -303,7 +303,7 @@ if (isset($_POST['saveData']) AND $can_read AND $can_write) {
 
             if ($valid) {
                 @$images_disk->put('docs/' . $new_filename, $filedata);
-                
+
                 if ($images_disk->isExists('docs/' . $new_filename))
                 {
                     $data['image'] = $dbs->escape_string($new_filename);
@@ -552,7 +552,7 @@ if (isset($_POST['saveData']) AND $can_read AND $can_write) {
       WHERE b.biblio_id=%d GROUP BY title', $itemID);
         $biblio_item_q = $dbs->query($_sql_biblio_item_q);
         $biblio_item_d = $biblio_item_q->fetch_row();
-        
+
         if (($biblio_item_d[1]??0) < 1) {
 
             if ($sysconf['log']['biblio']) {
@@ -562,7 +562,7 @@ if (isset($_POST['saveData']) AND $can_read AND $can_write) {
 
             // execute registered hook
             Plugins::getInstance()->execute(Plugins::BIBLIOGRAPHY_BEFORE_DELETE, [$itemID]);
-            
+
             if (!$sql_op->delete('biblio', "biblio_id=$itemID")) {
                 $error_num++;
             } else {
@@ -1113,7 +1113,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'history') {
      * Custom fields
      */
     $form->loadCustomField('biblio', 'biblio_id', $itemID);
-    
+
     // get advance custom field based on plugin
     $js = '';
     Plugins::getInstance()->execute(Plugins::BIBLIOGRAPHY_CUSTOM_FIELD_FORM, ['form' => $form, 'js' => &$js, 'data' => $rec_cust_d ?? []]);

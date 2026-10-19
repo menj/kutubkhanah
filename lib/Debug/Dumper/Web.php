@@ -34,7 +34,7 @@ class Web extends HtmlDumper
 
     protected $styles;
 
-    public function __construct($output = null, string $charset = null, int $flags = 0)
+    public function __construct($output = null, ?string $charset = null, int $flags = 0)
     {
         HtmlDumper::__construct($output, $charset, $flags);
         $this->styles['label'] = 'color:#d0d0d0;display:block';

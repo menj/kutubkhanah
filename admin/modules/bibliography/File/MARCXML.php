@@ -38,7 +38,7 @@
  * @example   marc_yaz.php Pretty print a MARC record retrieved through the PECL yaz extension
  */
 
-require_once 'PEAR/Exception.php';
+if (!class_exists('PEAR_Exception', false)) require_once __DIR__ . '/../PEAR/Exception.php';
 require_once MDLBS . 'bibliography/File/MARCBASE.php';
 require_once MDLBS . 'bibliography/File/MARC.php';
 require_once MDLBS . 'bibliography/File/MARC/Record.php';
@@ -235,7 +235,7 @@ class File_MARCXML extends File_MARCBASE
                 $subfieldattributes = $subfield->attributes();
                 $subfield_data[] = new File_MARC_Subfield((string)$subfieldattributes['code'], $subfield);
             }
-            
+
             // If the data is invalid, let's just ignore the one field
             try {
                 $new_field = new File_MARC_Data_Field((string)$datafieldattributes['tag'], $subfield_data, $datafieldattributes['ind1'], $datafieldattributes['ind2']);

@@ -70,7 +70,7 @@ class Ldap extends Native
             return false;
         }
         // connect to Directory Server
-        $_ds = $ldap_configs['port']?ldap_connect($ldap_configs['server'], $ldap_configs['port']):ldap_connect($ldap_configs['server']);
+        $_ds = ldap_connect($ldap_configs['port'] && !str_contains((string)$ldap_configs['server'], '://') ? 'ldap://' . $ldap_configs['server'] . ':' . (int)$ldap_configs['port'] : $ldap_configs['server']);
 
         // check LDAP options
         if ($ldap_configs['options']) {
@@ -161,7 +161,7 @@ class Ldap extends Native
             return false;
         }
         // connect to Directory Server
-        $_ds = $ldap_configs['port']?ldap_connect($ldap_configs['server'], $ldap_configs['port']):ldap_connect($ldap_configs['server']);
+        $_ds = ldap_connect($ldap_configs['port'] && !str_contains((string)$ldap_configs['server'], '://') ? 'ldap://' . $ldap_configs['server'] . ':' . (int)$ldap_configs['port'] : $ldap_configs['server']);
 
         // check LDAP options
         if ($ldap_configs['options']) {

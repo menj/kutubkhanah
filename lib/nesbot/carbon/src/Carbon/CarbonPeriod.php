@@ -975,7 +975,7 @@ class CarbonPeriod implements Iterator, Countable, JsonSerializable
      *
      * @return CarbonInterface
      */
-    public function getStartDate(string $rounding = null)
+    public function getStartDate(?string $rounding = null)
     {
         $date = $this->startDate->avoidMutation();
 
@@ -989,7 +989,7 @@ class CarbonPeriod implements Iterator, Countable, JsonSerializable
      *
      * @return CarbonInterface|null
      */
-    public function getEndDate(string $rounding = null)
+    public function getEndDate(?string $rounding = null)
     {
         if (!$this->endDate) {
             return null;
@@ -1761,7 +1761,7 @@ class CarbonPeriod implements Iterator, Countable, JsonSerializable
      *
      * @return CarbonInterface
      */
-    public function calculateEnd(string $rounding = null)
+    public function calculateEnd(?string $rounding = null)
     {
         if ($end = $this->getEndDate($rounding)) {
             return $end;

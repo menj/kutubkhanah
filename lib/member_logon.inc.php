@@ -68,7 +68,7 @@ class member_logon
             return false;
         }
         // connect to Directory Server
-        $_ds = $ldap_configs['ldap_port']?ldap_connect($ldap_configs['ldap_server'], $ldap_configs['ldap_port']):ldap_connect($ldap_configs['ldap_server']);
+        $_ds = ldap_connect($ldap_configs['ldap_port'] && !str_contains((string)$ldap_configs['ldap_server'], '://') ? 'ldap://' . $ldap_configs['ldap_server'] . ':' . (int)$ldap_configs['ldap_port'] : $ldap_configs['ldap_server']);
 
         // check LDAP options
         if ($ldap_configs['ldap_options']) {
