@@ -118,7 +118,13 @@ class DB
      */
     public static function backup()
     {
-        return new IMysqldump\Mysqldump(self::$connectionCollection->get('pdo_' . self::$connectionName));
+        $pdo = self::$connectionCollection->get('pdo_' . self::$connectionName);
+        // Kutubkhanah: SQLite and PostgreSQL use the portable dumper.
+        $conn = $pdo?->getConn();
+        if ($conn instanceof \SLiMS\Kutubkhanah\Db\Pdo && $conn->driverName() !== 'mysql') {
+            return new \SLiMS\Kutubkhanah\Db\Dump($conn, $conn->driverName());
+        }
+        return new IMysqldump\Mysqldump($pdo);
     }
 
     /**

@@ -103,7 +103,7 @@ if (isset($_POST['start']) && isset($_POST['tkn']) && $_POST['tkn'] === $_SESSIO
             $dump->start($sysconf['backup_dir'].DS.'backup_'.$time2append.'.sql');
 
             $data['user_id'] = $_SESSION['uid'];
-            $data['backup_time'] = date('Y-m-d H:i"s');
+            $data['backup_time'] = date('Y-m-d H:i:s');
             $data['backup_file'] = $dbs->escape_string($sysconf['backup_dir'].'backup_'.$time2append.'.sql');
             $output = sprintf(__('Backup SUCCESSFUL, backup files saved to %s !'),str_replace('\'', '/',$sysconf['backup_dir']));
 

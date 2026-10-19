@@ -13,7 +13,8 @@ Kutubkhanah changelog
 - A built-in translation layer (lib/Kutubkhanah/Db) converts the MySQL-style SQL used across the code base
   for SQLite and PostgreSQL, so existing modules keep working. Verified by installing and crawling
   1,500 pages and exercising the library features on all three.
-- Not yet portable: database backup export (MySQL only).
+- Backups work on all three: MySQL as before; SQLite and PostgreSQL write a portable .sql file (SQLite includes the
+  table definitions; PostgreSQL holds the data, to load into a fresh install of the same version).
 
 1.6.0
 - Blog built into Kutubkhanah (modelled on WordPress): posts and pages, categories, tags, featured image,

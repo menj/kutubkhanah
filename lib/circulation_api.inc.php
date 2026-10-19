@@ -66,7 +66,7 @@ class circapi
       WHERE loan_id=\''.$loan_id.'\'
       ';
     $_stmt_loaninfo = $obj_db->query($_sql_loaninfo);
-    $_count_loaninfo = mysqli_num_rows($_stmt_loaninfo);
+    $_count_loaninfo = $_stmt_loaninfo->num_rows;
     if ($_count_loaninfo === 1) {
       while($row_loaninfo = $_stmt_loaninfo->fetch_assoc()) {
         $_loan_rules_id = $row_loaninfo['loan_rules_id'];
@@ -102,7 +102,7 @@ class circapi
         AND l.member_id=\''.$_SESSION['member_id'].'\'';
     }
     $_stmt_llist = $obj_db->query($_sql_llist);
-    $_count_llist = mysqli_num_rows($_stmt_llist);
+    $_count_llist = $_stmt_llist->num_rows;
     if ($_count_llist === 1) {
       while($row = $_stmt_llist->fetch_assoc()) {
         $_old_dd = $row['due_date'];
@@ -118,10 +118,10 @@ class circapi
       do {
         $_sql_holiday = 'SELECT * FROM holiday WHERE holiday_date=\''.$_new_dd.'\'';
         $_stmt_holiday = $obj_db->query($_sql_holiday);
-        $_counter = mysqli_num_rows($_stmt_holiday);
+        $_counter = $_stmt_holiday->num_rows;
         $_sql_aholiday = 'SELECT * FROM holiday WHERE holiday_date IS NULL AND holiday_dayname=\''.$_new_dd_name.'\'';
         $_stmt_aholiday = $obj_db->query($_sql_aholiday);
-        $_countera = mysqli_num_rows($_stmt_aholiday);
+        $_countera = $_stmt_aholiday->num_rows;
         if ( ($_counter > 0) OR ($_countera > 0) ){
           $_loan_periode = $_loan_periode + 1;
           $_new_dd = date('Y-m-d', strtotime('+'.$_loan_periode.' day'));
@@ -164,7 +164,7 @@ class circapi
     $s_lr .= ' AND ';
     $s_lr .= 'l.is_lent=\'1\'';
     $q_lr = $obj_db->query($s_lr);
-    $c_lr = mysqli_num_rows($q_lr);
+    $c_lr = $q_lr->num_rows;
     if ($c_lr > 0) {
       return TRUE;
     } else {
@@ -187,7 +187,7 @@ class circapi
     $s_lr .= ' AND ';
     $s_lr .= 'l.is_lent=\'1\'';
     $q_lr = $obj_db->query($s_lr);
-    $c_lr = mysqli_num_rows($q_lr);
+    $c_lr = $q_lr->num_rows;
     if ($c_lr > 0) {
       return TRUE;
     } else {
