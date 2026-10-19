@@ -107,6 +107,9 @@ if (isset($_GET['versionlist'])) {
     'SLiMS 9.7.0 | Bulian D. Roger',
     'SLiMS 9.7.1 | Bulian D. Roger',
     'SLiMS 9.7.2 | Bulian D. Roger',
+    // Index 39: any earlier Kutubkhanah release. Its database is already current,
+    // so only Kutubkhanah's own schema step runs.
+    'Kutubkhanah 1.0 to 1.2.1',
   ];
   die(json_encode(['status' => true, 'data' => $versionList]));
 }
@@ -285,7 +288,9 @@ switch ($action) {
       }
 
       require_once 'Upgrade.inc.php';
-      $upgrade = Install\Upgrade::init($slims)->from($_POST['oldVersion']);
+      $upgrade = (int)$_POST['oldVersion'] === 39
+        ? [] // Kutubkhanah 1.x: no upstream steps to run
+        : Install\Upgrade::init($slims)->from($_POST['oldVersion']);
 
       if (count($upgrade) > 0) {
         die(json_encode(['status' => false, 'message' => $upgrade, 'code' => 5006]));

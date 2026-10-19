@@ -152,7 +152,7 @@ include 'function.php';
       </div>
     </div>
     <footer class="s-footer">
-      <div class="s-footer-about"><a href="http://www.slims.web.id/" target="_blank"><?php echo SENAYAN_VERSION ?? ''; ?></a></div>
+      <div class="s-footer-about"><a href="https://github.com/menj/kutubkhanah" target="_blank"><?php echo SENAYAN_VERSION ?? ''; ?></a></div>
       <div class="s-footer-brand"><?php echo ($sysconf['library_name'] ?? '').' - '.($sysconf['library_subname'] ?? '')?> </div>
     </footer>
   </main>

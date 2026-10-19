@@ -51,7 +51,7 @@ echo kk_head();
         __('Shown in the home page hero and the mission banner. Leave empty to hide both.'));
     kk_row(__('Footer description'), '<textarea name="footer_desc" class="kk-input kk-textarea" rows="3">' . kk_e($s['footer_desc']) . '</textarea>');
     kk_row(__('Location or hours'), '<input type="text" name="location" value="' . kk_e($s['location']) . '" class="kk-input">');
-    $layouts = ['library' => __('Library: hero, stats, recent additions, genres, resources'), 'shelf' => __('Cover shelf (A–Z grid)'), 'classic' => __('SLiMS classic home page')];
+    $layouts = ['library' => __('Library: hero, stats, recent additions, genres, resources'), 'shelf' => __('Cover shelf (A–Z grid)'), 'classic' => __('Classic home page')];
     $sel = '<select name="home_layout" class="kk-input">';
     foreach ($layouts as $v => $l) $sel .= '<option value="' . $v . '"' . ($s['home_layout'] === $v ? ' selected' : '') . '>' . kk_e($l) . '</option>';
     kk_row(__('Home page'), $sel . '</select>');
@@ -61,7 +61,7 @@ echo kk_head();
         kk_check('enable_access', __('Request Access page'), $s) . kk_check('enable_contact', __('Contact page'), $s),
         __('Submissions arrive in Kutubkhanah > Inbox.'));
     kk_row(__('Notify email'), '<input type="email" name="notify_email" value="' . kk_e($s['notify_email']) . '" class="kk-input">',
-        __('Optional. Also email new submissions here. Needs SLiMS mail set up in System > Mail Setting.'));
+        __('Optional. Also email new submissions here. Needs mail set up in System > Mail Setting.'));
     kk_row(__('Reading status'), kk_check('show_reading', __('Show Unread / Reading / Read and reading progress to visitors'), $s));
     ?>
     <div class="kk-actions"><button type="submit" class="kk-btn kk-btn--primary"><?= __('Save changes') ?></button><span class="kk-note kk-saved" aria-live="polite"></span></div>

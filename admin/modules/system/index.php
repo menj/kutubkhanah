@@ -332,7 +332,7 @@ $form->table_content_attr = 'class="alterCell2"';
 utility::loadSettings($dbs);
 
 // version status
-$form->addAnything(__('SLiMS Version'), '<strong>'.SENAYAN_VERSION.'</strong>');
+$form->addAnything(__('Version'), '<strong>'.SENAYAN_VERSION.'</strong>');
 
 // library name
 $form->addTextField('text', 'library_name', __('Library Name'), $sysconf['library_name'], 'class="form-control"');
@@ -555,7 +555,7 @@ $form->addSelectList('enable_chbox_confirm', __('Activate Confirm Alert?'), $opt
 $options = null;
 $options[] = array('1', __('Enable'));
 $options[] = array('0', __('Disable'));
-$form->addSelectList('ignore_ssl_verification', __('Ignore SSL verification'), $options, ((int)config('http.client.verify')),'class="form-control col-3"', __('SLiMS will ignore all error about SSL validation while download contents from other resource'));
+$form->addSelectList('ignore_ssl_verification', __('Ignore SSL verification'), $options, ((int)config('http.client.verify')),'class="form-control col-3"', __('Kutubkhanah will ignore all errors about SSL validation while download contents from other resource'));
 
 $options = null;
 $options[] = array('1', __('Yes'));

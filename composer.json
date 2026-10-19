@@ -1,6 +1,6 @@
 {
-    "name": "slims/slims9_bulian",
-    "description": "SLiMS (Senayan Library Management System)",
+    "name": "menj/kutubkhanah",
+    "description": "Kutubkhanah home library system (SLiMS, PMB and OpenBiblio)",
     "type": "project",
     "autoload": {
         "psr-0": {

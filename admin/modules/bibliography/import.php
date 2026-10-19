@@ -347,7 +347,7 @@ if (isset($_POST['doImport'])) {
       <h2><?php echo __('Import Tool'); ?></h2>
     </div>
     <div class="infoBox">
-      <?php echo __('Import for bibliographics data from CSV file. For guide on CSV fields order and format please refer to documentation or visit <a href="http://slims.web.id" target="_blank">Official Website</a>'); ?>
+      <?php echo __('Import for bibliographics data from CSV file. For guide on CSV fields order and format please refer to documentation or visit <a href="https://github.com/menj/kutubkhanah" target="_blank">Official Website</a>'); ?>
       &nbsp;<a href="<?= $_SERVER['PHP_SELF'] ?>?action=download_sample" class="s-btn btn btn-secondary notAJAX"><?= __('Download Sample') ?></a>
     </div>
   </div>

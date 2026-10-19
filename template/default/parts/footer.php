@@ -85,7 +85,7 @@ include LIB . "contents/chat.php"; ?>
 <script src="<?php echo assets(v('js/app.js')); ?>"></script>
 <script src="<?php echo assets(v('js/app_jquery.js')); ?>"></script>
 <?php if (\SLiMS\Kutubkhanah\Settings::get('home_layout') === 'classic') include __DIR__ . "/../assets/js/vegas.js.php"; ?>
-<script src="<?= SWB; ?>js/kutubkhanah/theme.js?v=1.2.1"></script>
+<script src="<?= SWB; ?>js/kutubkhanah/theme.js?v=1.2.2"></script>
 <?php if ($sysconf['chat_system']['enabled'] && $sysconf['chat_system']['opac']) : ?>
     <script>
         $('#show-pchat').click(() => {

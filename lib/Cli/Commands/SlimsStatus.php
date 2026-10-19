@@ -39,8 +39,8 @@ class SlimsStatus extends \SLiMS\Cli\Command
     {
         $dbs = DB::getInstance('mysqli');
         $columns = [
-            [__('SLiMS Environment Mode'), ucfirst(ENVIRONMENT)],
-            [__('SLiMS Version'), SENAYAN_VERSION_TAG],
+            [__('Environment Mode'), ucfirst(ENVIRONMENT)],
+            [__('Version'), SENAYAN_VERSION],
             [__('Operating System'), php_uname('a')],
             [__('OS Architecture'), php_uname('m').' '.(8 * PHP_INT_SIZE).' bit'],
             [__('PHP version'), phpversion()],  
@@ -50,7 +50,7 @@ class SlimsStatus extends \SLiMS\Cli\Command
 
         $this->newLine();
         $this->info(__('System Environment'));
-        $this->output(__('Information on SLiMS System Environment. Use this to support troubleshotting problem.'));
+        $this->output(__('Information on the Kutubkhanah system environment. Use this to support troubleshotting problem.'));
         $this->newLine();
         foreach ($columns as $column) {
             $this->justify($column);

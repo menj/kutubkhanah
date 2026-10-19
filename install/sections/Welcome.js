@@ -151,7 +151,7 @@ export default {
             <div class="flex-1 flex flex-col justify-center items-center text-center text-gray-200 px-12">
                 <canvas id="welcome" class="absolute left-0 top-0 z-0"></canvas>
                 <img id="logo" class="hidden" @load="onLogoLoaded" src="../images/kutubkhanah/kk-mark-outline.png" width="120" height="120" alt="Kutubkhanah">
-                <p class="mt-48 mb-4"><slims-text></slims-text> is a home library system built on SLiMS, the Senayan Library Management System:
+                <p class="mt-48 mb-4"><slims-text></slims-text> is a home library system that brings together SLiMS, PMB and OpenBiblio:
                     scan ISBNs, import from Libib and share your collection as a catalogue.</p>
                 <slims-button class="z-10" @click="$emit('click')" text="Get Started"></slims-button>
             </div>

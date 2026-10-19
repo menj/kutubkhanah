@@ -81,7 +81,7 @@ if (isset($_POST['saveData']))
       <h2><?php echo __('System Environment Settings'); ?></h2>
     </div>
     <div class="infoBox">
-      <?php echo __('SLiMS Environment preferences.'); ?>
+      <?php echo __('Kutubkhanah environment preferences.'); ?>
     </div>
   </div>
 </div>

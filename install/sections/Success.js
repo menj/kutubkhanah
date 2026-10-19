@@ -42,14 +42,12 @@ export default {
         </div>
     </div>            
     <div class="w-2/3">
-        <h1 class="text-2xl font-medium">Support Us</h1>
+        <h1 class="text-2xl font-medium">You are all set</h1>
         <p class="mb-4 mt-1 text-grey-700 leading-normal">
-            Support <slims-text></slims-text> development and become part of its history. We appreciate every donation to
-            support us in any way. If you willing to make donation, please follow this link:
-            <a class="text-blue-500 whitespace-no-wrap" href="https://slims.web.id/web/pages/support-us/" target="_blank">https://slims.web.id/web/pages/support-us/</a>
+            Sign in to the admin, open <strong>Kutubkhanah &gt; Scan ISBN</strong> and start adding books, or import your Libib export under
+            <strong>Kutubkhanah &gt; Import / Export</strong>. Source code and updates:
+            <a class="text-blue-500 whitespace-no-wrap" href="https://github.com/menj/kutubkhanah" target="_blank">github.com/menj/kutubkhanah</a>
         </p>
-        <p>List of individuals and or institutions who have made donations provided at <code>supports.txt</code></p>
-        <p>Your donation means a lot for SLiMS development ahead</p>
 
         <div class="flex">
             <a href="../index.php" class="text-white bg-green-500 py-3 px-8 rounded-full font-bold mt-4 no-underline">Go to Kutubkhanah</a>

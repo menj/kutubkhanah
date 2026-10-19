@@ -46,12 +46,6 @@ if (basename($_SERVER['PHP_SELF']) == basename(__FILE__)) {
 <div class="contentDesc">
     <div class="container-fluid">
 
-        <div id="alert-new-version" class="alert alert-info border-0 mt-3 hidden">
-            <strong>News!</strong> New version of SLiMS (<code id="new_version"></code>) available to <a class="notAJAX"
-                                                                                                         target="_blank"
-                                                                                                         href="https://github.com/slims/slims9_bulian/releases/latest">download</a>.
-        </div>
-
         <?php
         // generate warning messages
         $warnings = array();
@@ -453,19 +447,6 @@ if (basename($_SERVER['PHP_SELF']) == basename(__FILE__)) {
                     }
                 })
             <?php endif; ?>
-        <?php endif; ?>
-
-        <?php if (false && (int) $_SESSION['uid'] === 1) : /* Kutubkhanah: SLiMS release check disabled; SLiMS releases are not Kutubkhanah releases. */ ?>
-        // get lastest release
-        fetch('https://api.github.com/repos/slims/slims9_bulian/releases/latest')
-            .then(res => res.json())
-            .then(res => {
-                if (res.tag_name > '<?= SENAYAN_VERSION_TAG; ?>') {
-                    $('#new_version').text(res.tag_name);
-                    $('#alert-new-version').removeClass('hidden');
-                    $('#alert-new-version a').attr('href', res.html_url)
-                }
-            })
         <?php endif; ?>
 
     </script>

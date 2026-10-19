@@ -47,8 +47,8 @@ require SB.'admin/default/session_check.inc.php';
 // require SIMBIO.'simbio_DB/simbio_dbop.inc.php';
 
 $environment = array(
-  array('title' => __('SLiMS Environment Mode'), 'desc' => ucfirst(ENVIRONMENT)),
-  array('title' => __('SLiMS Version'), 'desc' => SENAYAN_VERSION_TAG),
+  array('title' => __('Environment Mode'), 'desc' => ucfirst(ENVIRONMENT)),
+  array('title' => __('Version'), 'desc' => SENAYAN_VERSION),
   array('title' => __('Operating System'), 'desc' => (function_exists('php_uname') ? php_uname('a') : (DS === '/' ? 'Unix Like' : 'MS Windows'))),
   array('title' => __('OS Architecture'), 'desc' => (function_exists('php_uname') ? php_uname('m') : 'uknown ').' '.(8 * PHP_INT_SIZE).' bit'),
   array('title' => __('Web Server'), 'desc' => $_SERVER['SERVER_SOFTWARE']),  
@@ -67,7 +67,7 @@ $environment = array(
       <h2><?php echo __('System Environment'); ?></h2>
     </div>
     <div class="infoBox">
-      <?php echo __('Information on SLiMS System Environment. Use this to support troubleshotting problem.'); ?>
+      <?php echo __('Information on the Kutubkhanah system environment. Use this to support troubleshotting problem.'); ?>
     </div>
   </div>
 </div>

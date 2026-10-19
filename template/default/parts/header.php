@@ -1,6 +1,6 @@
 <!--
 # ===============================
-# Classic SLiMS Template
+# Kutubkhanah OPAC template
 # ===============================
 # @Author: Waris Agung Widodo
 # @Email:  ido.alit@gmail.com
@@ -81,9 +81,9 @@ $request_uri = urlencode(strip_tags(urldecode($_SERVER['REQUEST_URI'])));
     <link rel="stylesheet" href="<?php echo assets('css/style.css?v=' . date('Ymd-his')); ?>">
     <!-- // Kutubkhanah theme (navy and gold, from the Private Library design); colours from Kutubkhanah > Settings > Display -->
     <link rel="preload" href="<?php echo SWB; ?>fonts/kutubkhanah/EBGaramond-Variable.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="<?php echo SWB; ?>css/kutubkhanah/fonts.css?v=1.2.1">
+    <link rel="stylesheet" href="<?php echo SWB; ?>css/kutubkhanah/fonts.css?v=1.2.2">
     <?php echo \SLiMS\Kutubkhanah\Library::privateFontFaces(); ?>
-    <link rel="stylesheet" href="<?php echo SWB; ?>css/kutubkhanah/theme.css?v=1.2.1">
+    <link rel="stylesheet" href="<?php echo SWB; ?>css/kutubkhanah/theme.css?v=1.2.2">
     <style><?php echo \SLiMS\Kutubkhanah\Settings::cssVars('body.kk-theme'); ?></style>
 
     <?php // Kutubkhanah: KK favicon set (images/kutubkhanah/) unless a custom web icon is set in System settings ?>

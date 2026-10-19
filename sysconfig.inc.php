@@ -72,9 +72,9 @@ if ((bool) ini_get('safe_mode')) {
     define('SENAYAN_IN_SAFE_MODE', 1);
 }
 
-// Kutubkhanah version (built on SLiMS 9.8.0; SENAYAN_VERSION_TAG stays the SLiMS tag for database/upgrade compatibility)
-define('KUTUBKHANAH_VERSION', '1.2.1');
-define('SENAYAN_VERSION', 'Kutubkhanah 1.2.1 (built on SLiMS 9.8.0)');
+// Kutubkhanah version. SENAYAN_VERSION_TAG is an internal database schema marker used by the upgrade routine; it is never shown.
+define('KUTUBKHANAH_VERSION', '1.2.2');
+define('SENAYAN_VERSION', 'Kutubkhanah 1.2.2');
 define('SENAYAN_VERSION_TAG', 'v9.8.0');
 
 // senayan session cookies name
@@ -375,9 +375,9 @@ $sysconf['reserve_direct_database'] = true;
 $sysconf['reserve_on_loan_only'] = false;
 
 /* CONTENT */
-$sysconf['library_name'] = 'Senayan';
-$sysconf['library_subname'] = 'Open Source Library Management System';
-$sysconf['page_footer'] = ' Kutubkhanah, built on Senayan Library Management System (SLiMS). Released under the GNU GPL v3.<br>SLiMS is made with love by the SLiMS Developer Community';
+$sysconf['library_name'] = 'Kutubkhanah';
+$sysconf['library_subname'] = 'Home Library';
+$sysconf['page_footer'] = 'Kutubkhanah. Brings together SLiMS, PMB and OpenBiblio. Released under the GNU GPL v3.';
 
 /* HTTPS Setting */
 $sysconf['https_enable'] = false;
@@ -478,7 +478,7 @@ $sysconf['OAI']['enable'] = true;
 $sysconf['OAI']['identifierPrefix'] = 'oai:slims/';
 $sysconf['OAI']['Identify']['baseURL'] = 'http://'.($_SERVER['SERVER_NAME']??'').':'.($_SERVER['SERVER_PORT']??'').SWB.'oai.php';
 $sysconf['OAI']['Identify']['repositoryName'] = 'Kutubkhanah Repository';
-$sysconf['OAI']['Identify']['adminEmail'] = 'admin@slims.web.id';
+$sysconf['OAI']['Identify']['adminEmail'] = 'librarian@localhost';
 $sysconf['OAI']['Identify']['granularity'] = 'YYYY-MM-DDThh:mm:ssZ';
 $sysconf['OAI']['Identify']['deletedRecord'] = 'transient';
 $sysconf['OAI']['Identify']['metadataPolicy'] = '';

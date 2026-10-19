@@ -75,7 +75,7 @@ if (isset($_GET['select_lang'])) {
             </form>
         </div>
         <div class="text-right">
-            <small class="text-grey-dark"><?= __('Powered by ')?> <code>SLiMS</code></small>
+            <small class="text-grey-dark"><?= __('Powered by ')?> <code>Kutubkhanah</code></small>
         </div>
     </div>
     <div class="flex-1 hidden md:block">

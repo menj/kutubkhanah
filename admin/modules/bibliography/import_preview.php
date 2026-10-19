@@ -63,12 +63,12 @@ if ( $files_disk->isExists($csv_file) ) :
         <h2><?php echo __('Preview Import'); ?></h2>
         </div>
         <div class="infoBox">
-            <?php echo __('Preview your data before import to SLiMS'); ?>
+            <?php echo __('Preview your data before import'); ?>
         </div>
     </div>
 </div>
 <div id="progress" class="d-none my-2 mx-2">
-    <p class="w-100 block"><?= __('Importing data to SLiMS') ?></p>
+    <p class="w-100 block"><?= __('Importing data') ?></p>
     <div class="progress">
         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
     </div>

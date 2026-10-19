@@ -97,7 +97,7 @@ foreach (config('database_backup') as $option => $value) {
 }
 // print out the form object
 echo $form->printOut();
-$confirm = __('Are you sure you want to make it automatically on first login?. It will take longer to complete if your SLiMS has a large collection.');
+$confirm = __('Are you sure you want to make it automatically on first login?. It will take longer to complete if your library has a large collection.');
 echo <<<HTML
 <script>
     $('#showadv').click(function() {

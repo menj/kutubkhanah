@@ -17,7 +17,7 @@ $baseUrl = strip_tags(str_replace(['/index.php','admin'],'', $_SERVER['PHP_SELF'
                 <p>
                     <?php $isIp = function_exists('filter_var') ? filter_var($_SERVER['SERVER_NAME'], FILTER_VALIDATE_IP) : preg_match('/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\z/', $_SERVER['SERVER_NAME']) ?>
                     <?php if ($_SERVER['SERVER_NAME'] === 'localhost' || $isIp): ?>
-                        Please run command via your favorite console (in SLiMS Root directory) : <br/>
+                        Please run command via your favorite console (in the Kutubkhanah root directory) : <br/>
                         <strong><code>php index.php env</code></strong>
                     <?php else: ?>
                         Call system administrator to fix it.

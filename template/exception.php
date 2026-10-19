@@ -23,7 +23,7 @@ if ($inSimbioRequest === false):
         <section class="container-fluid">
             <div class="row bg-white">
                 <div class="col-12 p-3">
-                    <strong>PHP <?= phpversion() ?> | SLiMS <?= SENAYAN_VERSION_TAG ?></strong>
+                    <strong>PHP <?= phpversion() ?> | <?= SENAYAN_VERSION ?></strong>
                 </div>
             </div>
             
