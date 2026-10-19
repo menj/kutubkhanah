@@ -11,17 +11,18 @@
 The open fonts were converted to WOFF2 without subsetting or other changes.
 The KFGQPC font is the original file because its licence does not allow it to be altered.
 
-## Optional licensed fonts (not distributed)
+## Licensed fonts (fonts/kutubkhanah/private/)
 
-These are referenced by the CSS but are **not** included, because their licences do not allow
-redistribution. If you hold a web-font licence, place the files in `fonts/kutubkhanah/private/`
-on your own server. They are git-ignored and excluded from release packages.
+These are part of the deployed CMS and are loaded by `Library::privateFontFaces()` (public site and admin).
+They are kept out of the public Git repository because their licences do not allow public redistribution;
+the deployment package includes them.
 
-| Font | Expected file names | Used for |
+| Font | Files | Used for |
 |---|---|---|
-| Kagnue (Youthlabs Studio) | `private/Kagnue-Regular.woff2` (or `.woff`, `.ttf`, `.otf`) | Display titles (hero, page banners) |
-| Ferments (Haksen Studio) | `private/Ferments-Regular.woff2` (or `.woff`, `.ttf`, `.otf`) | Hero quote accent |
+| Sabon Next LT (Monotype) | `SabonNextLT-Regular/Italic/Bold/BoldItalic.woff2` | First choice for all text and headings |
+| Kagnue (Youthlabs Studio) | `Kagnue-Regular.woff2` | Hero and banner titles, site name, statistics, A–Z links |
+| Kagnue Outline | `Kagnue-Outline.woff2` | Large A–Z letters on the catalogue shelf |
+| Ferments (Haksen Studio) | `Ferments-Regular.woff2`, `Ferments-Slant.woff2` (italic) | Hero tagline and mission quote |
 
-Sabon Next LT (Monotype) is listed first in the serif stack as a locally installed font only
-(`local()`), so visitors who have it installed see it. It is never downloaded or redistributed:
-the supplied file's licence limits it to Microsoft Sway.
+Each `@font-face` rule is printed only when its file is present, so a checkout without these files
+falls back to EB Garamond with no missing-file requests.

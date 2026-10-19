@@ -1,6 +1,12 @@
-Kutubkhanah 1.2.0
+Kutubkhanah 1.2.1
 =================
 A home library system built on SLiMS 9.8.0 (Bulian), licensed under the GNU GPL v3.
+
+### New in 1.2.1: full font stack
+- Sabon Next LT (text and headings), Kagnue (display titles), Kagnue Outline (catalogue A–Z letters)
+  and Ferments (tagline and quotes) are now active, alongside EB Garamond, Amiri, Noto Naskh Arabic,
+  KFGQPC HAFS and Special Elite. The licensed files live in `fonts/kutubkhanah/private/` and ship in the
+  deployment package, not in this public repository; without them the site falls back to EB Garamond.
 
 ### New in 1.2.0: KK brand and font stack
 - **KK brand mark**: a navy arch (library window / bookplate) with gold frame, an eight-pointed

@@ -28,7 +28,7 @@ if (empty($_SESSION['kk_token'])) {
     $_SESSION['kk_token'] = bin2hex(random_bytes(16));
 }
 
-const KK_VERSION = '1.2.0';
+const KK_VERSION = '1.2.1';
 
 function kk_e($s): string
 {
@@ -72,6 +72,7 @@ function kk_head(): string
         ],
     ];
     return '<link rel="stylesheet" href="' . SWB . 'css/kutubkhanah/fonts.css?v=' . KK_VERSION . '">'
+        . \SLiMS\Kutubkhanah\Library::privateFontFaces()
         . '<link rel="stylesheet" href="' . SWB . 'css/kutubkhanah/admin.css?v=' . KK_VERSION . '">'
         . '<script>window.kkAdmin = ' . json_encode($config, JSON_HEX_TAG | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE) . ';</script>';
 }

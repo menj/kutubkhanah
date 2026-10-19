@@ -73,8 +73,8 @@ if ((bool) ini_get('safe_mode')) {
 }
 
 // Kutubkhanah version (built on SLiMS 9.8.0; SENAYAN_VERSION_TAG stays the SLiMS tag for database/upgrade compatibility)
-define('KUTUBKHANAH_VERSION', '1.2.0');
-define('SENAYAN_VERSION', 'Kutubkhanah 1.2.0 (built on SLiMS 9.8.0)');
+define('KUTUBKHANAH_VERSION', '1.2.1');
+define('SENAYAN_VERSION', 'Kutubkhanah 1.2.1 (built on SLiMS 9.8.0)');
 define('SENAYAN_VERSION_TAG', 'v9.8.0');
 
 // senayan session cookies name

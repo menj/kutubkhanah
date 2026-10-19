@@ -150,21 +150,40 @@ class Library
     }
 
     /** @font-face rules for optional licensed fonts, only for files actually present in fonts/kutubkhanah/private/. */
+    /**
+     * @font-face rules for the licensed fonts in fonts/kutubkhanah/private/ (Sabon Next LT, Kagnue, Ferments).
+     * They ship in the deployment package but not in the public repository; each rule is printed only when its file exists.
+     */
     public static function privateFontFaces(): string
     {
         $dir = SB . 'fonts' . DS . 'kutubkhanah' . DS . 'private' . DS;
+        $faces = [
+            // family,           file base,                weight, style
+            ['Sabon Next LT',  'SabonNextLT-Regular',    400, 'normal'],
+            ['Sabon Next LT',  'SabonNextLT-Italic',     400, 'italic'],
+            ['Sabon Next LT',  'SabonNextLT-Bold',       700, 'normal'],
+            ['Sabon Next LT',  'SabonNextLT-BoldItalic', 700, 'italic'],
+            ['Kagnue',         'Kagnue-Regular',         400, 'normal'],
+            ['Kagnue Outline', 'Kagnue-Outline',         400, 'normal'],
+            ['Ferments',       'Ferments-Regular',       400, 'normal'],
+            ['Ferments',       'Ferments-Slant',         400, 'italic'],
+        ];
         $css = '';
-        foreach (['Kagnue' => 'Kagnue-Regular', 'Ferments' => 'Ferments-Regular'] as $family => $file) {
+        $have = [];
+        foreach ($faces as [$family, $file, $weight, $style]) {
             foreach (['woff2' => 'woff2', 'woff' => 'woff', 'ttf' => 'truetype', 'otf' => 'opentype'] as $ext => $format) {
                 if (is_file($dir . $file . '.' . $ext)) {
-                    $css .= '@font-face{font-family:"' . $family . '";font-weight:400;font-style:normal;font-display:swap;src:url("'
-                        . SWB . 'fonts/kutubkhanah/private/' . $file . '.' . $ext . '") format("' . $format . '")}';
+                    // Sabon also covers weights 500-600 and 800+ by range so semibold/extrabold requests map to the nearest cut.
+                    $w = $family === 'Sabon Next LT' ? ($weight === 700 ? '600 900' : '100 500') : (string)$weight;
+                    $css .= '@font-face{font-family:"' . $family . '";font-weight:' . $w . ';font-style:' . $style . ';font-display:swap;'
+                        . 'src:url("' . SWB . 'fonts/kutubkhanah/private/' . $file . '.' . $ext . '") format("' . $format . '")}';
+                    $have[$family] = true;
                     break;
                 }
             }
         }
         // Ferments is a script face: give the hero tagline enough size to stay readable when it is in use.
-        if (strpos($css, '"Ferments"') !== false) {
+        if (isset($have['Ferments'])) {
             $css .= 'body.kk-theme .kk-hero__tagline{font-size:1.75rem;font-style:normal;letter-spacing:.01em}';
         }
         return $css === '' ? '' : '<style>' . $css . '</style>';

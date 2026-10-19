@@ -293,3 +293,9 @@ textarea.kk-input { min-height: 140px; resize: vertical; }
 .kk-theme .blockquote h4, .kk-theme .blockquote-footer, .kk-theme .kk-page__body .text-grey-darker, .kk-theme .kk-author h2,
 .kk-theme .kk-author-box strong, .kk-card__title, .kk-card__author, .kk-theme .kk-book__title { unicode-bidi: plaintext; text-align: start; }
 .kk-theme .kk-author-box strong { display: block; }
+
+/* ---------- Display faces: Kagnue (titles), Kagnue Outline (large letters and numbers), Ferments (accents) ---------- */
+.kk-theme .kk-stat__num { font-family: var(--kk-font-display, var(--kk-serif)); font-weight: 400; font-size: 2.3rem; }
+.kk-theme .kk-footer__name, .kk-brand-name { font-family: var(--kk-font-display, var(--kk-serif)); font-weight: 400; letter-spacing: .06em; }
+.kk-theme .kk-section-title, .kk-theme .kk-page__body > h2 { font-family: var(--kk-font-heading); }
+.kk-theme .kk-mission__quote { font-family: var(--kk-font-script, var(--kk-serif)); font-style: normal; font-size: 1.6rem; }
