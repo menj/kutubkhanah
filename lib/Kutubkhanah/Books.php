@@ -79,6 +79,66 @@ class Books
         return (int)$db->lastInsertId();
     }
 
+    public static function placeId(string $name): ?int
+    {
+        $name = mb_substr(trim($name, " []:;,."), 0, 30);
+        if ($name === '') return null;
+        $st = self::db()->prepare('SELECT place_id FROM mst_place WHERE place_name = ? LIMIT 1');
+        $st->execute([$name]);
+        if ($id = (int)$st->fetchColumn()) return $id;
+        $today = date('Y-m-d');
+        $db = self::db();
+        $db->prepare('INSERT IGNORE INTO mst_place (place_name, input_date, last_update) VALUES (?, ?, ?)')->execute([$name, $today, $today]);
+        return (int)$db->lastInsertId() ?: null;
+    }
+
+    /** SLiMS language code for a 2-letter code, adding the language to SLiMS if it is new. */
+    public static function languageId(string $code): string
+    {
+        $code = strtolower(trim($code));
+        if (!preg_match('/^[a-z]{2,3}$/', $code)) return '';
+        $st = self::db()->prepare('SELECT language_id FROM mst_language WHERE language_id = ? LIMIT 1');
+        $st->execute([$code]);
+        if ($st->fetchColumn() !== false) return $code;
+        $name = Lookup::languageName($code);
+        $taken = self::db()->prepare('SELECT 1 FROM mst_language WHERE language_name = ?');
+        $taken->execute([$name]);
+        if ($taken->fetchColumn()) $name = mb_substr($name . ' (' . $code . ')', 0, 20);
+        $today = date('Y-m-d');
+        self::db()->prepare('INSERT IGNORE INTO mst_language (language_id, language_name, input_date, last_update) VALUES (?, ?, ?, ?)')
+            ->execute([$code, $name, $today, $today]);
+        return $code;
+    }
+
+    /** Link subject headings to a book (SLiMS topics), creating topics as needed. */
+    public static function attachSubjects(int $id, array $subjects): void
+    {
+        $find = self::db()->prepare('SELECT topic_id FROM mst_topic WHERE topic = ? LIMIT 1');
+        $link = self::db()->prepare('INSERT IGNORE INTO biblio_topic (biblio_id, topic_id, level) VALUES (?, ?, ?)');
+        $today = date('Y-m-d');
+        foreach (array_values($subjects) as $i => $topic) {
+            $topic = mb_substr(trim((string)$topic), 0, 50);
+            if ($topic === '') continue;
+            $find->execute([$topic]);
+            $tid = (int)$find->fetchColumn();
+            if (!$tid) {
+                $db = self::db();
+                $db->prepare("INSERT INTO mst_topic (topic, topic_type, classification, input_date, last_update) VALUES (?, 't', '', ?, ?)")
+                    ->execute([$topic, $today, $today]);
+                $tid = (int)$db->lastInsertId();
+            }
+            if ($tid) $link->execute([$id, $tid, $i === 0 ? 1 : 2]);
+        }
+    }
+
+    /** The collation SLiMS shows ("xxxiv, 671 p."), from the source's own wording or a page count. */
+    public static function collation(array $d): string
+    {
+        $c = trim((string)($d['collation'] ?? ''));
+        if ($c !== '' && preg_match('/\d/', $c)) return mb_substr($c, 0, 100);
+        return !empty($d['pages']) ? (int)$d['pages'] . ' p.' : '';
+    }
+
     private static function textGmdId(): ?int
     {
         static $id = false;
@@ -106,6 +166,7 @@ class Books
             'cover_tried' => null, 'source' => '', 'added' => null, 'format' => '', 'volume' => '',
             'tags' => '', 'digital_link' => '', 'oclc' => '', 'google_books_id' => '', 'goodreads_id' => '',
             'reading_progress' => 0, 'notes' => '', 'notes_public' => 0,
+            'lcc' => '', 'lccn' => '', 'openlibrary_id' => '', 'alt_title' => '', 'sources' => '',
         ];
     }
 
@@ -113,7 +174,7 @@ class Books
     {
         $allowed = ['needs_details', 'reading_status', 'cover_url', 'cover_tried', 'source', 'added',
             'format', 'volume', 'tags', 'digital_link', 'oclc', 'google_books_id', 'goodreads_id',
-            'reading_progress', 'notes', 'notes_public'];
+            'reading_progress', 'notes', 'notes_public', 'lcc', 'lccn', 'openlibrary_id', 'alt_title', 'sources'];
         $kv = array_intersect_key($kv, array_flip($allowed));
         if (!$kv) return;
         $cols = array_keys($kv);
@@ -166,18 +227,22 @@ class Books
 
         $db = self::db();
         $db->prepare(
-            'INSERT INTO biblio (gmd_id, title, sor, isbn_issn, publisher_id, publish_year, collation, language_id, notes,
-                                 opac_hide, promoted, input_date, last_update, uid)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?)'
+            'INSERT INTO biblio (gmd_id, title, sor, edition, isbn_issn, publisher_id, publish_year, collation, series_title,
+                                 language_id, publish_place_id, classification, notes, opac_hide, promoted, input_date, last_update, uid)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?)'
         )->execute([
             self::textGmdId(),
             $d['title'],
             mb_substr(implode(', ', $authors), 0, 200),
+            mb_substr((string)($d['edition'] ?? ''), 0, 50),
             mb_substr($isbn, 0, 32),
             $publisherId,
             $year,
-            !empty($d['pages']) ? (int)$d['pages'] . ' p.' : '',
-            Settings::get('default_language') ?: 'en',
+            self::collation($d),
+            mb_substr((string)($d['series'] ?? ''), 0, 200),
+            self::languageId((string)($d['language'] ?? '')) ?: (Settings::get('default_language') ?: 'en'),
+            self::placeId((string)($d['place'] ?? '')),
+            mb_substr((string)($d['dewey'] ?? ''), 0, 40),
             (string)($d['description'] ?? ''),
             $needs,
             $added,
@@ -187,15 +252,29 @@ class Books
         $id = (int)$db->lastInsertId();
 
         self::attachAuthors($id, $authors);
+        self::attachSubjects($id, (array)($d['subjects'] ?? []));
         self::addItems($id, max(1, (int)($d['copies'] ?? 1)), substr($added, 0, 10));
-        self::setMeta($id, [
+        self::setMeta($id, array_merge(self::lookupMeta($d), [
             'needs_details'  => $needs,
             'reading_status' => (string)($d['reading_status'] ?? ''),
             'cover_url'      => (string)($d['cover_url'] ?? ''),
             'source'         => (string)($d['source'] ?? ''),
             'added'          => substr($added, 0, 10),
-        ]);
+        ]));
         return $id;
+    }
+
+    /** kk_book fields that come from a lookup (identifiers, LC class, original-script title, sources used). */
+    public static function lookupMeta(array $d, array $current = []): array
+    {
+        $out = [];
+        $limits = ['lcc' => 60, 'lccn' => 20, 'oclc' => 30, 'openlibrary_id' => 20, 'google_books_id' => 30, 'alt_title' => 500];
+        foreach ($limits as $k => $n) {
+            $v = mb_substr(trim((string)($d[$k] ?? '')), 0, $n);
+            if ($v !== '' && trim((string)($current[$k] ?? '')) === '') $out[$k] = $v;
+        }
+        if (!empty($d['sources'])) $out['sources'] = mb_substr(implode(',', (array)$d['sources']), 0, 120);
+        return $out;
     }
 
     public static function attachAuthors(int $id, array $authors): void
@@ -263,19 +342,12 @@ class Books
 
         $data = Lookup::find($isbn);
         $found = $data['title'] !== '';
-        $id = self::create([
+        $id = self::create(array_merge($data, [
             'title'         => $found ? $data['title'] : 'ISBN ' . $isbn,
-            'authors'       => $data['authors'],
             'isbn13'        => $isbn,
-            'publisher'     => $data['publisher'],
-            'publish_date'  => $data['publish_date'],
-            'pages'         => $data['pages'],
-            'description'   => $data['description'],
             'needs_details' => !$found,
             'copies'        => 1,
-            'cover_url'     => $data['cover_url'],
-            'source'        => $data['source'],
-        ]);
+        ]));
         if (Settings::get('download_covers')) Covers::fetch($id);
         self::reindex($id);
 
@@ -285,6 +357,7 @@ class Books
             'isbn'    => $isbn,
             'title'   => self::title($id),
             'authors' => implode(', ', $data['authors']),
+            'sources' => implode(', ', array_map(fn($k) => Lookup::sources()[$k] ?? $k, $data['sources'])),
             'cover'   => self::thumb($id),
         ];
     }
@@ -308,7 +381,13 @@ class Books
         if (trim((string)$b['notes']) === '' && $data['description'] !== '') { $set[] = 'notes = ?'; $args[] = $data['description']; }
         if (empty($b['publisher_id']) && $data['publisher'] !== '') { $set[] = 'publisher_id = ?'; $args[] = self::publisherId($data['publisher']); }
         if (trim((string)$b['publish_year']) === '' && preg_match('/(\d{4})/', $data['publish_date'], $m)) { $set[] = 'publish_year = ?'; $args[] = $m[1]; }
-        if (trim((string)$b['collation']) === '' && $data['pages'] !== '') { $set[] = 'collation = ?'; $args[] = (int)$data['pages'] . ' p.'; }
+        if (trim((string)$b['collation']) === '' && ($c = self::collation($data)) !== '') { $set[] = 'collation = ?'; $args[] = $c; }
+        if (trim((string)$b['edition']) === '' && $data['edition'] !== '') { $set[] = 'edition = ?'; $args[] = mb_substr($data['edition'], 0, 50); }
+        if (trim((string)$b['series_title']) === '' && $data['series'] !== '') { $set[] = 'series_title = ?'; $args[] = mb_substr($data['series'], 0, 200); }
+        if (trim((string)$b['classification']) === '' && $data['dewey'] !== '') { $set[] = 'classification = ?'; $args[] = mb_substr($data['dewey'], 0, 40); }
+        if (empty($b['publish_place_id']) && $data['place'] !== '') { $set[] = 'publish_place_id = ?'; $args[] = self::placeId($data['place']); }
+        if ($data['language'] !== '' && in_array((string)$b['language_id'], ['', (string)(Settings::get('default_language') ?: 'en')], true)
+            && ($lang = self::languageId($data['language'])) !== '') { $set[] = 'language_id = ?'; $args[] = $lang; }
 
         $hasAuthors = self::db()->prepare('SELECT COUNT(*) FROM biblio_author WHERE biblio_id = ?');
         $hasAuthors->execute([$id]);
@@ -319,7 +398,11 @@ class Books
         $args[] = $id;
         self::db()->prepare('UPDATE biblio SET ' . implode(', ', $set) . ' WHERE biblio_id = ?')->execute($args);
 
-        $meta = ['needs_details' => 0, 'cover_tried' => null, 'source' => $data['source']];
+        $hasTopics = self::db()->prepare('SELECT COUNT(*) FROM biblio_topic WHERE biblio_id = ?');
+        $hasTopics->execute([$id]);
+        if (!$hasTopics->fetchColumn() && $data['subjects']) self::attachSubjects($id, $data['subjects']);
+
+        $meta = array_merge(self::lookupMeta($data, self::meta($id)), ['needs_details' => 0, 'cover_tried' => null, 'source' => $data['source']]);
         if ($data['cover_url'] !== '') $meta['cover_url'] = $data['cover_url'];
         self::setMeta($id, $meta);
         if (empty($b['image']) && Settings::get('download_covers')) Covers::fetch($id);

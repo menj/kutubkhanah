@@ -1,7 +1,17 @@
-Kutubkhanah 1.3.0
+Kutubkhanah 1.4.0
 =================
 A home library system that brings together three open-source library systems, **SLiMS**, **PMB**
 and **OpenBiblio**, licensed under the GNU GPL v3.
+
+### New in 1.4.0: more book databases
+- **Five free sources**, asked at the same time when you scan: Open Library, the Library of Congress,
+  Google Books, K10plus (about 200 German and international libraries) and any other library catalogue
+  with an SRU search (for example a national library). Turn each on or off in Settings > Lookup.
+- **Fuller records:** edition, place of publication, pages, language, series, subjects, Dewey and
+  Library of Congress classes, LCCN and OCLC numbers, and the original-script title (for example the
+  Arabic title of a romanised record), shown on the book page with links to Open Library, the Library
+  of Congress and WorldCat.
+- "Retry lookup" on older books fills the new details in, without touching anything you edited.
 
 ### New in 1.3.0: PHP 8.4
 - **PHP 8.4 is now the minimum.** The installer checks for it, and an older PHP gets a clear message

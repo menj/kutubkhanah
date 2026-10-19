@@ -113,11 +113,24 @@ echo kk_head();
   <!-- Lookup -->
   <form class="kk-panel kk-settings notAJAX" id="kk-pane-lookup" role="tabpanel" aria-labelledby="kk-tab-lookup" data-tab="lookup" hidden>
     <?php
-    kk_row(__('Source order'),
-        '<select name="source_order" class="kk-input">'
-        . '<option value="openlibrary_first"' . ($s['source_order'] === 'openlibrary_first' ? ' selected' : '') . '>' . __('Open Library, then Google Books') . '</option>'
-        . '<option value="google_first"' . ($s['source_order'] === 'google_first' ? ' selected' : '') . '>' . __('Google Books, then Open Library') . '</option></select>',
-        __('The second source fills gaps left by the first, such as a missing cover.'));
+    $srcHelp = [
+        'openlibrary' => __('Free and open (Internet Archive). Descriptions, subjects, Dewey and LC classes, covers.'),
+        'loc'         => __('The US national library catalogue. Excellent records for English and many Arabic titles.'),
+        'google'      => __('Good descriptions and covers, especially for recent books.'),
+        'k10plus'     => __('Union catalogue of about 200 German and international libraries, strong on academic and European titles.'),
+        'custom'      => __('Any library catalogue with an SRU search that returns MARCXML, for example a national library.'),
+    ];
+    $checks = '';
+    foreach (\SLiMS\Kutubkhanah\Lookup::sources() as $key => $label) {
+        $checks .= kk_check('src_' . $key, $label, $s) . '<p class="kk-note kk-note--tight">' . kk_e($srcHelp[$key]) . '</p>';
+    }
+    kk_row(__('Book databases'), $checks,
+        __('Every ticked source is asked at the same time. The first in this list that knows a detail wins, and later sources only fill what is still missing.'));
+    kk_row(__('Custom SRU catalogue'),
+        '<input type="url" name="sru_custom_url" placeholder="https://example.org/sru" value="' . kk_e($s['sru_custom_url']) . '" class="kk-input">'
+        . '<label class="kk-note" for="kk-sru-index">' . __('ISBN index name') . '</label>'
+        . '<input type="text" id="kk-sru-index" name="sru_custom_index" value="' . kk_e($s['sru_custom_index']) . '" class="kk-input kk-input--mid">',
+        __('The base address of the catalogue’s SRU service and its ISBN index (often "isbn", "bath.isbn" or "dc.identifier"). Tick "Custom SRU catalogue" above to use it.'));
     kk_row(__('Google Books API key'), '<input type="text" name="google_key" autocomplete="off" value="' . kk_e($s['google_key']) . '" class="kk-input">',
         __('Optional. A free key avoids Google’s anonymous rate limit during large cover runs.'));
     kk_row(__('Covers'), kk_check('download_covers', __('Download a cover when a book is scanned'), $s));

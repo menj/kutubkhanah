@@ -26,6 +26,9 @@
 .kk-link { background: none; border: 0; padding: 0; margin-top: 8px; color: var(--kk-accent); cursor: pointer; font: inherit; }
 .kk-input { height: 34px; padding: 0 10px; border: 1px solid var(--kk-line); border-radius: 6px; font: inherit; width: 100%; max-width: 420px; background: #fff; }
 .kk-input--short { width: 90px; }
+.kk-input--mid { width: 180px; }
+.kk-note--tight { margin: -6px 0 10px 24px; font-size: 12px; }
+.kk-row__field > label.kk-note { display: block; margin: 10px 0 4px; }
 .kk-check { display: block; margin: 0 0 8px; font-weight: 400; }
 .kk-check--inline { display: inline-block; margin: 0; }
 

@@ -89,7 +89,7 @@
         var j = res.j || {};
         if (!res.ok) { fill(li, 'error', isbn, j.message || t.failed); return; }
         if (j.status === 'created') {
-          fill(li, 'created', j.title, t.created + (j.authors ? ' · ' + j.authors : ''), j.cover, j.id);
+          fill(li, 'created', j.title, t.created + (j.authors ? ' · ' + j.authors : '') + (j.sources ? ' · ' + t.from + ' ' + j.sources : ''), j.cover, j.id);
         } else if (j.status === 'incomplete') {
           fill(li, 'incomplete', j.isbn, t.incomplete, j.cover, j.id);
         } else {

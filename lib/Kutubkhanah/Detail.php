@@ -54,6 +54,13 @@ class Detail
         $m = Books::meta($id);
         $out = '<div class="kk-detail-extra">';
 
+        if (($m['alt_title'] ?? '') !== '') {
+            $out .= '<p class="kk-alt-title" dir="auto" lang="' . (preg_match('/\p{Arabic}/u', $m['alt_title']) ? 'ar' : '') . '">' . $e($m['alt_title']) . '</p>';
+        }
+        if (($m['lcc'] ?? '') !== '') {
+            $out .= '<p class="kk-detail-lcc"><span>' . __('LC class') . '</span> <span class="kk-detail-call">' . $e($m['lcc']) . '</span></p>';
+        }
+
         $badges = '';
         if ($m['format'] !== '') $badges .= '<span class="kk-badge kk-badge--navy">' . $e($m['format']) . '</span>';
         $badges .= Library::readingBadge((string)$m['reading_status']);
@@ -70,6 +77,8 @@ class Detail
         if ($m['digital_link'] !== '') $links .= '<a class="kk-btn kk-btn--gold kk-btn--sm" href="' . $e($m['digital_link']) . '" target="_blank" rel="noopener noreferrer">' . __('View digital copy') . '</a>';
         if ($m['google_books_id'] !== '') $links .= '<a class="kk-btn kk-btn--outline kk-btn--sm" href="https://books.google.com/books?id=' . rawurlencode($m['google_books_id']) . '" target="_blank" rel="noopener noreferrer">Google Books</a>';
         if ($m['goodreads_id'] !== '') $links .= '<a class="kk-btn kk-btn--outline kk-btn--sm" href="https://www.goodreads.com/book/show/' . rawurlencode($m['goodreads_id']) . '" target="_blank" rel="noopener noreferrer">Goodreads</a>';
+        if (($m['openlibrary_id'] ?? '') !== '') $links .= '<a class="kk-btn kk-btn--outline kk-btn--sm" href="https://openlibrary.org/books/' . rawurlencode($m['openlibrary_id']) . '" target="_blank" rel="noopener noreferrer">Open Library</a>';
+        if (($m['lccn'] ?? '') !== '') $links .= '<a class="kk-btn kk-btn--ghost kk-btn--sm" href="https://lccn.loc.gov/' . rawurlencode($m['lccn']) . '" target="_blank" rel="noopener noreferrer">' . __('Library of Congress') . '</a>';
         if ($m['oclc'] !== '') $links .= '<a class="kk-btn kk-btn--ghost kk-btn--sm" href="https://www.worldcat.org/oclc/' . rawurlencode($m['oclc']) . '" target="_blank" rel="noopener noreferrer">WorldCat</a>';
         if ($links) $out .= '<div class="kk-links">' . $links . '</div>';
 

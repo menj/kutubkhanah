@@ -28,7 +28,7 @@ if (empty($_SESSION['kk_token'])) {
     $_SESSION['kk_token'] = bin2hex(random_bytes(16));
 }
 
-const KK_VERSION = '1.3.0';
+const KK_VERSION = '1.4.0';
 
 function kk_e($s): string
 {
@@ -54,6 +54,7 @@ function kk_head(): string
             'invalid'    => __('Not a valid ISBN.'),
             'looking'    => __('Looking up…'),
             'created'    => __('Added'),
+            'from'       => __('from'),
             'incomplete' => __('Saved, needs details'),
             'duplicate'  => __('Already in the library'),
             'copyadded'  => __('Copy added'),

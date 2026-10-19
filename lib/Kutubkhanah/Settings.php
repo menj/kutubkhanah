@@ -52,7 +52,13 @@ class Settings
             'dark_text'       => '#e5e7eb',
             'dark_muted'      => '#94a3b8',
             // Lookup
-            'source_order'    => 'openlibrary_first',
+            'src_openlibrary' => 1,
+            'src_loc'         => 1,
+            'src_google'      => 1,
+            'src_k10plus'     => 1,
+            'src_custom'      => 0,
+            'sru_custom_url'  => '',
+            'sru_custom_index' => 'isbn',
             'google_key'      => '',
             'download_covers' => 1,
         ];
@@ -79,7 +85,9 @@ class Settings
                 'dark_text' => 'color', 'dark_muted' => 'color',
             ],
             'lookup' => [
-                'source_order' => 'order', 'google_key' => 'text', 'download_covers' => 'bool',
+                'src_openlibrary' => 'bool', 'src_loc' => 'bool', 'src_google' => 'bool', 'src_k10plus' => 'bool',
+                'src_custom' => 'bool', 'sru_custom_url' => 'url', 'sru_custom_index' => 'sruindex',
+                'google_key' => 'text', 'download_covers' => 'bool',
             ],
         ];
     }
@@ -126,8 +134,11 @@ class Settings
                 case $type === 'scheme':
                     $out[$key] = in_array($raw, ['auto', 'light', 'dark'], true) ? $raw : 'auto';
                     break;
-                case $type === 'order':
-                    $out[$key] = in_array($raw, ['openlibrary_first', 'google_first'], true) ? $raw : 'openlibrary_first';
+                case $type === 'url':
+                    $out[$key] = ($raw === '' || (preg_match('#^https?://#i', $raw) && filter_var($raw, FILTER_VALIDATE_URL))) ? mb_substr($raw, 0, 300) : '';
+                    break;
+                case $type === 'sruindex':
+                    $out[$key] = preg_match('/^[A-Za-z][A-Za-z0-9._-]{0,39}$/', $raw) ? $raw : 'isbn';
                     break;
                 case $type === 'lang':
                     $out[$key] = preg_match('/^[a-z]{2,5}$/', $raw) ? $raw : 'en';

@@ -1,6 +1,14 @@
 Kutubkhanah changelog
 =====================
 
+1.4.0
+- Lookups from Open Library (edition + work), Library of Congress (SRU), Google Books, K10plus (SRU)
+  and a custom SRU catalogue, fetched in parallel and merged by trust order.
+- New stored details: edition, place, collation, language (added to SLiMS when new), series, subjects,
+  Dewey, LC class, LCCN, OCLC, Open Library ID, Google Books ID, original-script title, sources used.
+- Settings > Lookup: per-source switches and custom SRU address and ISBN index.
+- Book page: original-script title, LC class, Open Library and Library of Congress links.
+
 1.3.0
 - PHP 8.4 is the minimum version (installer check, runtime check, Composer and Docker).
 - All PHP 8.4 deprecations fixed in Kutubkhanah and the bundled libraries.

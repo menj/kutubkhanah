@@ -33,7 +33,7 @@ class Covers
             if (self::save($url, $id)) { $ok = true; break; }
         }
         if (!$ok && $isbn13 !== '') {
-            $g = Lookup::google($isbn13);
+            $g = Lookup::googleByIsbn($isbn13);
             if ($g && $g['cover_url'] !== '') {
                 Books::setMeta($id, ['cover_url' => $g['cover_url']]);
                 $ok = self::save($g['cover_url'], $id);

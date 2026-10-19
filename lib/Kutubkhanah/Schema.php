@@ -11,7 +11,7 @@ namespace SLiMS\Kutubkhanah;
 
 class Schema
 {
-    const VERSION = '1.2.2';
+    const VERSION = '1.4.0';
 
     /** Columns of kk_book, in order. Missing ones are added on upgrade. */
     private static function bookColumns(): array
@@ -34,6 +34,12 @@ class Schema
             'reading_progress' => "tinyint(3) unsigned NOT NULL default '0'",
             'notes'            => 'text',
             'notes_public'     => "tinyint(1) NOT NULL default '0'",
+            // 1.4.0: richer lookups
+            'lcc'              => "varchar(60) NOT NULL default ''",
+            'lccn'             => "varchar(20) NOT NULL default ''",
+            'openlibrary_id'   => "varchar(20) NOT NULL default ''",
+            'alt_title'        => "varchar(500) NOT NULL default ''",
+            'sources'          => "varchar(120) NOT NULL default ''",
         ];
     }
 
