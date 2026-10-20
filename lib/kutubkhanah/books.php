@@ -320,6 +320,7 @@ class Books
         if (!class_exists('biblio_indexer')) require_once MDLBS . 'system/biblio_indexer.inc.php';
         $dbs->query('DELETE FROM search_biblio WHERE biblio_id = ' . (int)$id);
         (new \biblio_indexer($dbs))->makeIndex((int)$id);
+        Hooks::action('kk_book_saved', (int)$id);
     }
 
     /* ---------- Scan flow ---------- */

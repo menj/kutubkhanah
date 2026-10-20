@@ -90,6 +90,7 @@ $GLOBALS['kk_desc'] = $kkDesc;
     <link rel="stylesheet" href="<?php echo assets('css/flag-icon.min.css'); ?>">
     <!-- // my custom style -->
     <link rel="stylesheet" href="<?php echo assets('css/style.css?v=' . date('Ymd-his')); ?>">
+    <?php echo \SLiMS\Kutubkhanah\Theme::head(); \SLiMS\Kutubkhanah\Hooks::action('kk_head'); ?>
     <!-- // Kutubkhanah theme (navy and gold, from the Private Library design); colours from Kutubkhanah > Settings > Display -->
     <link rel="preload" href="<?php echo SWB; ?>fonts/kutubkhanah/EBGaramond-Variable.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="<?php echo SWB; ?>css/kutubkhanah/fonts.css?v=1.6.0">

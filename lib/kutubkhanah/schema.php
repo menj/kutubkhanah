@@ -11,7 +11,7 @@ namespace SLiMS\Kutubkhanah;
 
 class Schema
 {
-    const VERSION = '1.9.0';
+    const VERSION = '1.10.0';
 
     /** Columns of kk_book, in order. Missing ones are added on upgrade. */
     private static function bookColumns(): array
@@ -274,6 +274,13 @@ class Schema
             `main` tinyint(1) NOT NULL default '1',
             PRIMARY KEY (`kind`, `slug`),
             KEY `ref` (`kind`, `ref`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+        // Options for plugins (the WordPress/Omeka get_option and update_option store).
+        $db->query("CREATE TABLE IF NOT EXISTS `kk_option` (
+            `name` varchar(190) NOT NULL,
+            `value` mediumtext,
+            PRIMARY KEY (`name`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
 
         // AI discovery files: how often each crawler fetched each file, per day.

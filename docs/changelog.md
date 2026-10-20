@@ -2,6 +2,15 @@
 
 All notable changes to Kutubkhanah. Newest first. The version number lives in `sysconfig.inc.php` (see `ssot.md`).
 
+## 1.10.0
+
+- Themes: a theme manager (Kutubkhanah > Themes) with live preview, child themes (`theme.json` with `parent`) and upload.
+  WordPress themes (`style.css`) and Omeka Classic themes (`theme.ini`) run through compatibility layers; see `themes.md`.
+- Plugins: a plugin system (Kutubkhanah > Plugins) with WordPress-style actions, filters and shortcodes, activate/deactivate/delete
+  and .zip upload. WordPress plugins and Omeka Classic plugins run on compatibility layers; see `plugins.md`.
+- New table `kk_option` (plugin options and transients), created automatically.
+- `flash()` can now be echoed safely, for themes written for other systems.
+
 ## 1.9.0
 
 - AI Discovery Files built in: `llms.txt`, `ai.txt`, `identity.json`, `ai.json`, `brand.txt`, `faq-ai.txt`, `llm.txt`,

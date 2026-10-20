@@ -305,7 +305,7 @@ class Opac
         // }
 
         // parse into template
-        require $opac->sysconf['template']['dir'].'/'.$opac->sysconf['template']['theme'].'/index_template.inc.php';
+        require \SLiMS\Kutubkhanah\Theme::file('index_template.inc.php');
         exit;
     }
 

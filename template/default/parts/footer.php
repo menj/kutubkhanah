@@ -104,5 +104,6 @@ include LIB . "contents/chat.php"; ?>
         })
     </script>
 <?php endif; ?>
+<?php echo \SLiMS\Kutubkhanah\Theme::footer(); \SLiMS\Kutubkhanah\Hooks::action('kk_footer'); ?>
 </body>
 </html>

@@ -86,8 +86,8 @@ if (PHP_VERSION_ID < 80400) {
 }
 
 // Kutubkhanah version. SENAYAN_VERSION_TAG is an internal database schema marker used by the upgrade routine; it is never shown.
-define('KUTUBKHANAH_VERSION', '1.9.0');
-define('SENAYAN_VERSION', 'Kutubkhanah 1.9.0');
+define('KUTUBKHANAH_VERSION', '1.10.0');
+define('SENAYAN_VERSION', 'Kutubkhanah 1.10.0');
 define('SENAYAN_VERSION_TAG', 'v9.8.0');
 
 // senayan session cookies name

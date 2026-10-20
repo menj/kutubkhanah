@@ -56,6 +56,22 @@
     }).catch(function () { btn.disabled = false; window.alert(t.error); });
   });
 
+  /* Theme and plugin upload (.zip) */
+  each('form[data-kk-zip]', function (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var out = form.querySelector('.kk-saved');
+      var fd = new FormData(form);
+      fd.append('target', form.getAttribute('data-target'));
+      out.textContent = t.working;
+      api('install_zip', fd, true).then(function (res) {
+        if (!res.ok) { out.textContent = (res.j && res.j.message) || t.error; return; }
+        out.textContent = t.saved;
+        reloadPane(window.location.pathname);
+      }).catch(function () { out.textContent = t.error; });
+    });
+  });
+
   /* Settings tabs */
   each('.kk-tabs [role="tab"]', function (tab) {
     tab.addEventListener('click', function () {

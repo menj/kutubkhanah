@@ -133,6 +133,8 @@ if (!function_exists('flash'))
         if (!empty($message) && !empty($key))  return Flash::register($key, $message);
 
         return new Class {
+            // Lets themes written for other systems echo flash() safely.
+            public function __toString(): string { return ''; }
             public function __call($method, $arguments)
             {
                 if (method_exists(Flash::class, $method)) 

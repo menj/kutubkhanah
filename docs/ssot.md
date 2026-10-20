@@ -54,7 +54,7 @@ Docker files are in `docker/`, long-form docs in `docs/`.
 
 | Path | Purpose |
 |---|---|
-| `docs/` | install.md, upgrading.md, changelog.md, ssot.md |
+| `docs/` | install.md, upgrading.md, changelog.md, ssot.md, themes.md, plugins.md |
 | `docker/` | Dockerfile, docker-compose.yml, entrypoint.sh, .env.example |
 | `lib/kutubkhanah/` | Own classes (Books, Library, Settings, Schema, Loans, Wishlist, Series, Fields, Lists, Duplicates, DocSearch, Covers, Lookup, Importer, Api, ...) |
 | `lib/kutubkhanah/blog/` | Journal (blog): Posts, Terms, Comments, Media, Render, Import, Text, Wp |
@@ -151,3 +151,10 @@ Unfinished installs (database.php without env.php) redirect to `install/index.ph
 `lib/kutubkhanah/ai-files.php`, page `kk-ai`, setting keys `ai_*` (Settings > AI files), table `kk_ai_hit`.
 Files follow the AI Discovery Files Specification v1.14.0 (ai-visibility.org.uk). Native port of the "AI Discovery Files"
 plugin by 365i (GPL v2 or later); credit in README.
+
+## Themes and plugins
+
+Classes `Theme`, `Hooks`, `Plugins` in `lib/kutubkhanah/`; compatibility layers in `lib/kutubkhanah/compat/` (`wordpress.php`, `omeka.php`, `wordpress-theme.php`, `omeka-theme.php`).
+Active theme: `template` setting row (`theme`); active plugins: `kk_plugins` setting row; plugin options: table `kk_option`.
+Admin pages `themes.php`, `plugins.php`, `plugin-page.php`; API actions `theme_activate`, `plugin_activate`, `plugin_deactivate`, `plugin_delete`, `install_zip`.
+Docs: `themes.md`, `plugins.md` (kept separate on purpose). Omeka S and WordPress block themes are out of scope.

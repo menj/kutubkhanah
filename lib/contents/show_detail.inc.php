@@ -119,7 +119,7 @@ if (isset($_GET['inXML']) AND !empty($_GET['inXML'])) {
 
     // create detail object
     $detail = new detail($dbs, $detail_id);
-    $detail->setTemplate($sysconf['template']['dir'].'/'.$sysconf['template']['theme'].'/detail_template.php');
+    $detail->setTemplate(\SLiMS\Kutubkhanah\Theme::file('detail_template.php'));
 
     // set the content for info box
     $info = '<strong>'.strtoupper(__('Record Detail')).'</strong><hr />';
@@ -134,6 +134,7 @@ if (isset($_GET['inXML']) AND !empty($_GET['inXML'])) {
 
     // output the record detail
     echo $detail->showDetail();
+    \SLiMS\Kutubkhanah\Hooks::action('kk_book_page', (int)$detail_id, (string)($detail->record_title ?? ''));
     $opac->page_title = ($detail->record_title??'Not found').' | '.$sysconf['library_name'];
     $opac->metadata   = $detail->metadata;
     $opac->image_src  = $detail->image_src;

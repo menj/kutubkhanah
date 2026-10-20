@@ -29,4 +29,7 @@ $menu['kutubkhanah.comments'] = array(__('Comments'), MWB . 'kutubkhanah/blog_co
 $menu['kutubkhanah.media']    = array(__('Media'), MWB . 'kutubkhanah/blog_media.php', __('Images for posts'));
 $menu['kutubkhanah.wpimport'] = array(__('Import from WordPress'), MWB . 'kutubkhanah/blog_import.php', __('Bring posts, pages and comments over from WordPress'));
 $menu['kutubkhanah.header-settings'] = array('Header', __('SETTINGS'));
+$menu['kutubkhanah.themes']   = array(__('Themes'), MWB . 'kutubkhanah/themes.php', __('Choose how the public site looks: Kutubkhanah, WordPress and Omeka Classic themes'));
+$menu['kutubkhanah.plugins']  = array(__('Plugins'), MWB . 'kutubkhanah/plugins.php', __('Add features: Kutubkhanah, WordPress and Omeka Classic plugins'));
+try { \SLiMS\Kutubkhanah\Plugins::boot(); foreach (\SLiMS\Kutubkhanah\Plugins::pages() as $k => $pg) $menu['kutubkhanah.plugin-' . $k] = array($pg['title'], MWB . 'kutubkhanah/plugin-page.php?page=' . rawurlencode($k), $pg['title']); } catch (\Throwable $e) { error_log('Kutubkhanah plugin menu: ' . $e->getMessage()); }
 $menu['kutubkhanah.settings'] = array(__('Settings'), MWB . 'kutubkhanah/settings.php', __('Shelf page, colours and lookup sources'));

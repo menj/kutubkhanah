@@ -142,7 +142,7 @@ $page_title = __('Forgot My Password').' | '.$sysconf['library_name'];
 
 if ($sysconf['template']['base'] == 'html') {
     // create the template object
-    $template = new simbio_template_parser($sysconf['template']['dir'].'/'.$sysconf['template']['theme'].'/login_template.html');
+    $template = new simbio_template_parser(\SLiMS\Kutubkhanah\Theme::file('login_template.html'));
     // assign content to markers
     $template->assign('<!--PAGE_TITLE-->', $page_title);
     $template->assign('<!--CSS-->', $sysconf['template']['css']);
@@ -150,6 +150,6 @@ if ($sysconf['template']['base'] == 'html') {
     // print out the template
     $template->printOut();
 } else if ($sysconf['template']['base'] == 'php') {
-    require_once $sysconf['template']['dir'].'/'.$sysconf['template']['theme'].'/login_template.inc.php';
+    require_once \SLiMS\Kutubkhanah\Theme::file('login_template.inc.php');
 }
 exit();

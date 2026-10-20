@@ -41,6 +41,9 @@ require 'sysconfig.inc.php';
 // Kutubkhanah: readable addresses (must run before anything reads $_GET)
 try { \SLiMS\Kutubkhanah\Permalink::boot(); } catch (\Throwable $e) { error_log('Kutubkhanah permalinks: ' . $e->getMessage()); }
 
+// Kutubkhanah: theme chain and active plugins
+try { \SLiMS\Kutubkhanah\Theme::boot(); \SLiMS\Kutubkhanah\Plugins::boot(); } catch (\Throwable $e) { error_log('Kutubkhanah theme/plugins: ' . $e->getMessage()); }
+
 // Cleanup SQL Injection and Common XSS
 $sanitizer->cleanUp(exception: ['contentDesc','fieldEnc']);
 

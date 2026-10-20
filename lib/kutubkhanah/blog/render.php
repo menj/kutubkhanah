@@ -11,6 +11,7 @@
 
 namespace SLiMS\Kutubkhanah\Blog;
 
+use SLiMS\Kutubkhanah\Hooks;
 use SLiMS\Kutubkhanah\Library;
 use SLiMS\Kutubkhanah\Messages;
 use SLiMS\Kutubkhanah\Series;
@@ -101,7 +102,8 @@ class Render
         $html = preg_replace('#<img(?![^>]*\bloading=)#i', '<img loading="lazy" decoding="async"', $html);
         $html = preg_replace('#<table#i', '<div class="kk-table-wrap"><table', $html);
         $html = preg_replace('#</table>#i', '</table></div>', $html);
-        return $html;
+        // Plugin shortcodes and the_content filters.
+        return (string)Hooks::filter('the_content', Hooks::shortcodes($html));
     }
 
     public static function embed(string $url): string

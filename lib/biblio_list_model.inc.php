@@ -193,7 +193,7 @@ abstract class biblio_list_model
     }
 
     // include biblio list HTML template callback
-    include SB.$sysconf['template']['dir'].'/'.$sysconf['template']['theme'].'/biblio_list_template.php';
+    include \SLiMS\Kutubkhanah\Theme::file('biblio_list_template.php');
     $settings = '';
     $settings = get_object_vars($this);
     $settings['keywords'] = $_keywords;

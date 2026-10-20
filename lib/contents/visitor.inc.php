@@ -83,7 +83,7 @@ if (isset($_POST['counter'])) {
 }
 
 // include visitor form template
-require SB.$sysconf['template']['dir'].'/'.$sysconf['template']['theme'].'/visitor_template.php';
+require \SLiMS\Kutubkhanah\Theme::file('visitor_template.php');
 
 ?>
 <div style="display: none !important;">

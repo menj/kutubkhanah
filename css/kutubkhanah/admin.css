@@ -119,3 +119,16 @@
 .kk-picker__item { display: block; width: 100%; text-align: start; background: none; border: 0; padding: 8px 10px; border-radius: 3px; cursor: pointer; color: inherit; font: inherit; }
 .kk-picker__item:hover, .kk-picker__item:focus-visible { background: var(--kk-soft); outline: none; }
 .kk-merge .kk-check { display: flex; gap: 10px; align-items: flex-start; }
+
+/* Themes and plugins */
+.kk-themes { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin-bottom: 16px; }
+.kk-theme { background: #fff; border: 1px solid var(--kk-line); border-radius: var(--kk-r); overflow: hidden; display: flex; flex-direction: column; }
+.kk-theme.is-active { border-color: var(--kk-gold, #c9a227); box-shadow: 0 0 0 1px var(--kk-gold, #c9a227); }
+.kk-theme__shot { aspect-ratio: 4 / 3; background: #f1f5f9; display: grid; place-items: center; font-size: 3rem; color: #94a3b8; overflow: hidden; }
+.kk-theme__shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.kk-theme__body { padding: 14px 16px 16px; }
+.kk-theme__body h3 { margin: 0 0 4px; font-size: 1rem; }
+.kk-badge { display: inline-block; font-size: .7rem; font-weight: 600; padding: 2px 8px; border-radius: 999px; background: var(--kk-gold, #c9a227); color: #0f172a; vertical-align: middle; }
+.kk-plugins .is-active { background: #fffbeb; }
+.kk-list__actions { display: flex; gap: 8px; flex-shrink: 0; }
+.kk-note--error { color: #b91c1c; }

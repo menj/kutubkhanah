@@ -1,4 +1,4 @@
-Kutubkhanah 1.9.0
+Kutubkhanah 1.10.0
 =================
 A self-hosted home library CMS. Catalogue your books by scanning ISBN barcodes, publish them on a public library site, lend them
 to friends and family, and keep a journal alongside. It replaces Libib, runs on your own server and needs only PHP and one of
@@ -7,6 +7,10 @@ MySQL/MariaDB, PostgreSQL or SQLite. Licensed under the GNU GPL v3.
 Documents: [install.md](docs/install.md) (install guide), [upgrading.md](docs/upgrading.md) (how to upgrade),
 [changelog.md](docs/changelog.md) (what changed), [ssot.md](docs/ssot.md) (single source of truth for developers),
 [readme.txt](readme.txt) (plain-text summary).
+
+### New in 1.10.0: themes and plugins
+- A theme manager with child themes, and a plugin system with hooks, shortcodes and .zip upload.
+- Runs many WordPress and Omeka Classic themes and plugins through compatibility layers. See `docs/themes.md` and `docs/plugins.md` for what is and is not supported.
 
 ### New in 1.9.0: AI discovery files
 - `llms.txt`, `ai.txt`, `identity.json` and seven more files from the AI Discovery Files Specification, generated from

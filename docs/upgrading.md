@@ -2,6 +2,11 @@
 
 Kutubkhanah upgrades itself. There is no upgrade wizard: replace the files, then open the admin.
 
+## 1.10.0
+
+New table `kk_option` is created on first admin visit. New folder `plugins/` is where plugins go; stock `*.plugin.php` files there are untouched.
+Existing themes keep working; `template/default/theme.json` is new.
+
 ## Before you start
 
 1. **Back up the database.** Admin > System > Backup, or your own tool.

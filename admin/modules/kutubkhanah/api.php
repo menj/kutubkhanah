@@ -24,6 +24,8 @@ use SLiMS\Kutubkhanah\Library;
 use SLiMS\Kutubkhanah\Loans;
 use SLiMS\Kutubkhanah\Series;
 use SLiMS\Kutubkhanah\Settings;
+use SLiMS\Kutubkhanah\Theme;
+use SLiMS\Kutubkhanah\Plugins;
 use SLiMS\Kutubkhanah\Wishlist;
 
 require __DIR__ . '/kk.inc.php';
@@ -99,6 +101,31 @@ try {
                 kk_json(['message' => __('No file was uploaded.')], 400);
             }
             kk_json(Importer::importFile($_FILES['csv']['tmp_name']));
+
+        case 'theme_activate':
+            $slug = (string)($input['slug'] ?? '');
+            if (!Theme::activate($slug)) kk_json(['message' => __('Theme not found.')], 404);
+            kk_json(['ok' => true]);
+
+        case 'plugin_activate':
+            [$ok, $msg] = Plugins::activate((string)($input['slug'] ?? ''));
+            if (!$ok) kk_json(['message' => $msg], 400);
+            kk_json(['ok' => true]);
+
+        case 'plugin_deactivate':
+            kk_json(['ok' => Plugins::deactivate((string)($input['slug'] ?? ''))]);
+
+        case 'plugin_delete':
+            if (!Plugins::delete((string)($input['slug'] ?? ''))) kk_json(['message' => __('Deactivate a plugin before deleting it.')], 400);
+            kk_json(['ok' => true]);
+
+        case 'install_zip':
+            if (empty($_FILES['zip']['tmp_name']) || (int)$_FILES['zip']['error'] !== UPLOAD_ERR_OK) kk_json(['message' => __('No file was uploaded.')], 400);
+            if (empty($_POST['trust'])) kk_json(['message' => __('Tick the box to confirm you trust this file.')], 400);
+            $target = ($_POST['target'] ?? '') === 'themes' ? 'themes' : 'plugins';
+            [$ok, $msg] = Plugins::installZip($_FILES['zip']['tmp_name'], $target);
+            if (!$ok) kk_json(['message' => $msg], 400);
+            kk_json(['ok' => true, 'slug' => $msg]);
 
         case 'settings':
             $tab = (string)($input['tab'] ?? '');

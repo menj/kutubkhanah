@@ -453,8 +453,7 @@ class DefaultEngine extends Contract
         global $sysconf;
         $buffer = '';
         // include biblio list html template callback
-        $path = SB . config('template.dir', $sysconf['template']['dir']) . DS;
-        $path .= config('template.theme', $sysconf['template']['theme']) . DS . 'biblio_list_template.php';
+        $path = \SLiMS\Kutubkhanah\Theme::file('biblio_list_template.php');
         include $path;
 
         foreach ($this->documents as $i => $document) {

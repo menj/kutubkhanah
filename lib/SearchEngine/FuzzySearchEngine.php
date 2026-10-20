@@ -636,8 +636,7 @@ class FuzzySearchEngine extends Contract
     {
         global $sysconf;
         $buffer = '';
-        $path = SB . config('template.dir', $sysconf['template']['dir']) . DS;
-        $path .= config('template.theme', $sysconf['template']['theme']) . DS . 'biblio_list_template.php';
+        $path = \SLiMS\Kutubkhanah\Theme::file('biblio_list_template.php');
 
         if (file_exists($path)) {
             include $path;
