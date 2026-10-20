@@ -552,3 +552,7 @@ textarea.kk-input { border-radius: calc(var(--kk-radius) * .75) !important; }
 .kk-book__cover { border-radius: calc(var(--kk-radius) * .75); }
 .kk-save--text { border-radius: var(--kk-pill, var(--kk-radius)); }
 .kk-theme .kk-nav .nav-item.active .nav-link { border-radius: var(--kk-pill, var(--kk-radius)); }
+
+.kk-section--visit { background: var(--kk-surface); border-top: 1px solid var(--kk-line); }
+.kk-section--visit .kk-info { margin-bottom: 1.75rem; }
+.kk-cta { display: flex; flex-wrap: wrap; gap: .75rem; }

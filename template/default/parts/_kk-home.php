@@ -69,49 +69,9 @@ $e = [Library::class, 'e'];
         </div>
     </div>
 
-    <?php if (trim((string)$kk['hours']) !== '' || trim((string)$kk['lending']) !== '') : ?>
-    <section class="kk-section kk-section--tight">
-        <div class="container kk-info">
-            <?php if (trim((string)$kk['hours']) !== '') : ?><div class="kk-info__box"><h2 class="kk-info__title"><?= __('Visiting hours'); ?></h2><p><?= nl2br($e($kk['hours'])); ?></p></div><?php endif; ?>
-            <?php if (trim((string)$kk['lending']) !== '') : ?><div class="kk-info__box"><h2 class="kk-info__title"><?= __('Lending'); ?></h2><p><?= nl2br($e($kk['lending'])); ?></p></div><?php endif; ?>
-        </div>
-    </section>
-    <?php endif; ?>
-
-    <?php if ($kkRecent) : ?>
-    <section class="kk-section">
-        <div class="container">
-            <div class="kk-section__head">
-                <div>
-                    <span class="kk-label"><?= __('New to the Collection'); ?></span>
-                    <h2 class="kk-section__title"><?= __('Recent Additions'); ?></h2>
-                </div>
-                <a class="kk-btn kk-btn--outline kk-btn--sm" href="index.php?p=shelf"><?= __('Browse Full Catalogue'); ?> &rarr;</a>
-            </div>
-            <?= Library::grid($kkRecent, 'kk-grid kk-grid--5'); ?>
-        </div>
-    </section>
-    <?php endif; ?>
-
-    <?php if ($kkAuthors) : ?>
-    <section class="kk-section kk-section--tight">
-        <div class="container">
-            <div class="kk-section__head">
-                <div>
-                    <span class="kk-label"><?= __('From the Shelves'); ?></span>
-                    <h2 class="kk-section__title"><?= __('By Author'); ?></h2>
-                </div>
-                <a class="kk-btn kk-btn--outline kk-btn--sm" href="index.php?p=shelf"><?= __('View All'); ?> &rarr;</a>
-            </div>
-            <div class="kk-grid kk-grid--3">
-                <?php foreach ($kkAuthors as $a) echo Library::authorMosaic($a); ?>
-            </div>
-        </div>
-    </section>
-    <?php endif; ?>
-
     <section class="kk-section kk-section--band">
         <div class="container">
+            <span class="kk-label kk-center"><?= __('What the shelves hold'); ?></span>
             <h2 class="kk-section__title kk-center"><?= __('Browse by Genre'); ?></h2>
             <?php if ($kkGenres) : ?>
                 <div class="kk-chips">
@@ -128,6 +88,38 @@ $e = [Library::class, 'e'];
             <?php endif; ?>
         </div>
     </section>
+
+    <?php if ($kkRecent) : ?>
+    <section class="kk-section">
+        <div class="container">
+            <div class="kk-section__head">
+                <div>
+                    <span class="kk-label"><?= __('Newly arrived'); ?></span>
+                    <h2 class="kk-section__title"><?= __('Recent Additions'); ?></h2>
+                </div>
+                <a class="kk-btn kk-btn--outline kk-btn--sm" href="index.php?p=shelf"><?= __('Browse Full Catalogue'); ?> &rarr;</a>
+            </div>
+            <?= Library::grid($kkRecent, 'kk-grid kk-grid--5'); ?>
+        </div>
+    </section>
+    <?php endif; ?>
+
+    <?php if ($kkAuthors) : ?>
+    <section class="kk-section kk-section--tight">
+        <div class="container">
+            <div class="kk-section__head">
+                <div>
+                    <span class="kk-label"><?= __('The voices behind the books'); ?></span>
+                    <h2 class="kk-section__title"><?= __('By Author'); ?></h2>
+                </div>
+                <a class="kk-btn kk-btn--outline kk-btn--sm" href="index.php?p=shelf"><?= __('View All'); ?> &rarr;</a>
+            </div>
+            <div class="kk-grid kk-grid--3">
+                <?php foreach ($kkAuthors as $a) echo Library::authorMosaic($a); ?>
+            </div>
+        </div>
+    </section>
+    <?php endif; ?>
 
     <?= \SLiMS\Kutubkhanah\Blog\Render::homeSection(); ?>
 
@@ -154,10 +146,33 @@ $e = [Library::class, 'e'];
     </section>
     <?php endif; ?>
 
+    <section class="kk-section kk-section--visit">
+        <div class="container">
+            <div class="kk-section__head">
+                <div>
+                    <span class="kk-label"><?= __('Come and read'); ?></span>
+                    <h2 class="kk-section__title"><?= __('Visit and Borrow'); ?></h2>
+                </div>
+            </div>
+            <?php if (trim((string)$kk['hours']) !== '' || trim((string)$kk['lending']) !== '') : ?>
+            <div class="kk-info">
+                <?php if (trim((string)$kk['hours']) !== '') : ?><div class="kk-info__box"><h3 class="kk-info__title"><?= __('Visiting hours'); ?></h3><p><?= nl2br($e($kk['hours'])); ?></p></div><?php endif; ?>
+                <?php if (trim((string)$kk['lending']) !== '') : ?><div class="kk-info__box"><h3 class="kk-info__title"><?= __('Lending'); ?></h3><p><?= nl2br($e($kk['lending'])); ?></p></div><?php endif; ?>
+            </div>
+            <?php endif; ?>
+            <div class="kk-cta">
+                <?php if (!empty($kk['enable_borrow'])) : ?><a class="kk-btn kk-btn--primary" href="index.php?p=my-list"><?= __('Your saved books'); ?></a><?php endif; ?>
+                <?php if (!empty($kk['enable_access'])) : ?><a class="kk-btn kk-btn--outline" href="index.php?p=request-access"><?= __('Request access'); ?></a><?php endif; ?>
+                <?php if (!empty($kk['enable_suggest'])) : ?><a class="kk-btn kk-btn--outline" href="index.php?p=suggest"><?= __('Suggest a book'); ?></a><?php endif; ?>
+                <?php if (!empty($kk['enable_contact'])) : ?><a class="kk-btn kk-btn--ghost" href="index.php?p=contact"><?= __('Contact'); ?></a><?php endif; ?>
+            </div>
+        </div>
+    </section>
+
     <?php if ($kk['mission'] !== '') : ?>
     <section class="kk-mission">
         <div class="container">
-            <span class="kk-label"><?= __('Mission Statement'); ?></span>
+            <span class="kk-label"><?= __('Why this collection exists'); ?></span>
             <blockquote class="kk-mission__quote">&ldquo;<?= $e($kk['mission']); ?>&rdquo;</blockquote>
             <p class="kk-mission__by">&mdash; <?= $e($sysconf['library_name']); ?></p>
         </div>
