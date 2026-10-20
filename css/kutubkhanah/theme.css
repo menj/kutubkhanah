@@ -541,3 +541,14 @@ body.kk-theme[data-scheme="dark"] .kk-badge--loan { color: #fbbf24; }
 .kk-author { display: flow-root; }
 .kk-author__photo { float: left; margin: 0 1.25rem 1rem 0; border-radius: var(--kk-radius); box-shadow: 0 3px 14px rgba(0,0,0,.18); height: auto; }
 .kk-author__src { font-size: .72rem; margin-top: .4rem; }
+
+/* ---------- 1.11 rounder shapes: --kk-radius for cards and panels, --kk-pill for buttons, tags and fields ---------- */
+.kk-btn, .kk-badge, .kk-chip, .kk-adv__form select, .kk-input, .kk-theme .form-control, .kk-theme .custom-select { border-radius: var(--kk-pill, var(--kk-radius)) !important; }
+textarea.kk-input { border-radius: calc(var(--kk-radius) * .75) !important; }
+.kk-hero__search input { border-radius: var(--kk-pill, var(--kk-radius)); }
+.kk-hero__search .kk-btn { border-radius: var(--kk-pill, var(--kk-radius)) !important; }
+.kk-hero__search:has(.kk-hero__by) input { padding-right: 150px; }
+.kk-book, .kk-resource, .kk-info__box, .kk-notes { border-radius: var(--kk-radius); }
+.kk-book__cover { border-radius: calc(var(--kk-radius) * .75); }
+.kk-save--text { border-radius: var(--kk-pill, var(--kk-radius)); }
+.kk-theme .kk-nav .nav-item.active .nav-link { border-radius: var(--kk-pill, var(--kk-radius)); }

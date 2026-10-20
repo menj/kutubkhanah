@@ -87,7 +87,7 @@ class Shelf
         $e = [self::class, 'e'];
 
         ob_start();
-        echo '<link rel="stylesheet" href="' . SWB . 'css/kutubkhanah/shelf.css?v=1.1.0">';
+        echo '<link rel="stylesheet" href="' . SWB . 'css/kutubkhanah/shelf.css?v=1.11.0">';
         echo '<style>' . Settings::cssVars('.kk-shelf') . '</style>';
         echo '<div class="kk-shelf" data-scheme="' . $e($s['scheme']) . '">';
         if ($s['shelf_title'] !== '') echo '<h2 class="kk-shelf__title">' . $e($s['shelf_title']) . '</h2>';

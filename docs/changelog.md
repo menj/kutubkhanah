@@ -4,6 +4,7 @@ All notable changes to Kutubkhanah. Newest first. The version number lives in `s
 
 ## 1.11.0
 
+- Rounder shapes: the default corner radius is now 16 px (range 0 to 32), and a new "Pill shapes" switch (Settings > Display) makes buttons, tags, search boxes and form fields fully rounded. Sites that already saved a radius keep it until changed.
 - Author portraits and short biographies from Open Library, saved on this server (Import / Export > Fetch author portraits). Shown on author pages and in the home page author cards. A curator's note still wins over a fetched biography.
 - Suggest a book: a public form that lands in Inbox > Suggestions, with one click to add the title to the wishlist.
 - Saved books: a bookmark on every book and a Saved books page. The list stays in the visitor's own browser.

@@ -112,7 +112,9 @@ echo kk_head();
     kk_row(__('Colour scheme'), $sel . '</select>');
     kk_row(__('Cover size'), '<input type="number" min="110" max="260" step="5" name="columns_min" value="' . (int)$s['columns_min'] . '" class="kk-input kk-input--short"> px',
         __('Minimum card width. Columns adjust to the screen.'));
-    kk_row(__('Corner radius'), '<input type="number" min="0" max="24" name="radius" value="' . (int)$s['radius'] . '" class="kk-input kk-input--short"> px');
+    kk_row(__('Corner radius'), '<input type="number" min="0" max="32" name="radius" value="' . (int)$s['radius'] . '" class="kk-input kk-input--short"> px',
+        __('Rounds cards, covers and panels. 0 is square; 16 is the default.'));
+    kk_row(__('Pill shapes'), kk_check('pills', __('Fully rounded buttons, tags, search boxes and form fields'), $s));
     $names = ['primary' => __('Primary'), 'accent' => __('Accent'), 'bg' => __('Background'), 'surface' => __('Surface'), 'text' => __('Text'), 'muted' => __('Muted text')];
     foreach (['light' => __('Light palette'), 'dark' => __('Dark palette')] as $mode => $title) {
         $html = '<div class="kk-swatches">';

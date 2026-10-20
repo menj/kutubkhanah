@@ -63,3 +63,6 @@
 
 .kk-card__title { font-family: var(--kk-font-heading, inherit); font-size: .95rem; unicode-bidi: plaintext; }
 .kk-card__author { unicode-bidi: plaintext; }
+
+/* Pill shapes (Settings > Display > Pill shapes) */
+.kk-shelf__search input, .kk-shelf__select select, .kk-shelf__az a { border-radius: var(--kk-pill, var(--kk-radius)); }

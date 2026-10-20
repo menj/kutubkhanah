@@ -76,7 +76,8 @@ class Settings
             // Display: navy and gold, from the Private Library design
             'scheme'          => 'auto',
             'columns_min'     => 150,
-            'radius'          => 4,
+            'radius'          => 16,
+            'pills'           => 1,
             'light_primary'   => '#0f172a',
             'light_accent'    => '#d4af37',
             'light_bg'        => '#f8f7f4',
@@ -141,7 +142,7 @@ class Settings
                 'show_search' => 'bool', 'show_status' => 'bool', 'default_language' => 'lang',
             ],
             'display' => [
-                'scheme' => 'scheme', 'columns_min' => 'int:110:260', 'radius' => 'int:0:24',
+                'scheme' => 'scheme', 'columns_min' => 'int:110:260', 'radius' => 'int:0:32', 'pills' => 'bool',
                 'light_primary' => 'color', 'light_accent' => 'color', 'light_bg' => 'color', 'light_surface' => 'color',
                 'light_text' => 'color', 'light_muted' => 'color',
                 'dark_primary' => 'color', 'dark_accent' => 'color', 'dark_bg' => 'color', 'dark_surface' => 'color',
@@ -277,8 +278,8 @@ class Settings
         };
         // --kk-deep / --kk-gold stay the light palette's primary and accent in both modes:
         // they colour the navy bands (nav top border, hero, banners, footer) and gold rules.
-        $shape = sprintf('--kk-radius:%dpx;--kk-card:%dpx;--kk-deep:%s;--kk-gold:%s;',
-            (int)$s['radius'], (int)$s['columns_min'], $s['light_primary'], $s['light_accent']);
+        $shape = sprintf('--kk-radius:%dpx;--kk-pill:%s;--kk-card:%dpx;--kk-deep:%s;--kk-gold:%s;',
+            (int)$s['radius'], !empty($s['pills']) ? '999px' : (int)$s['radius'] . 'px', (int)$s['columns_min'], $s['light_primary'], $s['light_accent']);
         return $selector . '{' . $set('light') . $shape . '}'
             . $selector . '[data-scheme="dark"]{' . $set('dark') . '}'
             . '@media (prefers-color-scheme: dark){' . $selector . '[data-scheme="auto"]{' . $set('dark') . '}}';
