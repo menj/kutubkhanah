@@ -1,6 +1,6 @@
 {
     "name": "menj/kutubkhanah",
-    "description": "Kutubkhanah home library system (SLiMS, PMB and OpenBiblio)",
+    "description": "Kutubkhanah home library system",
     "type": "project",
     "autoload": {
         "psr-0": {
