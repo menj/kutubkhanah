@@ -95,7 +95,7 @@ $GLOBALS['kk_desc'] = $kkDesc;
     <link rel="preload" href="<?php echo SWB; ?>fonts/kutubkhanah/EBGaramond-Variable.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="<?php echo SWB; ?>css/kutubkhanah/fonts.css?v=1.6.0">
     <?php echo \SLiMS\Kutubkhanah\Library::privateFontFaces(); ?>
-    <link rel="stylesheet" href="<?php echo SWB; ?>css/kutubkhanah/theme.css?v=1.11.2">
+    <link rel="stylesheet" href="<?php echo SWB; ?>css/kutubkhanah/theme.css?v=1.11.3">
     <style><?php echo \SLiMS\Kutubkhanah\Settings::cssVars('body.kk-theme'); ?></style>
 
     <?php // Kutubkhanah: KK favicon set (images/kutubkhanah/) unless a custom web icon is set in System settings ?>

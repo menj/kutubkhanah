@@ -181,6 +181,24 @@ class Library
         return $out . '</div></article>';
     }
 
+    /** A small chapter heading used to give a page a beginning, a middle and an end. */
+    public static function chapter(string $label, string $title = ''): string
+    {
+        return '<header class="kk-chapter"><span class="kk-label">' . self::e($label) . '</span>' . ($title !== '' ? '<h3 class="kk-chapter__title">' . self::e($title) . '</h3>' : '') . '</header>';
+    }
+
+    /** Closing row of next steps, shown at the end of listing pages. */
+    public static function nextSteps(string $here = ''): string
+    {
+        $items = ['shelf' => [__('Browse the catalogue'), 'index.php?p=shelf', true], 'series' => [__('Series'), 'index.php?p=series', true],
+                  'lists' => [__('Reading lists'), 'index.php?p=lists', (bool)Settings::get('enable_lists')],
+                  'suggest' => [__('Suggest a book'), 'index.php?p=suggest', (bool)Settings::get('enable_suggest')],
+                  'contact' => [__('Contact'), 'index.php?p=contact', (bool)Settings::get('enable_contact')]];
+        $out = '';
+        foreach ($items as $k => [$label, $url, $on]) if ($on && $k !== $here) $out .= '<a class="kk-btn kk-btn--outline kk-btn--sm" href="' . $url . '">' . self::e($label) . '</a>';
+        return $out === '' ? '' : '<nav class="kk-nextsteps" aria-label="' . self::e(__('Keep exploring')) . '"><span class="kk-label">' . __('Keep exploring') . '</span><div class="kk-cta">' . $out . '</div></nav>';
+    }
+
     /** Bookmark toggle; the list itself lives in the visitor's browser (theme.js). */
     public static function saveButton(int $id, bool $label = false): string
     {

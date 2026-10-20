@@ -83,9 +83,6 @@ class Detail
         if (($m['openlibrary_id'] ?? '') !== '') $links .= '<a class="kk-btn kk-btn--outline kk-btn--sm" href="https://openlibrary.org/books/' . rawurlencode($m['openlibrary_id']) . '" target="_blank" rel="noopener noreferrer">Open Library</a>';
         if (($m['lccn'] ?? '') !== '') $links .= '<a class="kk-btn kk-btn--ghost kk-btn--sm" href="https://lccn.loc.gov/' . rawurlencode($m['lccn']) . '" target="_blank" rel="noopener noreferrer">' . __('Library of Congress') . '</a>';
         if ($m['oclc'] !== '') $links .= '<a class="kk-btn kk-btn--ghost kk-btn--sm" href="https://www.worldcat.org/oclc/' . rawurlencode($m['oclc']) . '" target="_blank" rel="noopener noreferrer">WorldCat</a>';
-        if (Settings::get('enable_borrow')) {
-            $links = Library::saveButton($id, true) . '<a class="kk-btn kk-btn--primary kk-btn--sm" href="index.php?p=borrow&amp;ids=' . $id . '">' . __('Ask to borrow') . '</a>' . $links;
-        }
         if ($links) $out .= '<div class="kk-links">' . $links . '</div>';
 
         if ($m['tags'] !== '') {
@@ -118,6 +115,22 @@ class Detail
             $out .= '<div class="kk-notes"><p class="kk-notes__label">' . __("Curator's Notes") . '</p><p class="kk-notes__body">' . $e($m['notes']) . '</p></div>';
         }
 
+        return $out . '</div>';
+    }
+
+    /** "Take it home": save and ask-to-borrow actions for the book page. */
+    public static function actions(int $id): string
+    {
+        if (!Settings::get('enable_borrow')) return '';
+        return '<div class="kk-links kk-actions-row">' . Library::saveButton($id, true)
+            . '<a class="kk-btn kk-btn--primary kk-btn--sm" href="index.php?p=borrow&amp;ids=' . $id . '">' . __('Ask to borrow') . '</a></div>';
+    }
+
+    /** "Where it fits": the author, and more from the same author. */
+    public static function context(int $id): string
+    {
+        $e = [Library::class, 'e'];
+        $out = '<div class="kk-detail-extra">';
         $authors = self::authors($id);
         foreach ($authors as $a) {
             $bits = array_filter([$a['nationality'], self::years($a), $a['discipline']]);
@@ -166,6 +179,15 @@ class Detail
         ];
         $html = '<div class="kk-author">';
         if ($a['photo'] !== '') $html .= '<img class="kk-author__photo" src="' . Authors::photoUrl($a['photo'], 300) . '" alt="' . $e($a['author_name']) . '" width="150" loading="lazy">';
+        $about = '';
+        if ($a['notes'] !== '' && $a['notes_public']) {
+            $about .= '<div class="kk-notes"><p class="kk-notes__label">' . __("Curator's Notes") . '</p><p class="kk-notes__body">' . $e($a['notes']) . '</p></div>';
+        }
+        if ($a['bio'] !== '') {
+            $about .= '<div class="kk-notes"><p class="kk-notes__label">' . __('About the author') . '</p><p class="kk-notes__body">' . $e($a['bio']) . '</p>'
+                . ($a['bio_source'] !== '' ? '<p class="kk-muted kk-author__src">' . $e(sprintf(__('Source: %s'), $a['bio_source'])) . '</p>' : '') . '</div>';
+        }
+        $html .= $about;
         $table = '';
         foreach ($rows as $label => $value) {
             if ($value !== '') $table .= '<tr><th>' . $e($label) . '</th><td>' . $e($value) . '</td></tr>';
@@ -175,15 +197,8 @@ class Detail
                 . $e(parse_url($a['external_url'], PHP_URL_HOST) ?: $a['external_url']) . '</a></td></tr>';
         }
         if ($table) $html .= '<table class="kk-meta-table"><tbody>' . $table . '</tbody></table>';
-        if ($a['notes'] !== '' && $a['notes_public']) {
-            $html .= '<div class="kk-notes"><p class="kk-notes__label">' . __("Curator's Notes") . '</p><p class="kk-notes__body">' . $e($a['notes']) . '</p></div>';
-        }
-        if ($a['bio'] !== '') {
-            $html .= '<div class="kk-notes"><p class="kk-notes__label">' . __('About the author') . '</p><p class="kk-notes__body">' . $e($a['bio']) . '</p>'
-                . ($a['bio_source'] !== '' ? '<p class="kk-muted kk-author__src">' . $e(sprintf(__('Source: %s'), $a['bio_source'])) . '</p>' : '') . '</div>';
-        }
-        $html .= '</div><h3>' . $e(sprintf(count($books) === 1 ? __('%d book in the collection') : __('%d books in the collection'), count($books))) . '</h3>'
-            . Library::grid($books);
+        $html .= '</div>' . Library::chapter(__('On the shelves'), sprintf(count($books) === 1 ? __('%d book in the collection') : __('%d books in the collection'), count($books)))
+            . Library::grid($books) . Library::nextSteps();
         return ['name' => $a['author_name'], 'html' => $html];
     }
 }

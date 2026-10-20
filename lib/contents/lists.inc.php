@@ -22,6 +22,7 @@ if (!Settings::get('enable_lists')) {
     $opac->page_title = htmlspecialchars($kkList['title'], ENT_QUOTES, 'UTF-8');
     echo Lists::page($kkList);
     echo '<p class="kk-series__back"><a href="index.php?p=lists">' . __('All reading lists') . '</a></p>';
+    echo \SLiMS\Kutubkhanah\Library::nextSteps('lists');
 } else {
     http_response_code(404);
     $opac->page_title = __('List not found');

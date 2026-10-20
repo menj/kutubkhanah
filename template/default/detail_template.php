@@ -39,6 +39,7 @@ $setBookmarked = trim(isset($_SESSION['bookmark'][$biblio_id]) ? 'bg-success tex
                 <footer class="blockquote-footer"><?= rtrim(str_replace('<br />', ', ', preg_replace('#</a> - [^<]*#', '</a>', (string)$authors)), ', '); ?></footer>
             </blockquote>
             <hr>
+            <?= \SLiMS\Kutubkhanah\Library::chapter(__('Meet the book')); ?>
             <p class="text-grey-darker">
               <?= $notes ? $notes : '<i>'.__('Description Not Available').'</i>'; ?>
             </p>
@@ -46,9 +47,12 @@ $setBookmarked = trim(isset($_SESSION['bookmark'][$biblio_id]) ? 'bg-success tex
             <?= \SLiMS\Kutubkhanah\Detail::extras((int)$biblio_id); ?>
             <hr>
 
-            <h5 class="mt-4 mb-1"><?= __('Availability'); ?></h5>
+            <?= \SLiMS\Kutubkhanah\Library::chapter(__('Take it home')); ?>
+            <h5 class="mt-2 mb-1"><?= __('Availability'); ?></h5>
             <?= ($availability) ? $availability : '<p class="text-grey-dark">' . __('No copy data') . '</p>'; ?>
-            <h5 class="mt-4 mb-1"><?= __('Detail Information'); ?></h5>
+            <?= \SLiMS\Kutubkhanah\Detail::actions((int)$biblio_id); ?>
+            <?= \SLiMS\Kutubkhanah\Library::chapter(__('The details')); ?>
+            <h5 class="mt-2 mb-1"><?= __('Detail Information'); ?></h5>
             <dl class="row">
                 <dt class="col-sm-3"><?= __('Series Title'); ?></dt>
                 <dd class="col-sm-9">
@@ -159,6 +163,8 @@ $setBookmarked = trim(isset($_SESSION['bookmark'][$biblio_id]) ? 'bg-success tex
               </dl>
           <?php }; ?>
 
+            <?= \SLiMS\Kutubkhanah\Library::chapter(__('Where it fits')); ?>
+            <?= \SLiMS\Kutubkhanah\Detail::context((int)$biblio_id); ?>
             <h5 class="mt-4 mb-1"><?= __('Other version/related'); ?></h5>
             <div>
               <?php echo ($related) ? $related : '<p class="text-grey-dark">' . __('No other version available') . '</p>'; ?>

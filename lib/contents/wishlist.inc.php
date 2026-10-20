@@ -16,3 +16,4 @@ if (!\SLiMS\Kutubkhanah\Settings::get('enable_wishlist')) {
 }
 $opac->page_title = __('Wishlist');
 echo \SLiMS\Kutubkhanah\Wishlist::page();
+echo \SLiMS\Kutubkhanah\Library::nextSteps();

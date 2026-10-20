@@ -18,6 +18,7 @@ if ($kkName === '') {
     $opac->page_title = htmlspecialchars($kkName, ENT_QUOTES, 'UTF-8');
     echo $kkHtml;
     echo '<p class="kk-series__back"><a href="index.php?p=series">' . __('All series') . '</a></p>';
+    echo \SLiMS\Kutubkhanah\Library::nextSteps('series');
 } else {
     http_response_code(404);
     $opac->page_title = __('Series not found');
