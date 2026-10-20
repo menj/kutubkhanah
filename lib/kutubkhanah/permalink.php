@@ -18,7 +18,7 @@ class Permalink
     /** page name => path */
     private const STATIC_PATHS = [
         'shelf' => 'shelf', 'series' => 'series', 'lists' => 'lists', 'wishlist' => 'wishlist',
-        'inside' => 'search-inside', 'contact' => 'contact', 'request-access' => 'request-access', 'faq' => 'faq',
+        'inside' => 'search-inside', 'contact' => 'contact', 'request-access' => 'request-access', 'suggest' => 'suggest', 'borrow' => 'borrow', 'my-list' => 'my-list', 'faq' => 'faq',
         'kk-rss' => 'feed.xml', 'blog-rss' => 'journal/feed.xml', 'kk-sitemap' => 'sitemap.xml', 'kk-robots' => 'robots.txt',
     ];
 

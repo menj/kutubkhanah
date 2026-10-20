@@ -51,6 +51,7 @@ $kkE = fn($v) => htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
                 <ul class="kk-footer__links">
                     <?php if (!empty($kk['enable_access'])) : ?><li><a href="index.php?p=request-access"><?= __('Request Access'); ?></a></li><?php endif; ?>
                     <?php if (!empty($kk['enable_contact'])) : ?><li><a href="index.php?p=contact"><?= __('Contact'); ?></a></li><?php endif; ?>
+                    <?php if (!empty($kk['enable_suggest'])) : ?><li><a href="index.php?p=suggest"><?= __('Suggest a book'); ?></a></li><?php endif; ?>
                     <li><a href="index.php?p=member"><?= __('Member Area'); ?></a></li>
                     <li><a href="index.php?p=login"><?= __('Librarian Login'); ?></a></li>
                 </ul>
@@ -90,7 +91,7 @@ include LIB . "contents/chat.php"; ?>
 <script src="<?php echo assets(v('js/app.js')); ?>"></script>
 <script src="<?php echo assets(v('js/app_jquery.js')); ?>"></script>
 <?php if (\SLiMS\Kutubkhanah\Settings::get('home_layout') === 'classic') include __DIR__ . "/../assets/js/vegas.js.php"; ?>
-<script src="<?= SWB; ?>js/kutubkhanah/theme.js?v=1.10.0"></script>
+<script src="<?= SWB; ?>js/kutubkhanah/theme.js?v=1.11.0"></script>
 <?php if ($sysconf['chat_system']['enabled'] && $sysconf['chat_system']['opac']) : ?>
     <script>
         $('#show-pchat').click(() => {

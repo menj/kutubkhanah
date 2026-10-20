@@ -1,5 +1,5 @@
 === Kutubkhanah ===
-Version: 1.10.0
+Version: 1.11.0
 Requires PHP: 8.4 or later
 Databases: MySQL 5.7 / MariaDB 10.3 or later, PostgreSQL 13 or later, or SQLite 3.35 or later
 License: GNU GPL v3 or later

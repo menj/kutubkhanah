@@ -97,7 +97,7 @@ class Seo
         $u = [];
         $add = function (string $loc, ?string $mod = null) use (&$u) { $u[] = [$loc, $mod]; };
         $add($base);
-        foreach (['shelf' => 1, 'series' => Settings::get('enable_lists') ? 1 : 1, 'lists' => (int)Settings::get('enable_lists'), 'faq' => 1, 'contact' => (int)Settings::get('enable_contact'), 'wishlist' => (int)Settings::get('enable_wishlist'), 'inside' => (int)Settings::get('enable_inside'), 'blog' => (int)Settings::get('blog_enable')] as $p => $on) {
+        foreach (['shelf' => 1, 'series' => Settings::get('enable_lists') ? 1 : 1, 'lists' => (int)Settings::get('enable_lists'), 'faq' => 1, 'contact' => (int)Settings::get('enable_contact'), 'suggest' => (int)Settings::get('enable_suggest'), 'wishlist' => (int)Settings::get('enable_wishlist'), 'inside' => (int)Settings::get('enable_inside'), 'blog' => (int)Settings::get('blog_enable')] as $p => $on) {
             if (!$on) continue;
             $to = Permalink::toPretty(['p' => $p]);
             $add($pl && $to ? $base . $to[0] : $base . 'index.php?p=' . $p);

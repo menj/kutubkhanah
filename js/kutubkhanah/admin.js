@@ -203,6 +203,24 @@
     });
   }
 
+  /* Author portraits, a few authors per request */
+  var authorsGo = document.getElementById('kk-authors');
+  if (authorsGo) {
+    var aStatus = document.getElementById('kk-authors-status'), aReset = document.getElementById('kk-authors-reset');
+    authorsGo.addEventListener('click', function () {
+      var done = 0, found = 0, first = true;
+      authorsGo.disabled = true;
+      (function step() {
+        api('authors_fetch', { reset: first && aReset.checked, limit: 4 }).then(function (res) {
+          if (!res.ok) throw new Error();
+          first = false; done += res.j.processed; found += res.j.found;
+          aStatus.textContent = done + ' looked up, ' + found + ' found, ' + res.j.remaining + ' to go';
+          if (res.j.remaining > 0 && res.j.processed > 0) { step(); } else { authorsGo.disabled = false; }
+        }).catch(function () { aStatus.textContent = t.error; authorsGo.disabled = false; });
+      })();
+    });
+  }
+
   /* Bulk cover fetch, a few books per request so shared hosting never times out */
   var go = document.getElementById('kk-covers');
   if (go) {

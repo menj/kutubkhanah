@@ -157,3 +157,8 @@ Classes `Theme`, `Hooks`, `Plugins` in `lib/kutubkhanah/`; compatibility layers 
 Active theme: `template` setting row (`theme`); active plugins: `kk_plugins` setting row; plugin options: table `kk_option`.
 Admin pages `themes.php`, `plugins.php`, `plugin-page.php`; API actions `theme_activate`, `plugin_activate`, `plugin_deactivate`, `plugin_delete`, `install_zip`.
 Docs: `themes.md`, `plugins.md` (kept separate on purpose). Omeka S and WordPress block themes are out of scope.
+
+## Reader features (1.11.0)
+
+`Authors` (`lib/kutubkhanah/authors.php`, Open Library lookup, columns `photo`, `bio`, `bio_source`, `photo_tried` on `kk_author`). `Messages` types: `contact`, `access`, `suggest`, `borrow`.
+Pages `suggest`, `borrow`, `my-list` (`lib/contents/`). Saved list is browser `localStorage` key `kk_saved`, drawn by `theme.js`. Settings: `enable_suggest`, `enable_borrow`, `hours`, `lending`.

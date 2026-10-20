@@ -58,8 +58,12 @@ echo kk_head();
     kk_row(__('Recent additions'), '<input type="number" min="0" max="30" name="recent_count" value="' . (int)$s['recent_count'] . '" class="kk-input kk-input--short"> ' . __('books'),
         __('How many of the newest books the home page shows. 0 hides the section.'));
     kk_row(__('Public forms'),
-        kk_check('enable_access', __('Request Access page'), $s) . kk_check('enable_contact', __('Contact page'), $s),
+        kk_check('enable_access', __('Request Access page'), $s) . kk_check('enable_contact', __('Contact page'), $s) . kk_check('enable_suggest', __('Suggest a book page'), $s) . kk_check('enable_borrow', __('Borrow requests and saved books'), $s),
         __('Submissions arrive in Kutubkhanah > Inbox.'));
+    kk_row(__('Visiting hours'), '<textarea name="hours" class="kk-input kk-textarea" rows="3">' . kk_e($s['hours']) . '</textarea>',
+        __('Shown on the home page next to the lending note. One line per entry. Leave both empty to hide the panel.'));
+    kk_row(__('Lending note'), '<textarea name="lending" class="kk-input kk-textarea" rows="3">' . kk_e($s['lending']) . '</textarea>',
+        __('For example how long books can be borrowed and how to ask.'));
     kk_row(__('Notify email'), '<input type="email" name="notify_email" value="' . kk_e($s['notify_email']) . '" class="kk-input">',
         __('Optional. Also email new submissions here. Needs mail set up in System > Mail Setting.'));
     kk_row(__('Reading status'), kk_check('show_reading', __('Show Unread / Reading / Read and reading progress to visitors'), $s));

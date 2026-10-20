@@ -16,7 +16,7 @@
     # goes to the front controller. If your site lives in a sub-folder, add "RewriteBase /that-folder/" above.
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^(book|author|series|lists|page|journal|shelf|wishlist|search-inside|contact|request-access|faq|feed\.xml|sitemap\.xml|robots\.txt|llms?\.txt|llms\.html|ai\.txt|ai\.json|identity\.json|brand\.txt|faq-ai\.txt|developer-ai\.txt|robots-ai\.txt)(/.*)?$ index.php [L,QSA]
+    RewriteRule ^(book|author|series|lists|page|journal|shelf|wishlist|search-inside|contact|request-access|suggest|borrow|my-list|faq|feed\.xml|sitemap\.xml|robots\.txt|llms?\.txt|llms\.html|ai\.txt|ai\.json|identity\.json|brand\.txt|faq-ai\.txt|developer-ai\.txt|robots-ai\.txt)(/.*)?$ index.php [L,QSA]
 </IfModule>
 
 # Don't show directory listings for URLs which map to a directory.

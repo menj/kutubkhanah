@@ -78,9 +78,11 @@ class Library
                 'EXISTS (SELECT 1 FROM biblio_author x WHERE x.biblio_id = b.biblio_id AND x.author_id = ?)', [(int)$a['author_id']],
                 "CASE WHEN b.image IS NULL OR b.image = '' THEN 1 ELSE 0 END, b.publish_year DESC", 4
             );
-            $m = self::rows('SELECT nationality, discipline, notes, notes_public FROM kk_author WHERE author_id = ?', [(int)$a['author_id']])[0] ?? [];
+            $m = self::rows('SELECT nationality, discipline, notes, notes_public, photo, bio FROM kk_author WHERE author_id = ?', [(int)$a['author_id']])[0] ?? [];
+            $a['photo'] = (string)($m['photo'] ?? '');
             $bio = !empty($m['notes_public']) && trim((string)($m['notes'] ?? '')) !== '' ? trim($m['notes'])
-                : implode(' · ', array_filter([trim((string)($m['nationality'] ?? '')), trim((string)($m['discipline'] ?? ''))]));
+                : (trim((string)($m['bio'] ?? '')) !== '' ? trim($m['bio'])
+                : implode(' · ', array_filter([trim((string)($m['nationality'] ?? '')), trim((string)($m['discipline'] ?? ''))])));
             $a['bio'] = $bio;
         }
         return $authors;
@@ -90,8 +92,10 @@ class Library
     {
         $e = [self::class, 'e'];
         $url = SWB . 'index.php?p=author&amp;id=' . (int)$a['author_id'];
-        $books = array_slice($a['books'], 0, 3);
-        $out = '<article class="kk-mosaic"><a class="kk-mosaic__covers kk-mosaic__covers--' . min(3, count($books)) . '" href="' . $url . '" tabindex="-1" aria-hidden="true">';
+        $photo = (string)($a['photo'] ?? '');
+        $books = array_slice($a['books'], 0, $photo !== '' ? 2 : 3);
+        $out = '<article class="kk-mosaic' . ($photo !== '' ? ' kk-mosaic--portrait' : '') . '"><a class="kk-mosaic__covers kk-mosaic__covers--' . min(3, count($books) + ($photo !== '' ? 1 : 0)) . '" href="' . $url . '" tabindex="-1" aria-hidden="true">';
+        if ($photo !== '') $out .= '<span class="kk-mosaic__photo"><img src="' . Authors::photoUrl($photo, 300) . '" alt="" loading="lazy" decoding="async"></span>';
         foreach ($books as $b) {
             if (!empty($b['image'])) $out .= '<span><img src="' . self::cover($b['image'], 200) . '" alt="" loading="lazy" decoding="async"></span>';
             else $out .= '<span class="kk-mosaic__ph">' . $e(mb_strimwidth($b['title'], 0, 40, '…')) . '</span>';
@@ -100,6 +104,11 @@ class Library
             . '<p class="kk-mosaic__n">' . $e(sprintf((int)$a['n'] === 1 ? __('%d book') : __('%d books'), (int)$a['n'])) . '</p>';
         if ($a['bio'] !== '') $out .= '<p class="kk-mosaic__bio">' . $e(mb_strimwidth($a['bio'], 0, 140, '…')) . '</p>';
         return $out . '</article>';
+    }
+
+    public static function languages(): array
+    {
+        return self::rows("SELECT DISTINCT lg.language_id, lg.language_name FROM biblio b JOIN mst_language lg ON lg.language_id = b.language_id WHERE b.opac_hide = 0 ORDER BY lg.language_name");
     }
 
     public static function genres(int $limit = 16): array
@@ -158,7 +167,7 @@ class Library
                 . ($b['authors'] ? '<span class="kk-book__ph-author">' . $e($b['authors']) . '</span>' : '') . '</span>';
         }
         if (!empty($b['format'])) $out .= '<span class="kk-badge kk-badge--navy kk-book__format">' . $e($b['format']) . '</span>';
-        $out .= '</a><div class="kk-book__info">';
+        $out .= '</a>' . self::saveButton((int)$b['biblio_id']) . '<div class="kk-book__info">';
         if (!empty($b['call_number'])) $out .= '<span class="kk-book__call">' . $e($b['call_number']) . '</span>';
         $out .= '<h3 class="kk-book__title"><a href="' . $url . '">' . $e($b['title']) . '</a></h3>';
         if (!empty($b['authors'])) $out .= '<p class="kk-book__author">' . $e($b['authors']) . '</p>';
@@ -170,6 +179,15 @@ class Library
             $out .= '<div class="kk-book__meta"><span class="kk-book__year">' . $e($b['publish_year']) . '</span>' . $badge . '</div>';
         }
         return $out . '</div></article>';
+    }
+
+    /** Bookmark toggle; the list itself lives in the visitor's browser (theme.js). */
+    public static function saveButton(int $id, bool $label = false): string
+    {
+        if (!Settings::get('enable_borrow')) return '';
+        return '<button type="button" class="kk-save' . ($label ? ' kk-save--text' : '') . '" data-kk-save="' . $id . '" aria-pressed="false" aria-label="' . self::e(__('Save this book')) . '">'
+            . '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg>'
+            . ($label ? '<span data-save-label data-on="' . self::e(__('Saved')) . '">' . __('Save') . '</span>' : '') . '</button>';
     }
 
     public static function grid(array $books, string $class = 'kk-grid'): string

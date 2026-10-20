@@ -11,7 +11,7 @@ namespace SLiMS\Kutubkhanah;
 
 class Schema
 {
-    const VERSION = '1.10.0';
+    const VERSION = '1.11.0';
 
     /** Columns of kk_book, in order. Missing ones are added on upgrade. */
     private static function bookColumns(): array
@@ -80,6 +80,15 @@ class Schema
             `notes_public` tinyint(1) NOT NULL default '0',
             PRIMARY KEY (`author_id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+        // 1.11.0: author portrait and biography fetched from Open Library.
+        $have = [];
+        if ($q = $db->query('SHOW COLUMNS FROM `kk_author`')) {
+            while ($r = $q->fetch_row()) $have[$r[0]] = true;
+        }
+        foreach (['photo' => "varchar(255) NOT NULL default ''", 'bio' => 'text', 'bio_source' => "varchar(120) NOT NULL default ''", 'photo_tried' => "varchar(20) NOT NULL default ''"] as $name => $def) {
+            if (!isset($have[$name])) $db->query("ALTER TABLE `kk_author` ADD `$name` $def");
+        }
 
         $db->query("CREATE TABLE IF NOT EXISTS `kk_message` (
             `id` int(11) NOT NULL auto_increment,

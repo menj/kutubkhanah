@@ -83,6 +83,9 @@ class Detail
         if (($m['openlibrary_id'] ?? '') !== '') $links .= '<a class="kk-btn kk-btn--outline kk-btn--sm" href="https://openlibrary.org/books/' . rawurlencode($m['openlibrary_id']) . '" target="_blank" rel="noopener noreferrer">Open Library</a>';
         if (($m['lccn'] ?? '') !== '') $links .= '<a class="kk-btn kk-btn--ghost kk-btn--sm" href="https://lccn.loc.gov/' . rawurlencode($m['lccn']) . '" target="_blank" rel="noopener noreferrer">' . __('Library of Congress') . '</a>';
         if ($m['oclc'] !== '') $links .= '<a class="kk-btn kk-btn--ghost kk-btn--sm" href="https://www.worldcat.org/oclc/' . rawurlencode($m['oclc']) . '" target="_blank" rel="noopener noreferrer">WorldCat</a>';
+        if (Settings::get('enable_borrow')) {
+            $links = Library::saveButton($id, true) . '<a class="kk-btn kk-btn--primary kk-btn--sm" href="index.php?p=borrow&amp;ids=' . $id . '">' . __('Ask to borrow') . '</a>' . $links;
+        }
         if ($links) $out .= '<div class="kk-links">' . $links . '</div>';
 
         if ($m['tags'] !== '') {
@@ -144,7 +147,8 @@ class Detail
         $a = self::one(
             'SELECT a.author_id, a.author_name, COALESCE(m.birth_year, \'\') AS birth_year, COALESCE(m.death_year, \'\') AS death_year,
                     COALESCE(m.nationality, \'\') AS nationality, COALESCE(m.discipline, \'\') AS discipline,
-                    COALESCE(m.external_url, \'\') AS external_url, COALESCE(m.notes, \'\') AS notes, COALESCE(m.notes_public, 0) AS notes_public
+                    COALESCE(m.external_url, \'\') AS external_url, COALESCE(m.notes, \'\') AS notes, COALESCE(m.notes_public, 0) AS notes_public,
+                    COALESCE(m.photo, \'\') AS photo, COALESCE(m.bio, \'\') AS bio, COALESCE(m.bio_source, \'\') AS bio_source
              FROM mst_author a LEFT JOIN kk_author m ON m.author_id = a.author_id WHERE a.author_id = ?',
             [$authorId]
         );
@@ -161,6 +165,7 @@ class Detail
             __('Discipline') => $a['discipline'],
         ];
         $html = '<div class="kk-author">';
+        if ($a['photo'] !== '') $html .= '<img class="kk-author__photo" src="' . Authors::photoUrl($a['photo'], 300) . '" alt="' . $e($a['author_name']) . '" width="150" loading="lazy">';
         $table = '';
         foreach ($rows as $label => $value) {
             if ($value !== '') $table .= '<tr><th>' . $e($label) . '</th><td>' . $e($value) . '</td></tr>';
@@ -172,6 +177,10 @@ class Detail
         if ($table) $html .= '<table class="kk-meta-table"><tbody>' . $table . '</tbody></table>';
         if ($a['notes'] !== '' && $a['notes_public']) {
             $html .= '<div class="kk-notes"><p class="kk-notes__label">' . __("Curator's Notes") . '</p><p class="kk-notes__body">' . $e($a['notes']) . '</p></div>';
+        }
+        if ($a['bio'] !== '') {
+            $html .= '<div class="kk-notes"><p class="kk-notes__label">' . __('About the author') . '</p><p class="kk-notes__body">' . $e($a['bio']) . '</p>'
+                . ($a['bio_source'] !== '' ? '<p class="kk-muted kk-author__src">' . $e(sprintf(__('Source: %s'), $a['bio_source'])) . '</p>' : '') . '</div>';
         }
         $html .= '</div><h3>' . $e(sprintf(count($books) === 1 ? __('%d book in the collection') : __('%d books in the collection'), count($books))) . '</h3>'
             . Library::grid($books);

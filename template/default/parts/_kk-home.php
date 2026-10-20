@@ -44,6 +44,19 @@ $e = [Library::class, 'e'];
                 <input id="kk-hero-q" type="search" name="keywords" placeholder="<?= __('Search title, author or subject'); ?>" autocomplete="off">
                 <button type="submit" class="kk-btn kk-btn--primary"><?= __('Search'); ?></button>
             </form>
+            <details class="kk-adv">
+                <summary><?= __('Advanced search'); ?></summary>
+                <form class="kk-adv__form" action="index.php" method="get">
+                    <input type="hidden" name="p" value="shelf">
+                    <label><span><?= __('Subject'); ?></span><select name="genre"><option value=""><?= __('Any'); ?></option>
+                        <?php foreach (Library::genres(60) as $g) : ?><option value="<?= (int)$g['topic_id']; ?>"><?= $e($g['topic']); ?></option><?php endforeach; ?></select></label>
+                    <label><span><?= __('Format'); ?></span><select name="format"><option value=""><?= __('Any'); ?></option>
+                        <?php foreach (Settings::formats() as $f) : ?><option value="<?= $e($f); ?>"><?= $e($f); ?></option><?php endforeach; ?></select></label>
+                    <label><span><?= __('Language'); ?></span><select name="lang"><option value=""><?= __('Any'); ?></option>
+                        <?php foreach (Library::languages() as $l) : ?><option value="<?= $e($l['language_id']); ?>"><?= $e($l['language_name']); ?></option><?php endforeach; ?></select></label>
+                    <button type="submit" class="kk-btn kk-btn--gold kk-btn--sm"><?= __('Show books'); ?></button>
+                </form>
+            </details>
         </div>
     </section>
 
@@ -55,6 +68,15 @@ $e = [Library::class, 'e'];
             <div class="kk-stat"><span class="kk-stat__num"><?= $kkStats['genres'] ? number_format($kkStats['genres']) : '—'; ?></span><span class="kk-stat__label"><?= __('Genres'); ?></span></div>
         </div>
     </div>
+
+    <?php if (trim((string)$kk['hours']) !== '' || trim((string)$kk['lending']) !== '') : ?>
+    <section class="kk-section kk-section--tight">
+        <div class="container kk-info">
+            <?php if (trim((string)$kk['hours']) !== '') : ?><div class="kk-info__box"><h2 class="kk-info__title"><?= __('Visiting hours'); ?></h2><p><?= nl2br($e($kk['hours'])); ?></p></div><?php endif; ?>
+            <?php if (trim((string)$kk['lending']) !== '') : ?><div class="kk-info__box"><h2 class="kk-info__title"><?= __('Lending'); ?></h2><p><?= nl2br($e($kk['lending'])); ?></p></div><?php endif; ?>
+        </div>
+    </section>
+    <?php endif; ?>
 
     <?php if ($kkRecent) : ?>
     <section class="kk-section">
@@ -93,8 +115,12 @@ $e = [Library::class, 'e'];
             <h2 class="kk-section__title kk-center"><?= __('Browse by Genre'); ?></h2>
             <?php if ($kkGenres) : ?>
                 <div class="kk-chips">
-                    <?php foreach ($kkGenres as $g) : ?>
-                        <a class="kk-badge kk-badge--gold kk-chip" href="index.php?p=shelf&amp;genre=<?= (int)$g['topic_id']; ?>"><?= $e($g['topic']); ?> <span class="kk-chip__n">(<?= (int)$g['n']; ?>)</span></a>
+                    <?php
+                    $kkMax = max(1, (int)max(array_column($kkGenres, 'n'))); $kkMin = (int)min(array_column($kkGenres, 'n'));
+                    foreach ($kkGenres as $g) :
+                        $w = $kkMax === $kkMin ? 2 : 1 + (int)round(3 * ((int)$g['n'] - $kkMin) / ($kkMax - $kkMin));
+                    ?>
+                        <a class="kk-badge kk-badge--gold kk-chip kk-chip--w<?= $w; ?>" href="index.php?p=shelf&amp;genre=<?= (int)$g['topic_id']; ?>"><?= $e($g['topic']); ?> <span class="kk-chip__n">(<?= (int)$g['n']; ?>)</span></a>
                     <?php endforeach; ?>
                 </div>
             <?php else : ?>

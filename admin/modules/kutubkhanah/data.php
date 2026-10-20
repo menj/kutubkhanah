@@ -5,6 +5,7 @@
  */
 
 use SLiMS\Kutubkhanah\Covers;
+use SLiMS\Kutubkhanah\Authors;
 
 require __DIR__ . '/kk.inc.php';
 if (!$kk_can_write) kk_deny();
@@ -36,6 +37,16 @@ echo kk_head();
     </div>
     <div class="kk-progress" id="kk-covers-progress" hidden><div class="kk-progress__bar"></div></div>
     <p class="kk-note" id="kk-covers-status" aria-live="polite"></p>
+  </section>
+
+  <section class="kk-panel">
+    <h3><?= __('Fetch author portraits') ?></h3>
+    <p class="kk-note"><?= sprintf(__('%d authors have not been looked up yet. Portraits and short biographies come from Open Library and are saved on this server.'), Authors::countPending()) ?></p>
+    <div class="kk-actions">
+      <button type="button" class="kk-btn kk-btn--primary" id="kk-authors"><?= __('Fetch portraits') ?></button>
+      <label class="kk-check kk-check--inline"><input type="checkbox" id="kk-authors-reset"> <?= __('Also retry authors that had no result') ?></label>
+    </div>
+    <p class="kk-note" id="kk-authors-status" aria-live="polite"></p>
   </section>
 
   <section class="kk-panel">

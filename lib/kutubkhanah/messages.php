@@ -30,7 +30,7 @@ class Messages
     {
         $fail = fn(string $m, array $errors = []) => ['ok' => false, 'message' => $m, 'errors' => $errors];
 
-        if (!in_array($type, ['contact', 'access'], true)) return $fail(__('Unknown form.'));
+        if (!in_array($type, ['contact', 'access', 'suggest', 'borrow'], true)) return $fail(__('Unknown form.'));
         if (!hash_equals((string)($_SESSION['kk_form_token'] ?? ''), (string)($post['kk_token'] ?? ''))) {
             return $fail(__('Your session expired. Please submit the form again.'));
         }
@@ -44,15 +44,23 @@ class Messages
         $v = fn($k, $n) => mb_substr(trim(strip_tags((string)($post[$k] ?? ''))), 0, $n);
         $name = $v('name', 200);
         $email = trim((string)($post['email'] ?? ''));
-        $subject = $type === 'contact' ? $v('subject', 400) : 'Access request';
-        $affiliation = $type === 'access' ? $v('affiliation', 300) : '';
-        $body = mb_substr(trim(strip_tags((string)($post[$type === 'contact' ? 'message' : 'reason'] ?? ''))), 0, 5000);
+        $subject = ['contact' => $v('subject', 400), 'access' => 'Access request', 'suggest' => $v('title', 400), 'borrow' => 'Borrow request'][$type];
+        $affiliation = $type === 'access' ? $v('affiliation', 300) : ($type === 'suggest' ? $v('author', 300) : '');
+        $bodyKey = ['contact' => 'message', 'access' => 'reason', 'suggest' => 'notes', 'borrow' => 'note'][$type];
+        $body = mb_substr(trim(strip_tags((string)($post[$bodyKey] ?? ''))), 0, 5000);
+        if ($type === 'borrow') {
+            $ids = self::ids((string)($post['ids'] ?? ''));
+            $list = $ids ? Library::books('b.biblio_id IN (' . implode(',', $ids) . ')', [], 'b.title', 30) : [];
+            if (!$list) return $fail(__('Choose at least one book first.'));
+            $body = ($body !== '' ? $body . "\n\n" : '') . "Books requested:\n" . implode("\n", array_map(fn($b) => '- ' . $b['title'] . ($b['authors'] ? ' (' . $b['authors'] . ')' : '') . ' [#' . $b['biblio_id'] . ']', $list));
+        }
 
         $errors = [];
         if ($name === '') $errors['name'] = __('Please enter your name.');
         if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 254) $errors['email'] = __('Please enter a valid email address.');
         if ($type === 'contact' && $subject === '') $errors['subject'] = __('Please enter a subject.');
-        if ($body === '') $errors[$type === 'contact' ? 'message' : 'reason'] = $type === 'contact' ? __('Please write a message.') : __('Please tell us why you would like access.');
+        if ($type === 'suggest' && $subject === '') $errors['title'] = __('Please enter the title.');
+        if ($body === '' && in_array($type, ['contact', 'access'], true)) $errors[$bodyKey] = $type === 'contact' ? __('Please write a message.') : __('Please tell us why you would like access.');
         if ($errors) return $fail(__('Please check the highlighted fields.'), $errors);
 
         $ok = DB::getInstance()->prepare(
@@ -67,8 +75,16 @@ class Messages
         return ['ok' => true, 'message' => self::thanks($type), 'errors' => []];
     }
 
+    /** @return int[] positive, unique, at most 30 */
+    public static function ids(string $csv): array
+    {
+        return array_slice(array_values(array_unique(array_filter(array_map('intval', explode(',', $csv)), fn($i) => $i > 0))), 0, 30);
+    }
+
     private static function thanks(string $type): string
     {
+        if ($type === 'suggest') return __('Thank you. Your suggestion has been received.');
+        if ($type === 'borrow') return __('Thank you. Your request has been received. You will hear back by email.');
         return $type === 'access'
             ? __('Thank you. Your access request has been received and will be reviewed personally.')
             : __('Thank you. Your message has been received.');
@@ -80,7 +96,7 @@ class Messages
         $to = (string)Settings::get('notify_email');
         if ($to === '' || !function_exists('config') || !config('mail')) return;
         try {
-            $title = '[' . ($sysconf['library_name'] ?? 'Kutubkhanah') . '] ' . ($type === 'access' ? 'Access request: ' . $name : 'Contact: ' . $subject);
+            $title = '[' . ($sysconf['library_name'] ?? 'Kutubkhanah') . '] ' . ['access' => 'Access request: ' . $name, 'contact' => 'Contact: ' . $subject, 'suggest' => 'Book suggestion: ' . $subject, 'borrow' => 'Borrow request: ' . $name][$type];
             $text = "Name: $name\nEmail: $email\n" . ($affiliation !== '' ? "Affiliation: $affiliation\n" : '') . "\n$body\n";
             \SLiMS\Mail::to($to, 'Librarian')->subject($title)->message(nl2br(htmlspecialchars($text, ENT_QUOTES, 'UTF-8')))->send();
         } catch (\Throwable $e) {
@@ -92,7 +108,7 @@ class Messages
 
     public static function counts(): array
     {
-        $out = ['contact' => 0, 'access' => 0, 'new' => 0];
+        $out = ['contact' => 0, 'access' => 0, 'suggest' => 0, 'borrow' => 0, 'new' => 0];
         $q = DB::getInstance()->query("SELECT type, SUM(CASE WHEN status = 'new' THEN 1 ELSE 0 END) AS n FROM kk_message GROUP BY type");
         foreach ($q ? $q->fetchAll(\PDO::FETCH_ASSOC) : [] as $r) {
             $out[$r['type']] = (int)$r['n'];

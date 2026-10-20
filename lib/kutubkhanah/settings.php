@@ -26,6 +26,10 @@ class Settings
             'recent_count'    => 10,
             'enable_contact'  => 1,
             'enable_access'   => 1,
+            'enable_suggest'  => 1,
+            'enable_borrow'   => 1,
+            'hours'           => '',
+            'lending'         => '',
             'notify_email'    => '',
             'show_reading'    => 1,
             'show_ratings'    => 1,
@@ -118,7 +122,7 @@ class Settings
             'library' => [
                 'tagline' => 'text', 'mission' => 'longtext', 'footer_desc' => 'longtext', 'location' => 'text',
                 'home_layout' => 'layout', 'recent_count' => 'int:0:30',
-                'enable_contact' => 'bool', 'enable_access' => 'bool', 'notify_email' => 'email', 'show_reading' => 'bool',
+                'enable_contact' => 'bool', 'enable_access' => 'bool', 'enable_suggest' => 'bool', 'enable_borrow' => 'bool', 'hours' => 'longtext', 'lending' => 'longtext', 'notify_email' => 'email', 'show_reading' => 'bool',
                 'show_ratings' => 'bool', 'enable_wishlist' => 'bool', 'enable_rss' => 'bool', 'enable_lists' => 'bool', 'enable_inside' => 'bool', 'ocr_lang' => 'text', 'loan_days' => 'int:0:365', 'permalinks' => 'permalinks',
             ],
             'ai' => [

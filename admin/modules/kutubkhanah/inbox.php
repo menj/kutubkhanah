@@ -9,7 +9,7 @@ use SLiMS\Kutubkhanah\Messages;
 require __DIR__ . '/kk.inc.php';
 if (!$kk_can_write) kk_deny();
 
-$type = ($_GET['t'] ?? 'access') === 'contact' ? 'contact' : 'access';
+$type = in_array($_GET['t'] ?? 'access', ['access', 'contact', 'suggest', 'borrow'], true) ? $_GET['t'] : 'access';
 $status = in_array($_GET['s'] ?? '', Messages::STATUSES, true) ? $_GET['s'] : '';
 $counts = Messages::counts();
 $rows = Messages::list($type, $status);
@@ -20,12 +20,13 @@ echo kk_head();
 <div class="kk">
   <header class="kk-head">
     <h2><?= __('Inbox') ?></h2>
-    <p><?= __('Messages from the public Request Access and Contact pages. Set "Notify email" in Settings > Library to also get them by email.') ?></p>
+    <p><?= __('Messages from the public Request Access, Borrow, Suggest a book and Contact pages. Set "Notify email" in Settings > Library to also get them by email.') ?></p>
   </header>
 
   <nav class="kk-tabs" aria-label="<?= __('Message type') ?>">
-    <a href="<?= MWB ?>kutubkhanah/inbox.php?t=access" class="kk-tab<?= $type === 'access' ? ' is-active' : '' ?>"<?= $type === 'access' ? ' aria-current="page"' : '' ?>><?= __('Access requests') ?> <span class="kk-count"><?= $counts['access'] ?></span></a>
-    <a href="<?= MWB ?>kutubkhanah/inbox.php?t=contact" class="kk-tab<?= $type === 'contact' ? ' is-active' : '' ?>"<?= $type === 'contact' ? ' aria-current="page"' : '' ?>><?= __('Contact messages') ?> <span class="kk-count"><?= $counts['contact'] ?></span></a>
+    <?php foreach (['access' => __('Access requests'), 'borrow' => __('Borrow requests'), 'suggest' => __('Suggestions'), 'contact' => __('Contact messages')] as $tk => $tl): ?>
+      <a href="<?= MWB ?>kutubkhanah/inbox.php?t=<?= $tk ?>" class="kk-tab<?= $type === $tk ? ' is-active' : '' ?>"<?= $type === $tk ? ' aria-current="page"' : '' ?>><?= kk_e($tl) ?> <span class="kk-count"><?= $counts[$tk] ?></span></a>
+    <?php endforeach; ?>
   </nav>
 
   <div class="kk-filter">
@@ -42,16 +43,17 @@ echo kk_head();
     <article class="kk-panel kk-msg" data-id="<?= (int)$r['id'] ?>">
       <header class="kk-msg__head">
         <div>
-          <strong><?= kk_e($r['type'] === 'contact' ? $r['subject'] : $r['name']) ?></strong>
-          <span class="kk-note"><?= kk_e($r['type'] === 'contact' ? $r['name'] . ' · ' : '') ?><a class="notAJAX" href="mailto:<?= kk_e($r['email']) ?>"><?= kk_e($r['email']) ?></a> · <?= kk_e($r['created_at']) ?></span>
-          <?php if ($r['affiliation'] !== ''): ?><span class="kk-note"><?= __('Affiliation') ?>: <?= kk_e($r['affiliation']) ?></span><?php endif; ?>
+          <strong><?= kk_e(in_array($r['type'], ['contact', 'suggest'], true) ? $r['subject'] : $r['name']) ?></strong>
+          <span class="kk-note"><?= kk_e($r['type'] !== 'access' ? $r['name'] . ' · ' : '') ?><a class="notAJAX" href="mailto:<?= kk_e($r['email']) ?>"><?= kk_e($r['email']) ?></a> · <?= kk_e($r['created_at']) ?></span>
+          <?php if ($r['affiliation'] !== ''): ?><span class="kk-note"><?= $r['type'] === 'suggest' ? __('Author') : __('Affiliation') ?>: <?= kk_e($r['affiliation']) ?></span><?php endif; ?>
         </div>
         <div class="kk-msg__actions">
           <label class="kk-sr" for="kk-st-<?= (int)$r['id'] ?>"><?= __('Status') ?></label>
           <select class="kk-input kk-input--short kk-msg-status" id="kk-st-<?= (int)$r['id'] ?>" data-id="<?= (int)$r['id'] ?>">
             <?php foreach ($labels as $k => $l): ?><option value="<?= $k ?>"<?= $r['status'] === $k ? ' selected' : '' ?>><?= kk_e($l) ?></option><?php endforeach; ?>
           </select>
-          <a class="kk-btn notAJAX" href="mailto:<?= kk_e($r['email']) ?>?subject=<?= rawurlencode('Re: ' . ($r['type'] === 'contact' ? $r['subject'] : 'Your access request')) ?>"><?= __('Reply') ?></a>
+          <a class="kk-btn notAJAX" href="mailto:<?= kk_e($r['email']) ?>?subject=<?= rawurlencode('Re: ' . ['contact' => $r['subject'], 'suggest' => 'Your book suggestion: ' . $r['subject'], 'borrow' => 'Your borrow request', 'access' => 'Your access request'][$r['type']]) ?>"><?= __('Reply') ?></a>
+          <?php if ($r['type'] === 'suggest' && $r['status'] === 'new'): ?><button type="button" class="kk-btn kk-btn--primary" data-kk-action="suggest_to_wishlist" data-id="<?= (int)$r['id'] ?>" data-values='<?= kk_e(json_encode(['id' => (int)$r['id']])) ?>' data-reload="<?= kk_e(MWB . 'kutubkhanah/inbox.php?t=suggest') ?>"><?= __('Add to wishlist') ?></button><?php endif; ?>
           <button type="button" class="kk-btn kk-msg-delete" data-id="<?= (int)$r['id'] ?>" data-confirm="<?= kk_e(__('Delete this message permanently?')) ?>"><?= __('Delete') ?></button>
         </div>
       </header>

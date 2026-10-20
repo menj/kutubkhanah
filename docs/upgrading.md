@@ -2,6 +2,10 @@
 
 Kutubkhanah upgrades itself. There is no upgrade wizard: replace the files, then open the admin.
 
+## 1.11.0
+
+Four columns are added to `kk_author` on first admin visit. If you use Apache, the bundled `.htaccess` already routes the new pages (`suggest`, `borrow`, `my-list`); with another web server add them to your rewrite rule.
+
 ## 1.10.0
 
 New table `kk_option` is created on first admin visit. New folder `plugins/` is where plugins go; stock `*.plugin.php` files there are untouched.

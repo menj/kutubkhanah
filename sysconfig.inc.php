@@ -86,9 +86,9 @@ if (PHP_VERSION_ID < 80400) {
 }
 
 // Kutubkhanah version. KUTUBKHANAH_VERSION_TAG is an internal database schema marker used by the upgrade routine; it is never shown.
-define('KUTUBKHANAH_VERSION', '1.10.0');
-define('KUTUBKHANAH_FULL_VERSION', 'Kutubkhanah 1.10.0');
-define('KUTUBKHANAH_VERSION_TAG', 'v1.10.0');
+define('KUTUBKHANAH_VERSION', '1.11.0');
+define('KUTUBKHANAH_FULL_VERSION', 'Kutubkhanah 1.11.0');
+define('KUTUBKHANAH_VERSION_TAG', 'v1.11.0');
 
 // Kutubkhanah session cookies name
 define('COOKIES_NAME', 'KutubkhanahAdmin');

@@ -68,6 +68,14 @@ HTML;
             echo $menu_str;
           }
           ?>
+          <?php if (!empty($kk['enable_borrow'])) : ?>
+              <li class="nav-item kk-nav-saved<?= ($_GET['p'] ?? '') === 'my-list' ? ' active' : '' ?>">
+                  <a class="nav-link" href="index.php?p=my-list" aria-label="<?= __('Saved books'); ?>">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg>
+                      <span class="kk-nav-saved__n" data-kk-saved-count hidden>0</span>
+                  </a>
+              </li>
+          <?php endif; ?>
           <?php
           $menu_member_active = isset($_GET['p']) && $_GET['p'] === 'member' ? 'active' : '';
           if ($is_login) {

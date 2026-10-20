@@ -2,6 +2,17 @@
 
 All notable changes to Kutubkhanah. Newest first. The version number lives in `sysconfig.inc.php` (see `ssot.md`).
 
+## 1.11.0
+
+- Author portraits and short biographies from Open Library, saved on this server (Import / Export > Fetch author portraits). Shown on author pages and in the home page author cards. A curator's note still wins over a fetched biography.
+- Suggest a book: a public form that lands in Inbox > Suggestions, with one click to add the title to the wishlist.
+- Saved books: a bookmark on every book and a Saved books page. The list stays in the visitor's own browser.
+- Borrow requests: "Ask to borrow" on a book, or for everything saved. Requests arrive in Inbox > Borrow requests with the book list.
+- Tag cloud: genre chips on the home page are sized by how many books they hold.
+- Visiting hours and lending note panel on the home page (Settings > Library). Empty hides it.
+- Advanced search panel under the home search box: subject, format and language.
+- New columns on `kk_author` (`photo`, `bio`, `bio_source`, `photo_tried`) are added automatically. New pages: `/suggest`, `/borrow`, `/my-list`.
+
 ## 1.10.0
 
 - Catalogue refresh: a "By Author" section on the home page (three covers, name, book count and a short line per author), a "search by" menu in the home search box, and quieter book cards with shadowed covers.

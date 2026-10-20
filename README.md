@@ -1,4 +1,4 @@
-Kutubkhanah 1.10.0
+Kutubkhanah 1.11.0
 =================
 A self-hosted home library CMS. Catalogue your books by scanning ISBN barcodes, publish them on a public library site, lend them
 to friends and family, and keep a journal alongside. It replaces Libib, runs on your own server and needs only PHP and one of
@@ -7,6 +7,9 @@ MySQL/MariaDB, PostgreSQL or SQLite. Licensed under the GNU GPL v3.
 Documents: [install.md](docs/install.md) (install guide), [upgrading.md](docs/upgrading.md) (how to upgrade),
 [changelog.md](docs/changelog.md) (what changed), [ssot.md](docs/ssot.md) (single source of truth for developers),
 [readme.txt](readme.txt) (plain-text summary).
+
+### New in 1.11.0: reader features
+- Saved books, borrow requests, suggest a book, author portraits and bios, visiting hours panel, advanced search panel and a tag cloud.
 
 ### New in 1.10.0: themes and plugins
 - A theme manager with child themes, and a plugin system with hooks, shortcodes and .zip upload.

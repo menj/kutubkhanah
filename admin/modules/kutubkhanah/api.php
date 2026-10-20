@@ -102,6 +102,23 @@ try {
             }
             kk_json(Importer::importFile($_FILES['csv']['tmp_name']));
 
+        case 'authors_fetch':
+            if (!empty($input['reset'])) \SLiMS\Kutubkhanah\Authors::resetTried();
+            $pending = \SLiMS\Kutubkhanah\Authors::pending(max(1, min(6, (int)($input['limit'] ?? 4))));
+            $found = 0;
+            foreach ($pending as $a) { if (\SLiMS\Kutubkhanah\Authors::fetch((int)$a['author_id'])) $found++; }
+            kk_json(['processed' => count($pending), 'found' => $found, 'remaining' => \SLiMS\Kutubkhanah\Authors::countPending()]);
+
+        case 'suggest_to_wishlist':
+            $mid = (int)($input['id'] ?? 0);
+            $row = \SLiMS\Kutubkhanah\Library::rows("SELECT subject, affiliation, body FROM kk_message WHERE id = ? AND type = 'suggest'", [$mid])[0] ?? null;
+            if (!$row) kk_json(['message' => __('Suggestion not found.')], 404);
+            try {
+                Wishlist::save(0, ['title' => $row['subject'], 'authors' => $row['affiliation'], 'notes' => $row['body'], 'priority' => 2, 'is_public' => 1]);
+            } catch (\Throwable $e) { kk_json(['message' => $e->getMessage()], 400); }
+            Messages::setStatus($mid, 'approved');
+            kk_json(['ok' => true]);
+
         case 'restore':
             if (empty($_FILES['sql']['tmp_name']) || (int)$_FILES['sql']['error'] !== UPLOAD_ERR_OK) kk_json(['message' => __('No file was uploaded.')], 400);
             if (empty($_POST['confirm'])) kk_json(['message' => __('Tick the box to confirm the restore.')], 400);
