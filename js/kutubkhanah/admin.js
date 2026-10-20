@@ -188,6 +188,21 @@
     });
   }
 
+  /* Backup restore (SQLite and PostgreSQL) */
+  var restoreForm = document.getElementById('kk-restore');
+  if (restoreForm) {
+    restoreForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var out = document.getElementById('kk-restore-status');
+      var btn = restoreForm.querySelector('button');
+      btn.disabled = true;
+      out.textContent = t.working;
+      api('restore', new FormData(restoreForm), true).then(function (res) {
+        out.textContent = res.ok ? (res.j.rows + ' rows restored in ' + res.j.tables + ' tables. Previous data saved as ' + res.j.safety + '.') : ((res.j && res.j.message) || t.error);
+      }).catch(function () { out.textContent = t.error; }).then(function () { btn.disabled = false; });
+    });
+  }
+
   /* Bulk cover fetch, a few books per request so shared hosting never times out */
   var go = document.getElementById('kk-covers');
   if (go) {

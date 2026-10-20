@@ -4,6 +4,7 @@ All notable changes to Kutubkhanah. Newest first. The version number lives in `s
 
 ## 1.10.0
 
+- Restore screen for SQLite and PostgreSQL backups (Import / Export > Restore a backup). Takes a backup .sql from System > Backup, saves a `before-restore-*.sql` copy of the current data first, replaces the tables in one transaction, and changes nothing if it fails. Needs system administrator rights.
 - Admin files `blog_*.php` renamed to kebab-case (`blog-comments.php` and so on).
 
 - Themes: a theme manager (Kutubkhanah > Themes) with live preview, child themes (`theme.json` with `parent`) and upload.

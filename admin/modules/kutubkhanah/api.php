@@ -102,6 +102,22 @@ try {
             }
             kk_json(Importer::importFile($_FILES['csv']['tmp_name']));
 
+        case 'restore':
+            if (empty($_FILES['sql']['tmp_name']) || (int)$_FILES['sql']['error'] !== UPLOAD_ERR_OK) kk_json(['message' => __('No file was uploaded.')], 400);
+            if (empty($_POST['confirm'])) kk_json(['message' => __('Tick the box to confirm the restore.')], 400);
+            if (!utility::havePrivilege('system', 'w')) kk_json(['message' => __('Only a system administrator can restore a backup.')], 403);
+            $dumper = \SLiMS\DB::backup();
+            if (!($dumper instanceof \SLiMS\Kutubkhanah\Db\Dump)) kk_json(['message' => __('On MySQL/MariaDB, restore with System > Backup or your own tool.')], 400);
+            $dir = rtrim((string)$sysconf['backup_dir'], '/\\') . DIRECTORY_SEPARATOR;
+            if (!is_dir($dir)) mkdir($dir, 0755, true);
+            $safety = $dir . 'before-restore-' . date('Ymd-His') . '.sql';
+            try {
+                $counts = $dumper->restore($_FILES['sql']['tmp_name'], $safety);
+            } catch (\Throwable $e) {
+                kk_json(['message' => $e->getMessage()], 400);
+            }
+            kk_json(['ok' => true, 'tables' => count($counts), 'rows' => array_sum($counts), 'safety' => basename($safety)]);
+
         case 'theme_activate':
             $slug = (string)($input['slug'] ?? '');
             if (!Theme::activate($slug)) kk_json(['message' => __('Theme not found.')], 404);

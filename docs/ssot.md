@@ -138,14 +138,13 @@ Unfinished installs (database.php without env.php) redirect to `install/index.ph
 
 ## Known limits
 
-- Backups on PostgreSQL hold data only; there is no restore screen for SQLite/PostgreSQL backups yet.
+- Backups on PostgreSQL hold data only, so restore them into a site of the same version (Import / Export > Restore a backup).
 - No tool converts an existing site between database engines.
 - Some inherited modules were written for MySQL and are only verified by the crawl.
 
 ## Open items
 
 - Public catalogue redesign (waiting for screenshots).
-- Restore screen for SQLite/PostgreSQL backups.
 
 ## AI discovery files
 `lib/kutubkhanah/ai-files.php`, page `kk-ai`, setting keys `ai_*` (Settings > AI files), table `kk_ai_hit`.

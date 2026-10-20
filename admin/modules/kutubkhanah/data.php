@@ -43,5 +43,18 @@ echo kk_head();
     <p class="kk-note"><?= __('Download the whole catalogue as a CSV with Libib-compatible columns. It can be re-imported here or elsewhere.') ?></p>
     <a class="kk-btn notAJAX" href="<?= MWB ?>kutubkhanah/api.php?action=export&token=<?= kk_e($_SESSION['kk_token']) ?>"><?= __('Download CSV') ?></a>
   </section>
+
+  <?php if (\SLiMS\DB::backup() instanceof \SLiMS\Kutubkhanah\Db\Dump): ?>
+  <section class="kk-panel">
+    <h3><?= __('Restore a backup') ?></h3>
+    <p class="kk-note"><?= __('Upload a .sql backup made by System > Backup on this kind of database. The catalogue tables in the file replace the current ones. A copy of the current data is saved in the backup folder first, and a failed restore changes nothing.') ?></p>
+    <form id="kk-restore" class="kk-inline-form notAJAX" enctype="multipart/form-data">
+      <input type="file" name="sql" accept=".sql,text/plain" required>
+      <label class="kk-check kk-check--inline"><input type="checkbox" name="confirm" value="1"> <?= __('Replace my current data with this backup') ?></label>
+      <button type="submit" class="kk-btn kk-btn--primary"><?= __('Restore') ?></button>
+    </form>
+    <p class="kk-note" id="kk-restore-status" aria-live="polite"></p>
+  </section>
+  <?php endif; ?>
 </div>
 <?= kk_script('admin.js') ?>

@@ -75,4 +75,82 @@ class Dump
             fclose($fh);
         }
     }
+
+    /** Run one statement untouched (see raw()). */
+    private function rawExec(string $sql): void
+    {
+        (new \ReflectionMethod(\PDO::class, 'exec'))->invoke($this->pdo, $sql);
+    }
+
+    /** Read a backup file one complete statement at a time (quotes may span lines). */
+    private function statements(string $file): \Generator
+    {
+        $fh = fopen($file, 'rb');
+        if (!$fh) throw new \RuntimeException('Cannot read the file.');
+        try {
+            $buf = '';
+            while (($line = fgets($fh)) !== false) {
+                if ($buf === '' && (trim($line) === '' || str_starts_with($line, '--'))) continue;
+                $buf .= $line;
+                if (substr_count($buf, "'") % 2 === 0 && rtrim($buf) !== '' && str_ends_with(rtrim($buf), ';')) {
+                    yield rtrim($buf);
+                    $buf = '';
+                }
+            }
+            if (trim($buf) !== '') yield trim($buf);
+        } finally {
+            fclose($fh);
+        }
+    }
+
+    /**
+     * Replace the catalogue with the contents of a backup written by start(). Only INSERT statements for tables that exist
+     * are run; everything else in the file is ignored. Tables named in the file are emptied first, all in one transaction.
+     * A copy of the current data is written to $safety before anything changes.
+     *
+     * @return array<string,int> rows restored per table
+     * @throws \RuntimeException
+     */
+    public function restore(string $file, string $safety): array
+    {
+        $fh = fopen($file, 'rb');
+        $head = $fh ? (string)fgets($fh) : '';
+        if ($fh) fclose($fh);
+        if (!preg_match('/^-- Kutubkhanah backup \((sqlite|pgsql)\)/', $head, $m)) {
+            throw new \RuntimeException('This is not a Kutubkhanah SQLite or PostgreSQL backup.');
+        }
+        if ($m[1] !== $this->driver) {
+            throw new \RuntimeException('This backup is for ' . $m[1] . ', but this site runs on ' . $this->driver . '.');
+        }
+        $known = array_flip($this->tables());
+        $plan = [];
+        foreach ($this->statements($file) as $sql) {
+            if (!preg_match('/^INSERT INTO "((?:[^"]|"")+)" \(/', $sql, $t)) continue;
+            $name = str_replace('""', '"', $t[1]);
+            if (!isset($known[$name])) continue;
+            $plan[$name] = ($plan[$name] ?? 0) + 1;
+        }
+        if (!$plan) throw new \RuntimeException('The backup holds no rows to restore.');
+
+        $this->start($safety);
+
+        $counts = [];
+        $this->pdo->beginTransaction();
+        try {
+            foreach (array_keys($plan) as $name) $this->rawExec('DELETE FROM ' . $this->q($name));
+            foreach ($this->statements($file) as $sql) {
+                if (!preg_match('/^INSERT INTO "((?:[^"]|"")+)" \(/', $sql, $t)) continue;
+                $name = str_replace('""', '"', $t[1]);
+                if (!isset($plan[$name])) continue;
+                $this->rawExec($sql);
+                $counts[$name] = ($counts[$name] ?? 0) + substr_count($sql, "\n(") + 1;
+            }
+            $this->pdo->commit();
+        } catch (\Throwable $e) {
+            if ($this->pdo->inTransaction()) $this->pdo->rollBack();
+            throw new \RuntimeException('Restore failed and nothing was changed: ' . $e->getMessage());
+        }
+        if ($this->pdo instanceof Pdo) $this->pdo->resetSequences();
+        return $counts;
+    }
 }
