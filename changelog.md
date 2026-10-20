@@ -1,7 +1,9 @@
-Kutubkhanah changelog
-=====================
+# Changelog
 
-1.7.0
+All notable changes to Kutubkhanah. Newest first. The version number lives in `sysconfig.inc.php` (see `ssot.md`).
+
+## 1.7.0
+
 - Reading lists: ordered lists of books with notes, a public page each (index.php?p=lists) and links from book pages.
 - Duplicates & Editions: finds books entered twice (same ISBN, or same title, author and year) and merges them,
   moving copies, authors, subjects, files, loans and notes into the record you keep. Editions of one work can be
@@ -16,19 +18,22 @@ Kutubkhanah changelog
 - Backups work on all three: MySQL as before; SQLite and PostgreSQL write a portable .sql file (SQLite includes the
   table definitions; PostgreSQL holds the data, to load into a fresh install of the same version).
 
-1.6.0
+## 1.6.0
+
 - Blog built into Kutubkhanah (modelled on WordPress): posts and pages, categories, tags, featured image,
   scheduled and draft posts, sticky posts, comments with moderation, media library, RSS feed,
   WordPress export import, rich-text editor, shortcodes that embed books from your library.
 - Public blog at index.php?p=blog in the Kutubkhanah theme; settings in Settings > Blog.
 
-1.5.1
+## 1.5.1
+
 - WordPress-style installer: welcome, database details (writes config/database.php, or shows the text to paste),
   then library title, username, generated password and email, with optional sample books and a
   "discourage search engines" switch. No JavaScript framework; the old upgrade wizard is gone
   (Kutubkhanah upgrades itself when files are replaced). Unfinished installs redirect to the installer.
 
-1.5.0
+## 1.5.0
+
 - Lending log (kk_loan): lend, return, overdue list, per-book history, public "On loan" badge.
 - Ratings (1-5) and reviews with a public switch; stars on book pages and cards.
 - Wishlist (kk_wish): admin page, scanner Wishlist mode, ISBN lookup, local covers, acquired on scan,
@@ -40,7 +45,8 @@ Kutubkhanah changelog
 - Password reset mail sent locally instead of through an outside mailer.
 - Footer credit reads "Powered by Kutubkhanah".
 
-1.4.0
+## 1.4.0
+
 - Lookups from Open Library (edition + work), Library of Congress (SRU), Google Books, K10plus (SRU)
   and a custom SRU catalogue, fetched in parallel and merged by trust order.
 - New stored details: edition, place, collation, language (added to SLiMS when new), series, subjects,
@@ -48,14 +54,16 @@ Kutubkhanah changelog
 - Settings > Lookup: per-source switches and custom SRU address and ISBN index.
 - Book page: original-script title, LC class, Open Library and Library of Congress links.
 
-1.3.0
+## 1.3.0
+
 - PHP 8.4 is the minimum version (installer check, runtime check, Composer and Docker).
 - All PHP 8.4 deprecations fixed in Kutubkhanah and the bundled libraries.
 - EAN-8, EAN-13, UPC-A, Code 25 and Identcode barcodes work again (removed {} string offsets).
 - MARC import, export and per-book MARC download work without system PEAR (PEAR_Exception bundled, BSD licence).
 - Installer messages and the upgrade option ("Kutubkhanah 1.0 to 1.2.x") updated.
 
-1.2.2
+## 1.2.2
+
 - All upstream version branding removed: the version reads "Kutubkhanah 1.2.2" everywhere
   (admin, installer, page footer, error pages, generator tag).
 - Kutubkhanah credits all three systems it brings together: SLiMS, PMB and OpenBiblio.
@@ -63,17 +71,21 @@ Kutubkhanah changelog
   with "About Kutubkhanah" and "Licence" on new installs and on upgrade.
 - The upstream release check and community registration links are gone from the admin home.
 
-1.2.1
+## 1.2.1
+
 - Full font stack: Sabon Next LT, Kagnue, Kagnue Outline and Ferments active alongside
   EB Garamond, Amiri, Noto Naskh Arabic, KFGQPC HAFS and Special Elite.
 
-1.2.0
+## 1.2.0
+
 - KK brand mark, favicon set, logo, social image and installer branding.
 
-1.1.0
+## 1.1.0
+
 - Private Library "navy and gold" public design, home page, catalogue and digital archives,
   book and author pages, contact and request-access forms, FAQ, read-only JSON API.
 
-1.0.0
+## 1.0.0
+
 - ISBN scanning with Open Library and Google Books lookups, review queue, Libib import and
   export, cover fetching, tabbed settings and the A-Z cover shelf.

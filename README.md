@@ -1,7 +1,10 @@
-Kutubkhanah 1.5.0
+Kutubkhanah 1.7.0
 =================
 A home library system that brings together three open-source library systems, **SLiMS**, **PMB**
 and **OpenBiblio**, licensed under the GNU GPL v3.
+
+Documents: [changelog.md](changelog.md) (what changed), [upgrading.md](upgrading.md) (how to upgrade),
+[ssot.md](ssot.md) (single source of truth for developers), [readme.txt](readme.txt) (plain-text summary).
 
 ### New in 1.7.0: three databases, reading lists, duplicates, search inside books
 - **MySQL/MariaDB, SQLite or PostgreSQL.** Choose in the installer; SQLite needs no database server. The SQL used by
