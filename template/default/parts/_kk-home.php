@@ -13,6 +13,7 @@ $kk = Settings::all();
 $kkStats = Library::stats();
 $kkRecent = (int)$kk['recent_count'] > 0 ? Library::books('1=1', [], 'b.input_date DESC, b.biblio_id DESC', (int)$kk['recent_count']) : [];
 $kkGenres = Library::genres(16);
+$kkAuthors = Library::authorMosaics(3);
 $kkNews = Library::news(3);
 $e = [Library::class, 'e'];
 ?>
@@ -34,6 +35,12 @@ $e = [Library::class, 'e'];
                 <input type="hidden" name="search" value="search">
                 <svg class="kk-hero__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
                 <label class="kk-sr" for="kk-hero-q"><?= __('Search the library'); ?></label>
+                <select class="kk-hero__by" id="kk-hero-by" aria-label="<?= __('Search by'); ?>">
+                    <option value="keywords"><?= __('All'); ?></option>
+                    <option value="title"><?= __('Title'); ?></option>
+                    <option value="author"><?= __('Author'); ?></option>
+                    <option value="subject"><?= __('Subject'); ?></option>
+                </select>
                 <input id="kk-hero-q" type="search" name="keywords" placeholder="<?= __('Search title, author or subject'); ?>" autocomplete="off">
                 <button type="submit" class="kk-btn kk-btn--primary"><?= __('Search'); ?></button>
             </form>
@@ -60,6 +67,23 @@ $e = [Library::class, 'e'];
                 <a class="kk-btn kk-btn--outline kk-btn--sm" href="index.php?p=shelf"><?= __('Browse Full Catalogue'); ?> &rarr;</a>
             </div>
             <?= Library::grid($kkRecent, 'kk-grid kk-grid--5'); ?>
+        </div>
+    </section>
+    <?php endif; ?>
+
+    <?php if ($kkAuthors) : ?>
+    <section class="kk-section kk-section--tight">
+        <div class="container">
+            <div class="kk-section__head">
+                <div>
+                    <span class="kk-label"><?= __('From the Shelves'); ?></span>
+                    <h2 class="kk-section__title"><?= __('By Author'); ?></h2>
+                </div>
+                <a class="kk-btn kk-btn--outline kk-btn--sm" href="index.php?p=shelf"><?= __('View All'); ?> &rarr;</a>
+            </div>
+            <div class="kk-grid kk-grid--3">
+                <?php foreach ($kkAuthors as $a) echo Library::authorMosaic($a); ?>
+            </div>
         </div>
     </section>
     <?php endif; ?>

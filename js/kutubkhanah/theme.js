@@ -55,3 +55,9 @@
     if (e.target.hasAttribute && e.target.hasAttribute('data-cancel-reply')) { parent.value = '0'; note.hidden = true; }
   });
 }());
+
+/* Hero search: the "search by" menu decides which field the box searches. */
+(function () {
+  var by = document.getElementById('kk-hero-by'), q = document.getElementById('kk-hero-q');
+  if (by && q) by.addEventListener('change', function () { q.name = by.value; });
+})();

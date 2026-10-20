@@ -63,6 +63,45 @@ class Library
         );
     }
 
+    /** The authors with most books, each with up to four covers and a short line about them, for the home page mosaic. */
+    public static function authorMosaics(int $limit = 3): array
+    {
+        $authors = self::rows(
+            "SELECT a.author_id, a.author_name, COUNT(DISTINCT b.biblio_id) AS n
+             FROM mst_author a JOIN biblio_author ba ON ba.author_id = a.author_id JOIN biblio b ON b.biblio_id = ba.biblio_id
+             LEFT JOIN kk_book k ON k.biblio_id = b.biblio_id
+             WHERE " . self::VISIBLE . "
+             GROUP BY a.author_id, a.author_name ORDER BY n DESC, a.author_name LIMIT " . max(1, $limit)
+        );
+        foreach ($authors as &$a) {
+            $a['books'] = self::books(
+                'EXISTS (SELECT 1 FROM biblio_author x WHERE x.biblio_id = b.biblio_id AND x.author_id = ?)', [(int)$a['author_id']],
+                "CASE WHEN b.image IS NULL OR b.image = '' THEN 1 ELSE 0 END, b.publish_year DESC", 4
+            );
+            $m = self::rows('SELECT nationality, discipline, notes, notes_public FROM kk_author WHERE author_id = ?', [(int)$a['author_id']])[0] ?? [];
+            $bio = !empty($m['notes_public']) && trim((string)($m['notes'] ?? '')) !== '' ? trim($m['notes'])
+                : implode(' · ', array_filter([trim((string)($m['nationality'] ?? '')), trim((string)($m['discipline'] ?? ''))]));
+            $a['bio'] = $bio;
+        }
+        return $authors;
+    }
+
+    public static function authorMosaic(array $a): string
+    {
+        $e = [self::class, 'e'];
+        $url = SWB . 'index.php?p=author&amp;id=' . (int)$a['author_id'];
+        $books = array_slice($a['books'], 0, 3);
+        $out = '<article class="kk-mosaic"><a class="kk-mosaic__covers kk-mosaic__covers--' . min(3, count($books)) . '" href="' . $url . '" tabindex="-1" aria-hidden="true">';
+        foreach ($books as $b) {
+            if (!empty($b['image'])) $out .= '<span><img src="' . self::cover($b['image'], 200) . '" alt="" loading="lazy" decoding="async"></span>';
+            else $out .= '<span class="kk-mosaic__ph">' . $e(mb_strimwidth($b['title'], 0, 40, '…')) . '</span>';
+        }
+        $out .= '</a><h3 class="kk-mosaic__name"><a href="' . $url . '">' . $e($a['author_name']) . '</a></h3>'
+            . '<p class="kk-mosaic__n">' . $e(sprintf((int)$a['n'] === 1 ? __('%d book') : __('%d books'), (int)$a['n'])) . '</p>';
+        if ($a['bio'] !== '') $out .= '<p class="kk-mosaic__bio">' . $e(mb_strimwidth($a['bio'], 0, 140, '…')) . '</p>';
+        return $out . '</article>';
+    }
+
     public static function genres(int $limit = 16): array
     {
         return self::rows(
