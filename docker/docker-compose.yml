@@ -1,11 +1,11 @@
 version: "3"
 
 services:
-  slims:
-    container_name: slims
+  kutubkhanah:
+    container_name: kutubkhanah
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: docker/Dockerfile
     environment:
       - ENV=${APP_ENV}
       - DB_HOST=db
@@ -26,12 +26,12 @@ services:
 
   db:
     image: mariadb:lts
-    container_name: db
+    container_name: kutubkhanah-db
     ports:
       - "${DB_PORT}:3306"
     volumes:
-      - ./install/senayan.sql:/docker-entrypoint-initdb.d/01-senayan.sql
-      - ./install/sampledata.sql:/docker-entrypoint-initdb.d/02-sampledata.sql
+      - ../install/senayan.sql:/docker-entrypoint-initdb.d/01-senayan.sql
+      - ../install/sampledata.sql:/docker-entrypoint-initdb.d/02-sampledata.sql
       - dbdata:/var/lib/mysql
     environment:
       - MARIADB_ROOT_PASSWORD=${DB_PASS}

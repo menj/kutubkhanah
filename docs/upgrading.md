@@ -61,7 +61,7 @@ Pulling keeps `config/` and `files/` because they are ignored by git.
 - **PHP 8.4 is the minimum.** Upgrade PHP first.
 
 ### To 1.2.x and earlier
-- Stock upstream pages (About, Licence) are replaced on upgrade.
+- Stock pages (About, Licence) are replaced on upgrade.
 
 ## If something goes wrong
 

@@ -49,7 +49,7 @@ All notable changes to Kutubkhanah. Newest first. The version number lives in `s
 
 - Lookups from Open Library (edition + work), Library of Congress (SRU), Google Books, K10plus (SRU)
   and a custom SRU catalogue, fetched in parallel and merged by trust order.
-- New stored details: edition, place, collation, language (added to SLiMS when new), series, subjects,
+- New stored details: edition, place, collation, language (added when new), series, subjects,
   Dewey, LC class, LCCN, OCLC, Open Library ID, Google Books ID, original-script title, sources used.
 - Settings > Lookup: per-source switches and custom SRU address and ISBN index.
 - Book page: original-script title, LC class, Open Library and Library of Congress links.
@@ -64,12 +64,12 @@ All notable changes to Kutubkhanah. Newest first. The version number lives in `s
 
 ## 1.2.2
 
-- All upstream version branding removed: the version reads "Kutubkhanah 1.2.2" everywhere
+- All outside version branding removed: the version reads "Kutubkhanah 1.2.2" everywhere
   (admin, installer, page footer, error pages, generator tag).
-- Kutubkhanah credits all three systems it brings together: SLiMS, PMB and OpenBiblio.
-- Stock upstream pages (About SLiMS, SLiMS licence, module list, open-source model) are replaced
+- Credits page names the open-source projects Kutubkhanah builds on.
+- Stock pages (about, licence, module list, open-source model) are replaced
   with "About Kutubkhanah" and "Licence" on new installs and on upgrade.
-- The upstream release check and community registration links are gone from the admin home.
+- The outside release check and community registration links are gone from the admin home.
 
 ## 1.2.1
 

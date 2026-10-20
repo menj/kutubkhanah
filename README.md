@@ -1,10 +1,11 @@
 Kutubkhanah 1.7.0
 =================
-A home library system that brings together three open-source library systems, **SLiMS**, **PMB**
-and **OpenBiblio**, licensed under the GNU GPL v3.
+A home library system for people who keep their own books. It replaces Libib, runs on your own server and
+needs only PHP and one of MySQL/MariaDB, PostgreSQL or SQLite. Licensed under the GNU GPL v3.
 
-Documents: [changelog.md](changelog.md) (what changed), [upgrading.md](upgrading.md) (how to upgrade),
-[ssot.md](ssot.md) (single source of truth for developers), [readme.txt](readme.txt) (plain-text summary).
+Documents: [install.md](docs/install.md) (install guide), [upgrading.md](docs/upgrading.md) (how to upgrade),
+[changelog.md](docs/changelog.md) (what changed), [ssot.md](docs/ssot.md) (single source of truth for developers),
+[readme.txt](readme.txt) (plain-text summary).
 
 ### New in 1.7.0: three databases, reading lists, duplicates, search inside books
 - **MySQL/MariaDB, SQLite or PostgreSQL.** Choose in the installer; SQLite needs no database server. The SQL used by
@@ -15,7 +16,7 @@ Documents: [changelog.md](changelog.md) (what changed), [upgrading.md](upgrading
 - **Search Inside**: indexes the text of PDF digital copies (pdftotext, plus tesseract OCR for scanned pages) and adds a
   public page (`index.php?p=inside`) that shows the page and a highlighted snippet. Private files are never searched.
 
-### New in 1.5.0: home-library features from PMB and OpenBiblio
+### New in 1.5.0: more home-library features
 - **Lending** (Admin > Kutubkhanah > Lending): "lent to Ahmad on 3 March, due back 2 April", what is
   out and what is overdue, history per book, and an "On loan" badge on the public book page.
 - **Ratings and reviews**: a 1–5 star rating and your own review on Book Details; the review is public
@@ -55,8 +56,8 @@ Documents: [changelog.md](changelog.md) (what changed), [upgrading.md](upgrading
 
 ### New in 1.2.2
 - One name everywhere: the version reads "Kutubkhanah 1.2.2" in the admin, installer, footer and
-  error pages. Upstream release checks, donation and registration links are removed, and the stock
-  upstream content pages are replaced with "About Kutubkhanah" and "Licence" (also on upgrade).
+  error pages. Outside release checks, donation and registration links are removed, and the stock
+  content pages are replaced with "About Kutubkhanah" and "Licence" (also on upgrade).
 
 ### New in 1.2.1: full font stack
 - Sabon Next LT (text and headings), Kagnue (display titles), Kagnue Outline (catalogue A–Z letters)

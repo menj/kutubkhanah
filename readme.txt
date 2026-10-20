@@ -5,7 +5,7 @@ Databases: MySQL 5.7 / MariaDB 10.3 or later, PostgreSQL 13 or later, or SQLite 
 License: GNU GPL v3 or later
 Repository: https://github.com/menj/kutubkhanah
 
-A home library system. It brings together SLiMS, PMB and OpenBiblio in one program and replaces Libib.
+A home library system. It replaces Libib and runs on your own server.
 
 == Description ==
 
@@ -15,7 +15,7 @@ A home library system. It brings together SLiMS, PMB and OpenBiblio in one progr
   search inside digital books, a journal (blog), contact and request-access forms, a JSON API and an RSS feed.
 * Lending log for books lent to friends and family, ratings and reviews, custom fields per format,
   duplicate finder and merge, editions grouped as one work.
-* Full SLiMS cataloguing, circulation, membership and reporting underneath.
+* Full cataloguing, circulation, membership and reporting underneath.
 * Settings are organised in tabs, with configurable light and dark colour schemes.
 
 == Installation ==
@@ -29,14 +29,15 @@ A home library system. It brings together SLiMS, PMB and OpenBiblio in one progr
 
 == Upgrading ==
 
-Back up, replace the files (keep config/ and files/), and open any admin page. See upgrading.md.
+Back up, replace the files (keep config/ and files/), and open any admin page. See docs/upgrading.md.
 
 == Documents ==
 
-readme.md      Overview and feature list
-changelog.md   What changed in each version
-upgrading.md   How to upgrade, and notes per version
-ssot.md        Single source of truth for developers: layout, tables, routes, conventions
+README.md          Overview and feature list
+docs/install.md    Step-by-step install guide
+docs/upgrading.md  How to upgrade, and notes per version
+docs/changelog.md  What changed in each version
+docs/ssot.md       Single source of truth for developers: layout, tables, routes, conventions
 
 == Credits ==
 

@@ -5,8 +5,8 @@ in the same commit. Keep it short and factual.
 
 ## Identity
 
-- Name: **Kutubkhanah** ("KK"). Only this name is public-facing. No upstream version strings in the UI.
-- Purpose: home library CMS that merges SLiMS, PMB and OpenBiblio and replaces Libib.
+- Name: **Kutubkhanah** ("KK"). Only this name is public-facing. No third-party version strings in the UI; the projects Kutubkhanah builds on are named only in the credits.
+- Purpose: home library CMS that replaces Libib.
 - Licence: GNU GPL v3 or later. Repository: https://github.com/menj/kutubkhanah (branch `main`, always in sync).
 - Brand: navy and gold. Fonts in `fonts/kutubkhanah/`.
 
@@ -20,7 +20,7 @@ Change all of these together on a release:
 | `lib/Kutubkhanah/Schema.php` | `Schema::VERSION` (schema check key) |
 | `admin/modules/kutubkhanah/kk.inc.php` | `KK_VERSION` |
 | `README.md`, `readme.txt` | headline version |
-| `changelog.md`, `upgrading.md` | new entry |
+| `docs/changelog.md`, `docs/upgrading.md` | new entry |
 
 Release flow: edit, test, update the files above, commit, push to `origin main`. Never ship zip files.
 Commit identity: `menj <remotiveasia@gmail.com>`.
@@ -48,8 +48,13 @@ Commit identity: `menj <remotiveasia@gmail.com>`.
 
 ## Layout
 
+Root holds only the entry points (`index.php`, `oai*.php`, `sysconfig.inc.php`), Composer files, `LICENSE`, `README.md` and `readme.txt`.
+Docker files are in `docker/`, long-form docs in `docs/`.
+
 | Path | Purpose |
 |---|---|
+| `docs/` | install.md, upgrading.md, changelog.md, ssot.md |
+| `docker/` | Dockerfile, docker-compose.yml, entrypoint.sh, .env.example |
 | `lib/Kutubkhanah/` | Own classes (Books, Library, Settings, Schema, Loans, Wishlist, Series, Fields, Lists, Duplicates, DocSearch, Covers, Lookup, Importer, Api, ...) |
 | `lib/Kutubkhanah/Blog/` | Journal (blog): Posts, Terms, Comments, Media, Render, Import, Text, Wp |
 | `lib/Kutubkhanah/Db/` | Portable database layer |
@@ -65,9 +70,9 @@ Assets rule: JavaScript and CSS live in their own files under `/js/kutubkhanah/`
 ## Public routes (`index.php?p=`)
 
 `shelf`, `show_detail`, `author`, `series`, `lists`, `wishlist`, `inside`, `blog`, `page`, `blog_rss`, `kk_rss`, `kk_api`,
-`contact`, `request_access`, `faq`, plus stock SLiMS pages.
+`contact`, `request_access`, `faq`, plus the stock catalogue pages.
 
-## Tables (own, all prefixed `kk_`; catalogue tables are SLiMS's, unprefixed)
+## Tables (own, all prefixed `kk_`; the catalogue tables are unprefixed)
 
 | Table | Holds |
 |---|---|
@@ -120,7 +125,7 @@ Unfinished installs (database.php without env.php) redirect to `install/index.ph
 
 - Backups on PostgreSQL hold data only; there is no restore screen for SQLite/PostgreSQL backups yet.
 - No tool converts an existing site between database engines.
-- Some inherited SLiMS modules were written for MySQL and are only verified by the crawl.
+- Some inherited modules were written for MySQL and are only verified by the crawl.
 
 ## Open items
 

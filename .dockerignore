@@ -1,4 +1,6 @@
+.git
 .github
 .gitignore
-docker-compose.yml
-Dockerfile
+docker/docker-compose.yml
+docker/.env.example
+docs
