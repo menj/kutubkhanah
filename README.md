@@ -3,6 +3,15 @@ Kutubkhanah 1.5.0
 A home library system that brings together three open-source library systems, **SLiMS**, **PMB**
 and **OpenBiblio**, licensed under the GNU GPL v3.
 
+### New in 1.7.0: three databases, reading lists, duplicates, search inside books
+- **MySQL/MariaDB, SQLite or PostgreSQL.** Choose in the installer; SQLite needs no database server. The SQL used by
+  the code base is translated on the fly (`lib/Kutubkhanah/Db`). Backups work on all three.
+- **Reading lists** (Admin > Kutubkhanah > Reading Lists): ordered lists with notes and a public page each (`index.php?p=lists`).
+- **Duplicates & Editions**: find books entered twice and merge them (copies, authors, subjects, files, loans and notes
+  move to the record you keep); link different editions of one work so each book page lists the others.
+- **Search Inside**: indexes the text of PDF digital copies (pdftotext, plus tesseract OCR for scanned pages) and adds a
+  public page (`index.php?p=inside`) that shows the page and a highlighted snippet. Private files are never searched.
+
 ### New in 1.5.0: home-library features from PMB and OpenBiblio
 - **Lending** (Admin > Kutubkhanah > Lending): "lent to Ahmad on 3 March, due back 2 April", what is
   out and what is overdue, history per book, and an "On loan" badge on the public book page.
