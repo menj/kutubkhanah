@@ -109,6 +109,13 @@ try {
             foreach ($pending as $a) { if (\SLiMS\Kutubkhanah\Authors::fetch((int)$a['author_id'])) $found++; }
             kk_json(['processed' => count($pending), 'found' => $found, 'remaining' => \SLiMS\Kutubkhanah\Authors::countPending()]);
 
+        case 'author_review':
+            $op = (string)($input['op'] ?? 'save');
+            if (!in_array($op, ['save', 'approve', 'reject', 'refetch'], true)) kk_json(['message' => __('Unknown action.')], 400);
+            if (!\SLiMS\Kutubkhanah\Authors::review((int)($input['id'] ?? 0), $op, $input)) kk_json(['message' => __('Author not found.')], 404);
+            $m = \SLiMS\Kutubkhanah\Authors::meta((int)$input['id']);
+            kk_json(['ok' => true, 'ol_name' => (string)($m['ol_name'] ?? ''), 'ol_key' => (string)($m['ol_key'] ?? ''), 'found' => ($m['bio_source'] ?? '') !== '']);
+
         case 'suggest_to_wishlist':
             $mid = (int)($input['id'] ?? 0);
             $row = \SLiMS\Kutubkhanah\Library::rows("SELECT subject, affiliation, body FROM kk_message WHERE id = ? AND type = 'suggest'", [$mid])[0] ?? null;

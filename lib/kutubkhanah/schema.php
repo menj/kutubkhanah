@@ -86,7 +86,9 @@ class Schema
         if ($q = $db->query('SHOW COLUMNS FROM `kk_author`')) {
             while ($r = $q->fetch_row()) $have[$r[0]] = true;
         }
-        foreach (['photo' => "varchar(255) NOT NULL default ''", 'bio' => 'text', 'bio_source' => "varchar(120) NOT NULL default ''", 'photo_tried' => "varchar(20) NOT NULL default ''"] as $name => $def) {
+        foreach (['photo' => "varchar(255) NOT NULL default ''", 'bio' => 'text', 'bio_source' => "varchar(120) NOT NULL default ''", 'photo_tried' => "varchar(20) NOT NULL default ''",
+            'ol_key' => "varchar(20) NOT NULL default ''", 'ol_name' => "varchar(200) NOT NULL default ''", 'search_name' => "varchar(200) NOT NULL default ''",
+            'sort_name' => "varchar(200) NOT NULL default ''", 'native_name' => "varchar(200) NOT NULL default ''", 'reviewed' => "varchar(1) NOT NULL default ''"] as $name => $def) {
             if (!isset($have[$name])) $db->query("ALTER TABLE `kk_author` ADD `$name` $def");
         }
 

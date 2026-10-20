@@ -4,6 +4,7 @@ All notable changes to Kutubkhanah. Newest first. The version number lives in `s
 
 ## 1.11.0
 
+- Authors in any script: English, Bahasa Melayu, Arabic and Mandarin names are shown as stored (right-to-left aware), with an optional native-script name beside the Latin spelling. Import / Export > Review matches lets you check each Open Library match, set a search name or Open Library ID, approve or reject it, and set a sort name so "Ahmad bin Ali" can file under the part you choose. Rejected matches are never fetched again; names in Arabic or Chinese script are not reordered for the lookup.
 - Every page now has a narrative order. Book page: meet the book, take it home (availability, save, ask to borrow), the details, where it fits (author, more by, related). Author page: about, facts, then their books. Series, lists and wishlist end with a "Keep exploring" row.
 - The home page now reads as a story: welcome and search, the collection in numbers, what the shelves hold (genres), what just arrived, the voices behind the books (authors), the journal, notes from the library, how to visit and borrow, and why the collection exists.
 - Rounder shapes: the default corner radius is now 16 px (range 0 to 32), and a new "Pill shapes" switch (Settings > Display) makes buttons, tags, search boxes and form fields fully rounded. Sites that already saved a radius keep it until changed.

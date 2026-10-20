@@ -70,8 +70,9 @@ class Library
             "SELECT a.author_id, a.author_name, COUNT(DISTINCT b.biblio_id) AS n
              FROM mst_author a JOIN biblio_author ba ON ba.author_id = a.author_id JOIN biblio b ON b.biblio_id = ba.biblio_id
              LEFT JOIN kk_book k ON k.biblio_id = b.biblio_id
+             LEFT JOIN kk_author sn ON sn.author_id = a.author_id
              WHERE " . self::VISIBLE . "
-             GROUP BY a.author_id, a.author_name ORDER BY n DESC, a.author_name LIMIT " . max(1, $limit)
+             GROUP BY a.author_id, a.author_name, sn.sort_name ORDER BY n DESC, COALESCE(NULLIF(sn.sort_name, ''), a.author_name) LIMIT " . max(1, $limit)
         );
         foreach ($authors as &$a) {
             $a['books'] = self::books(

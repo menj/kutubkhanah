@@ -221,6 +221,24 @@
     });
   }
 
+  /* Review author matches */
+  document.querySelectorAll('.kk-author-review__row').forEach(function (row) {
+    row.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-op]');
+      if (!b) return;
+      var body = { id: row.getAttribute('data-author'), op: b.getAttribute('data-op') };
+      row.querySelectorAll('[data-f]').forEach(function (i) { body[i.getAttribute('data-f')] = i.value; });
+      b.disabled = true;
+      api('author_review', body).then(function (res) {
+        if (!res.ok) throw new Error();
+        var m = row.querySelector('.kk-ar-match');
+        if (body.op === 'reject') { row.style.opacity = '.5'; m.textContent = 'rejected'; }
+        else if (body.op === 'approve') { row.style.opacity = '.6'; m.textContent += ' ✓'; }
+        else if (body.op === 'refetch') { m.textContent = res.j.ol_name ? res.j.ol_name + ' (' + res.j.ol_key + ')' : 'no match'; row.querySelector('[data-f=ol_key]').value = res.j.ol_key; }
+      }).catch(function () { alert(t.error); }).then(function () { b.disabled = false; });
+    });
+  });
+
   /* Bulk cover fetch, a few books per request so shared hosting never times out */
   var go = document.getElementById('kk-covers');
   if (go) {

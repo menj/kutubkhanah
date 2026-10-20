@@ -161,7 +161,7 @@ class Detail
             'SELECT a.author_id, a.author_name, COALESCE(m.birth_year, \'\') AS birth_year, COALESCE(m.death_year, \'\') AS death_year,
                     COALESCE(m.nationality, \'\') AS nationality, COALESCE(m.discipline, \'\') AS discipline,
                     COALESCE(m.external_url, \'\') AS external_url, COALESCE(m.notes, \'\') AS notes, COALESCE(m.notes_public, 0) AS notes_public,
-                    COALESCE(m.photo, \'\') AS photo, COALESCE(m.bio, \'\') AS bio, COALESCE(m.bio_source, \'\') AS bio_source
+                    COALESCE(m.photo, \'\') AS photo, COALESCE(m.bio, \'\') AS bio, COALESCE(m.bio_source, \'\') AS bio_source, COALESCE(m.native_name, \'\') AS native_name
              FROM mst_author a LEFT JOIN kk_author m ON m.author_id = a.author_id WHERE a.author_id = ?',
             [$authorId]
         );
@@ -173,6 +173,7 @@ class Detail
 
         $e = [Library::class, 'e'];
         $rows = [
+            __('In native script') => $a['native_name'],
             __('Born – died') => self::years($a),
             __('Nationality') => $a['nationality'],
             __('Discipline') => $a['discipline'],
@@ -184,13 +185,13 @@ class Detail
             $about .= '<div class="kk-notes"><p class="kk-notes__label">' . __("Curator's Notes") . '</p><p class="kk-notes__body">' . $e($a['notes']) . '</p></div>';
         }
         if ($a['bio'] !== '') {
-            $about .= '<div class="kk-notes"><p class="kk-notes__label">' . __('About the author') . '</p><p class="kk-notes__body">' . $e($a['bio']) . '</p>'
+            $about .= '<div class="kk-notes"><p class="kk-notes__label">' . __('About the author') . '</p><p class="kk-notes__body" dir="auto">' . $e($a['bio']) . '</p>'
                 . ($a['bio_source'] !== '' ? '<p class="kk-muted kk-author__src">' . $e(sprintf(__('Source: %s'), $a['bio_source'])) . '</p>' : '') . '</div>';
         }
         $html .= $about;
         $table = '';
         foreach ($rows as $label => $value) {
-            if ($value !== '') $table .= '<tr><th>' . $e($label) . '</th><td>' . $e($value) . '</td></tr>';
+            if ($value !== '') $table .= '<tr><th>' . $e($label) . '</th><td dir="auto">' . $e($value) . '</td></tr>';
         }
         if ($a['external_url'] !== '') {
             $table .= '<tr><th>' . __('More about') . '</th><td><a href="' . $e($a['external_url']) . '" target="_blank" rel="noopener noreferrer">'

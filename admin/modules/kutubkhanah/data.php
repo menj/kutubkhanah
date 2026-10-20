@@ -47,6 +47,36 @@ echo kk_head();
       <label class="kk-check kk-check--inline"><input type="checkbox" id="kk-authors-reset"> <?= __('Also retry authors that had no result') ?></label>
     </div>
     <p class="kk-note" id="kk-authors-status" aria-live="polite"></p>
+
+    <h4><?= __('Review matches') ?></h4>
+    <p class="kk-note"><?= __('Names are matched by search, so a different spelling or name order can pick the wrong person. Check each match, set a search name or Open Library ID if needed, and add a sort name to file an author under the part you choose.') ?></p>
+    <form method="get" class="kk-actions">
+      <?php foreach ($_GET as $k => $v) if ($k !== 'aq' && is_string($v)) echo '<input type="hidden" name="' . htmlspecialchars($k, ENT_QUOTES) . '" value="' . htmlspecialchars($v, ENT_QUOTES) . '">'; ?>
+      <input type="search" name="aq" value="<?= htmlspecialchars((string)($_GET['aq'] ?? ''), ENT_QUOTES) ?>" placeholder="<?= __('Find an author') ?>" aria-label="<?= __('Find an author') ?>">
+      <button class="kk-btn kk-btn--outline kk-btn--sm"><?= __('Search') ?></button>
+    </form>
+    <?php $kkRev = Authors::reviewList(trim((string)($_GET['aq'] ?? ''))); ?>
+    <?php if (!$kkRev) : ?><p class="kk-note"><?= __('Nothing to review.') ?></p><?php else : ?>
+    <div class="kk-author-review">
+      <?php foreach ($kkRev as $r) : $h = fn($v) => htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); ?>
+      <div class="kk-author-review__row" data-author="<?= (int)$r['author_id'] ?>">
+        <p><strong dir="auto"><?= $h($r['author_name']) ?></strong>
+          <span class="kk-muted">&rarr; <span class="kk-ar-match"><?= $r['ol_name'] ? $h($r['ol_name']) . ' (' . $h($r['ol_key']) . ')' : __('no match') ?></span></span>
+          <?= $r['reviewed'] === 'a' ? '<span class="kk-badge kk-badge--muted">' . __('Approved') . '</span>' : ($r['reviewed'] === 'r' ? '<span class="kk-badge kk-badge--muted">' . __('Rejected') . '</span>' : '') ?></p>
+        <div class="kk-actions">
+          <input data-f="sort_name" value="<?= $h($r['sort_name']) ?>" placeholder="<?= __('Sort name') ?>" aria-label="<?= __('Sort name') ?>">
+          <input data-f="native_name" dir="auto" value="<?= $h($r['native_name']) ?>" placeholder="<?= __('Native-script name') ?>" aria-label="<?= __('Native-script name') ?>">
+          <input data-f="search_name" value="<?= $h($r['search_name']) ?>" placeholder="<?= __('Search name') ?>" aria-label="<?= __('Search name') ?>">
+          <input data-f="ol_key" value="<?= $h($r['ol_key']) ?>" placeholder="OL123A" aria-label="Open Library ID" size="10">
+          <button type="button" class="kk-btn kk-btn--outline kk-btn--sm" data-op="save"><?= __('Save') ?></button>
+          <button type="button" class="kk-btn kk-btn--outline kk-btn--sm" data-op="refetch"><?= __('Look up again') ?></button>
+          <button type="button" class="kk-btn kk-btn--primary kk-btn--sm" data-op="approve"><?= __('Approve') ?></button>
+          <button type="button" class="kk-btn kk-btn--ghost kk-btn--sm" data-op="reject"><?= __('Reject') ?></button>
+        </div>
+      </div>
+      <?php endforeach; ?>
+    </div>
+    <?php endif; ?>
   </section>
 
   <section class="kk-panel">
