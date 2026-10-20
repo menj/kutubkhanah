@@ -226,4 +226,39 @@ class Installer
         $slims->createEnvFile();   // marks the site as installed
         return [];
     }
+
+    /** Problems that would stop the installed site from working; empty when it is ready. */
+    public static function verify(object $db): array
+    {
+        $bad = [];
+        if (!self::configExists()) $bad[] = 'config/database.php is missing.';
+        if (!self::envExists()) $bad[] = 'config/env.php is missing.';
+        try {
+            if (!self::isInstalled($db)) $bad[] = 'The database tables are missing.';
+            else {
+                $r = $db->query('SELECT COUNT(*) FROM user');
+                $n = $r ? (int)($r->fetch_row()[0] ?? 0) : 0;
+                if ($n < 1) $bad[] = 'There is no administrator account.';
+            }
+        } catch (\Throwable $e) { $bad[] = 'The database check failed: ' . $e->getMessage(); }
+        return $bad;
+    }
+
+    /** Delete this installer folder. Returns '' on success, otherwise the reason. */
+    public static function removeSelf(): string
+    {
+        $dir = realpath(__DIR__);
+        $root = realpath(self::root());
+        if (!$dir || !$root || basename($dir) !== 'install' || dirname($dir) !== $root) return 'The installer folder was not where it was expected.';
+        $it = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS), \RecursiveIteratorIterator::CHILD_FIRST);
+        $files = [];
+        foreach ($it as $f) $files[] = [$f->getPathname(), $f->isDir() && !$f->isLink()];
+        // This script is the last file to go, so it can finish the request.
+        usort($files, fn($a, $b) => (realpath($a[0]) === __FILE__ ? 1 : 0) <=> (realpath($b[0]) === __FILE__ ? 1 : 0));
+        foreach ($files as [$path, $isDir]) {
+            $ok = $isDir ? @rmdir($path) : @unlink($path);
+            if (!$ok && file_exists($path) && $path !== __FILE__) return 'Could not delete ' . basename($path) . '. Delete the install folder by hand.';
+        }
+        return @rmdir($dir) ? '' : 'Could not remove the install folder. Delete it by hand.';
+    }
 }

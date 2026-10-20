@@ -26,7 +26,7 @@ friends and family, and keep a journal alongside. It replaces Libib and runs on 
 3. Open the site in a browser. You are taken to install/index.php.
 4. Choose the database (MySQL/MariaDB, PostgreSQL or SQLite), enter its details, then set the library title,
    administrator username and email. A strong password is generated for you; copy it.
-5. Sign in at /admin. Remove or rename the install/ folder when you are done.
+5. Sign in at /admin. The installer deletes its own install/ folder once the new site answers; if it cannot, remove the folder by hand.
 
 == Upgrading ==
 

@@ -29,7 +29,7 @@ if (Installer::configExists()) {
     try { $db = Installer::dbFromConfig(); $installed = Installer::isInstalled($db) && Installer::envExists(); }
     catch (Exception $e) { $errors[] = 'config/database.php exists but the database cannot be reached: ' . $e->getMessage() . '. Delete config/database.php to enter the details again.'; $step = 'broken'; }
 }
-if ($installed) $step = 'already';
+if ($installed) $step = ($step === 'done' && !empty($_SESSION['kk_done'])) ? 'done' : 'already';
 elseif ($step === 'broken') { /* keep */ }
 elseif (Installer::configExists()) { if (!in_array($step, ['site', 'done'], true)) $step = 'ready'; if ($step === 'ready' && isset($_GET['step']) && $_GET['step'] === 'site') $step = 'site'; }
 elseif (!in_array($step, ['config', 'welcome'], true)) $step = 'welcome';
@@ -83,6 +83,18 @@ if ($post && $step === 'site') {
         $errors = Installer::install($db, ['title' => $old['title'], 'username' => $old['username'], 'password' => $pass, 'email' => $old['email'], 'private' => $old['private'], 'sample' => $old['sample']]);
         if (!$errors) { $_SESSION['kk_done'] = ['username' => $old['username'], 'email' => $old['email']]; header('Location: index.php?step=done'); exit; }
     }
+}
+
+// ---- Final step: once the site answers, the installer removes itself ----------------------------
+if ($post && ($_GET['step'] ?? '') === 'cleanup') {
+    header('Content-Type: application/json');
+    if (!$db || !$installed || empty($_SESSION['kk_done'])) { echo json_encode(['removed' => false, 'message' => 'Nothing to clean up.']); exit; }
+    $bad = Installer::verify($db);
+    if ($bad) { echo json_encode(['removed' => false, 'message' => implode(' ', $bad)]); exit; }
+    $why = Installer::removeSelf();
+    if ($why === '') unset($_SESSION['kk_done']);
+    echo json_encode(['removed' => $why === '', 'message' => $why]);
+    exit;
 }
 
 $done = $_SESSION['kk_done'] ?? null;
@@ -203,7 +215,7 @@ $titles = ['welcome' => 'Welcome', 'config' => 'Database details', 'manual' => '
         <tr><th>Password</th><td><em>The password you chose.</em></td></tr>
     </table>
     <p class="kk-actions"><a class="kk-button" href="<?= $h($root) ?>admin/">Log In</a></p>
-    <p class="kk-small">For safety, delete the <code>install</code> folder from your server once you have logged in.</p>
+    <p class="kk-small" id="kk-cleanup" data-csrf="<?= $h($token) ?>" data-home="<?= $h($root) ?>">Checking that your site works, then this installer will remove itself&hellip;</p>
 
 <?php elseif ($step === 'already'): ?>
     <h2>Already Installed</h2>

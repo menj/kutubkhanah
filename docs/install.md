@@ -52,7 +52,7 @@ Example (Debian/Ubuntu with Apache): `chown -R www-data:www-data config files im
 
 ## 5. After installing
 
-- Remove or rename the `install/` folder.
+- The installer deletes its own `install/` folder after the finished site answers and an administrator account exists. If your host does not allow that, it says so, and you remove the folder by hand.
 - Open **Admin > Kutubkhanah > Settings** and set the library name, colours, lookup sources and public pages.
 - Add your first book with **Scan ISBN** (camera or typing), or import a Libib CSV under **Import / Export**.
 - Set up outgoing email under **System > Mail Setting** if you want password-reset and notification emails.
