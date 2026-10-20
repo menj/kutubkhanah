@@ -1,6 +1,6 @@
 <?php
 /**
- * SENAYAN application printable data configuration
+ * Kutubkhanah application printable data configuration
  *
  * Copyright (C) 2007,2008  Arie Nugraha (dicarve@yahoo.com)
  *

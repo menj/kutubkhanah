@@ -1,7 +1,7 @@
 <?php
 
 /**
- * SENAYAN admin application bootstrap files
+ * Kutubkhanah admin application bootstrap files
  *
  * Copyright (C) 2007,2008  Arie Nugraha (dicarve@yahoo.com)
  *
@@ -49,15 +49,15 @@ if ($sysconf['https_enable']) {
 
 /**
  * Just info for who want to
- * upgrade SLiMS if didn't have access
+ * upgrade Kutubkhanah if didn't have access
  * to last slims source code.
  */
 if ($_SESSION['uid'] == 1 && config('init_info') === null) {
     DB::query('insert into `setting` set `setting_name` = ?, `setting_value` = ?', [
         'init_info',
         serialize([
-            'version' => SENAYAN_VERSION,
-            'tag' => SENAYAN_VERSION_TAG,
+            'version' => KUTUBKHANAH_FULL_VERSION,
+            'tag' => KUTUBKHANAH_VERSION_TAG,
             'admin_url' => dirname($_SERVER['PHP_SELF'])
         ])
     ])->run();

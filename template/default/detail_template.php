@@ -35,7 +35,7 @@ $setBookmarked = trim(isset($_SESSION['bookmark'][$biblio_id]) ? 'bg-success tex
             <p class="kk-eyebrow kk-detail-gmd"><?= $gmd_name; ?></p>
             <blockquote class="blockquote">
                 <h4 class="mb-2"><?= stripslashes($title); ?></h4>
-                <?php // Kutubkhanah: drop SLiMS's " - Personal Name" authority labels and join authors with commas. ?>
+                <?php // Kutubkhanah: drop the base system's " - Personal Name" authority labels and join authors with commas. ?>
                 <footer class="blockquote-footer"><?= rtrim(str_replace('<br />', ', ', preg_replace('#</a> - [^<]*#', '</a>', (string)$authors)), ', '); ?></footer>
             </blockquote>
             <hr>

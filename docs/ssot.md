@@ -17,7 +17,7 @@ Change all of these together on a release:
 
 | Place | What |
 |---|---|
-| `sysconfig.inc.php` | `KUTUBKHANAH_VERSION`, `SENAYAN_VERSION` |
+| `sysconfig.inc.php` | `KUTUBKHANAH_VERSION`, `KUTUBKHANAH_FULL_VERSION` |
 | `lib/kutubkhanah/schema.php` | `Schema::VERSION` (schema check key) |
 | `admin/modules/kutubkhanah/kk.inc.php` | `KK_VERSION` |
 | `README.md`, `readme.txt` | headline version |

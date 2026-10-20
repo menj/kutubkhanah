@@ -11,7 +11,7 @@ This section is provided with facilities to DELETE and EDIT.
 
 ####Add New Member
 
-This provides the facility to add new members to the data in the Senayan system. Members' information included are: 
+This provides the facility to add new members to the data in the Kutubkhanah system. Members' information included are: 
 - Member ID (ID -barcode/RFID for the member), 
 - Member Name (Full Name of the member), 
 - Register Date (date horizontal), 

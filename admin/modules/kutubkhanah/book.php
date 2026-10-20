@@ -3,7 +3,7 @@
  * Kutubkhanah: Book details editor (Private Library fields: format, volume, tags,
  * digital link, OCLC, Google Books ID, Goodreads ID, reading status and progress,
  * curator's notes). Title, authors, call number, series, edition and language are
- * edited in SLiMS's own Bibliography form.
+ * edited in the base system's own Bibliography form.
  *
  * GNU GPL v3 or later.
  */

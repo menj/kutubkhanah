@@ -8,4 +8,4 @@ Contains membership information, ie:
 
 The report is available in .html format and can be printed by clicking Download Report
 
-Commencing Senayan3-stable14, the three types of report are equipped with a print feature of various Pie charts. You get this graph simply by clicking the “Show in Chart/Plot“ which appears in all three types of report (Statistics Collection, Loan Report, and Membership Report).
+Commencing Kutubkhanah, the three types of report are equipped with a print feature of various Pie charts. You get this graph simply by clicking the “Show in Chart/Plot“ which appears in all three types of report (Statistics Collection, Loan Report, and Membership Report).

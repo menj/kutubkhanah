@@ -1,6 +1,6 @@
 <?php
 /**
- * Kutubkhanah: cover download into images/docs/ (SLiMS's cover folder).
+ * Kutubkhanah: cover download into images/docs/ (the base system's cover folder).
  * Tries the stored URL, Open Library by ISBN, then Google Books.
  *
  * GNU GPL v3 or later.

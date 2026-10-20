@@ -26,7 +26,7 @@ if (!defined('INDEX_AUTH')) {
 }
 
 /*
- * This file demonstrate HTDIG integration with SENAYAN
+ * This file demonstrate HTDIG integration with Kutubkhanah
  */
 
 // HTDIG base config config

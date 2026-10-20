@@ -40,7 +40,7 @@ class SlimsStatus extends \SLiMS\Cli\Command
         $dbs = DB::getInstance('mysqli');
         $columns = [
             [__('Environment Mode'), ucfirst(ENVIRONMENT)],
-            [__('Version'), SENAYAN_VERSION],
+            [__('Version'), KUTUBKHANAH_FULL_VERSION],
             [__('Operating System'), php_uname('a')],
             [__('OS Architecture'), php_uname('m').' '.(8 * PHP_INT_SIZE).' bit'],
             [__('PHP version'), phpversion()],  

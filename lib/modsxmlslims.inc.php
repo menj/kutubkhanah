@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * MODS XML to SENAYAN
+ * MODS XML to Kutubkhanah
  *
  * Copyright (C) 2011,2012 Arie Nugraha (dicarve@gmail.com)
  *

@@ -1,6 +1,6 @@
 ### Indexs Biblio
 <hr>
-Menu ini digunakan untuk melakukan index pada database bibliografi yang adalam SLiMS. Dengan adanya proses index ini maka performa pencarian dalam SLiMS dapat meningkat
+Menu ini digunakan untuk melakukan index pada database bibliografi yang adalam Kutubkhanah. Dengan adanya proses index ini maka performa pencarian dalam Kutubkhanah dapat meningkat
 
 Terdapat tiga fungsi pada menu ini:
 

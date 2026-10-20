@@ -1,6 +1,6 @@
 <?php
 /**
- * Kutubkhanah: settings stored as one serialized row in SLiMS's `setting` table,
+ * Kutubkhanah: settings stored as one serialized row in the base system's `setting` table,
  * so they load into $sysconf['kutubkhanah'] with the rest of the configuration.
  *
  * GNU GPL v3 or later.

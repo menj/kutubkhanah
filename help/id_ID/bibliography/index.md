@@ -22,9 +22,9 @@ Metadata yang harus kita isikan adalah:
 - Language : Pilihan bahasa dokumen 
 - Abstract/Notes : Catatan penting berkaitan dengan bibliografi 
 - Image : Gambar (biasanya sampul) yang menunjukkan identitas koleksi. Gambar ini akan muncul di OPAC File 
-- Attachment : Dapat diisi dengan file yang berkaitan dengan koleksi (misalnya hasil scan halaman daftar isi koleksi bersangkutan), atau file multimedia dari data bibliografi yang bersangkutan. File yang dapat diupload adalah file yang berekstensi .pdf .rtf .txt .odt .odp .ods .doc .xls .ppt .avi .mpeg .mp4 .flv .mvk .wmv .jpg .jpeg .png .gif .ogg .mp3 .wma .csv. Jika yang diupload adalah file multimedia, maka nantinya Senayan akan memutar secara streaming dengan program Flowplayer dan tidak dapat diunduh.  Sedangkan jika file yang diupload adalah file non multimedia, maka file tersebut dapat didownload. (Contoh pemutaran file multimedia ada di bagian OPAC). File yang diupload bisa lebih dari satu file, dan dapat diset Public (dapat dilihat oleh user) atau Private (berdasar jenis keanggotaan). Berikut ketentuan pembatasan akses:
+- Attachment : Dapat diisi dengan file yang berkaitan dengan koleksi (misalnya hasil scan halaman daftar isi koleksi bersangkutan), atau file multimedia dari data bibliografi yang bersangkutan. File yang dapat diupload adalah file yang berekstensi .pdf .rtf .txt .odt .odp .ods .doc .xls .ppt .avi .mpeg .mp4 .flv .mvk .wmv .jpg .jpeg .png .gif .ogg .mp3 .wma .csv. Jika yang diupload adalah file multimedia, maka nantinya Kutubkhanah akan memutar secara streaming dengan program Flowplayer dan tidak dapat diunduh.  Sedangkan jika file yang diupload adalah file non multimedia, maka file tersebut dapat didownload. (Contoh pemutaran file multimedia ada di bagian OPAC). File yang diupload bisa lebih dari satu file, dan dapat diset Public (dapat dilihat oleh user) atau Private (berdasar jenis keanggotaan). Berikut ketentuan pembatasan akses:
 
-- Pembatasan akses file di senayan berbasiskan group (tipe 
+- Pembatasan akses file di Kutubkhanah berbasiskan group (tipe 
 keanggotaan). Jadi pembatasan akses ini terintegrasi dengan 
 jenis keanggotaan. Tidak bisa pembatasan akses berdasarkan 
 perorangan.
@@ -45,7 +45,7 @@ tersebut.Untuk menambahi jenis file yang dapat diunggah, silahkan membaca pada b
 - Hide: Data Bibliografi tidak dapat diakses melalui OPAC
 - Promote in Homepage: untuk mengatur sebuah bibliografi, apakah akan ditampilkan di halaman depan atau tidak. 
 - Label: Untuk memberikan informasi khusus tentang bibliografi. Label dapat didefinisikan pada menu Master File. 
-  Secara default Senayan mempunyai tiga label: New Title, Favorite Title dan Multimedia.
+  Secara default Kutubkhanah mempunyai tiga label: New Title, Favorite Title dan Multimedia.
 
 Fitur Promote to Homepage  berkaitan dengan konfigurasi Show 
 Promoted Titles at Homepage yang ada pada Modul System 

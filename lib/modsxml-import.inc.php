@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * MODS XML to SENAYAN converter
+ * MODS XML to Kutubkhanah converter
  *
  * Copyright (C) 2010 Hendro Wicaksono (hendrowicaksono@yahoo.com)
  * Copyright (C) 2011,2012 Arie Nugraha (dicarve@gmail.com)
@@ -28,11 +28,11 @@ use SLiMS\Url;
 use SLiMS\Http\Client;
 
 /**
- * MODS XML parser for SENAYAN 3
+ * MODS XML parser for Kutubkhanah
  * @param string $str_modsxml : can be string, file or uri
  * @return  mixed
  **/
-function modsXMLsenayan($str_modsxml, $str_xml_type = 'string')
+function modsXMLimport($str_modsxml, $str_xml_type = 'string')
 {
   // initiate records array
   $_records = array();

@@ -24,7 +24,7 @@ $request_uri = urlencode(strip_tags(urldecode($_SERVER['REQUEST_URI'])));
 <meta name="keywords" content="<?php echo $sysconf['library_subname']; ?>">
 <?php endif; ?>
 <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
-<meta name="generator" content="<?php echo SENAYAN_VERSION ?>">
+<meta name="generator" content="<?php echo KUTUBKHANAH_FULL_VERSION ?>">
 
 <!-- Opengraph
 ============================================= -->

@@ -1,6 +1,6 @@
 <?php
 /**
- * SENAYAN application bootstrap files
+ * Kutubkhanah application bootstrap files
  *
  * Copyright (C) 2007,2008  Arie Nugraha (dicarve@yahoo.com)
  * Some modifications & patches by Hendro Wicaksono (hendrowicaksono@yahoo.com)

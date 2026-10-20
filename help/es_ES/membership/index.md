@@ -11,7 +11,7 @@ Esta sección cuenta con opecoines para BORRAR y EDITAR.
 
 #### Añadir nuevo miembro
 
-Proporciona la facilidad de agregar los datos de los nuevos miembros en el sistema Senayan. La información de los miembros incluida es:
+Proporciona la facilidad de agregar los datos de los nuevos miembros en el sistema Kutubkhanah. La información de los miembros incluida es:
 - ID de miembro (IDcódigo de barras/RFID para el miembro),
 - Nombre del miembro (Nombre completo del mismo),
 - Fecha de registro (fecha de alta),

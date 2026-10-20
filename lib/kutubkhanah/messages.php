@@ -2,7 +2,7 @@
 /**
  * Kutubkhanah: public Contact and Request Access forms (from the Private Library design)
  * and their admin Inbox. Submissions are stored in kk_message; an email notice is sent
- * when Settings > Library > "Notify email" is set and SLiMS mail is configured.
+ * when Settings > Library > "Notify email" is set and the base system mail is configured.
  *
  * Abuse protection: per-session token, a hidden honeypot field, a minimum fill time
  * and a limit of 3 submissions per 10 minutes per session.

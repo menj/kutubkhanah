@@ -1,5 +1,5 @@
 /*
- * Kutubkhanah OPAC theme: the Private Library "navy and gold" design, layered over SLiMS's default theme.
+ * Kutubkhanah OPAC theme: the Private Library "navy and gold" design, layered over the base system's default theme.
  * Colours are CSS variables set from Kutubkhanah > Settings > Display (light, dark or automatic).
  * GNU GPL v3 or later.
  */
@@ -49,7 +49,7 @@ body.kk-theme {
 .kk-theme .kk-nav .navbar-toggler { border-color: var(--kk-line); }
 .kk-theme .kk-nav .dropdown-menu { border-radius: var(--kk-radius); border-color: var(--kk-line); }
 
-/* ---------- SLiMS header area becomes a navy band (no photo slideshow) ---------- */
+/* ---------- the base system header area becomes a navy band (no photo slideshow) ---------- */
 .kk-theme .c-header { background: var(--kk-deep) !important; background-image: none !important; min-height: 0 !important; padding-bottom: 70px; }
 .kk-theme .c-header .mask { display: none; }
 .kk-theme .c-header .vegas-slide, .kk-theme .c-header .vegas-overlay { display: none !important; }
@@ -200,7 +200,7 @@ textarea.kk-input { min-height: 140px; resize: vertical; }
 .kk-more { margin-top: 2.5rem; border-top: 1px solid var(--kk-line); padding-top: 2rem; }
 .kk-more .kk-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
 
-/* SLiMS detail page refinements */
+/* the base system detail page refinements */
 .kk-theme .blockquote h4 { font-family: var(--kk-serif); font-size: clamp(1.5rem, 3vw, 2.2rem); color: var(--kk-primary); }
 .kk-theme .blockquote-footer { color: var(--kk-muted); }
 .kk-theme dl.row dt { font-size: .7rem; text-transform: uppercase; letter-spacing: .12em; color: var(--kk-muted); font-weight: 700; }
@@ -224,7 +224,7 @@ textarea.kk-input { min-height: 140px; resize: vertical; }
   padding: .55rem .75rem; background: color-mix(in srgb, var(--kk-muted) 6%, transparent); border: 1px solid var(--kk-line); }
 .kk-meta-table td { padding: .55rem .75rem; border: 1px solid var(--kk-line); font-size: .92rem; }
 
-/* ---------- FAQ (SLiMS content page "faq") ---------- */
+/* ---------- FAQ (the base system content page "faq") ---------- */
 .kk-faq details { border: 1px solid var(--kk-line); border-radius: var(--kk-radius); margin-bottom: .75rem; background: var(--kk-surface); overflow: hidden; }
 .kk-faq summary { padding: 1.05rem 1.25rem; font-family: var(--kk-serif); font-weight: 700; font-size: 1rem; color: var(--kk-primary); cursor: pointer;
   list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
@@ -249,7 +249,7 @@ textarea.kk-input { min-height: 140px; resize: vertical; }
 .kk-theme .kk-footer__links a:hover, .kk-theme .kk-footer__bottom a:hover { color: var(--kk-gold); }
 .kk-footer__bottom { border-top: 1px solid rgba(255,255,255,.1); padding: 1.2rem 0; display: flex; justify-content: space-between; flex-wrap: wrap; gap: .75rem; font-size: .8rem; color: rgba(255,255,255,.45); }
 
-/* ---------- Dark scheme: soften SLiMS's own light components ---------- */
+/* ---------- Dark scheme: soften the base system's own light components ---------- */
 .kk-theme[data-scheme="dark"] .card, .kk-theme[data-scheme="dark"] .list-group-item, .kk-theme[data-scheme="dark"] .table,
 .kk-theme[data-scheme="dark"] .modal-content, .kk-theme[data-scheme="dark"] .form-control { background-color: var(--kk-surface); color: var(--kk-text); border-color: var(--kk-line); }
 .kk-theme[data-scheme="dark"] .text-grey-darker, .kk-theme[data-scheme="dark"] .text-grey-darkest, .kk-theme[data-scheme="dark"] .text-secondary { color: var(--kk-muted) !important; }

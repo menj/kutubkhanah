@@ -1,6 +1,6 @@
 <?php
 /**
- * Kutubkhanah: the subset of mysqli that SLiMS code uses, on top of PDO for SQLite and PostgreSQL.
+ * Kutubkhanah: the subset of mysqli that the base system code uses, on top of PDO for SQLite and PostgreSQL.
  * Errors throw mysqli_sql_exception, as mysqli does by default in PHP 8.1+.
  *
  * GNU GPL v3 or later.

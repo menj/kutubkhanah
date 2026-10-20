@@ -2,7 +2,7 @@
 /**
  * Kutubkhanah blog: media library (images in images/blog/YYYY/MM/, like WordPress's uploads folder).
  * Large photos are scaled down to 2400 px on upload; smaller sizes are made on demand by the
- * SLiMS thumbnailer and cached.
+ * the base system thumbnailer and cached.
  *
  * GNU GPL v3 or later.
  */

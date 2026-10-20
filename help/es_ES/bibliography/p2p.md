@@ -1,6 +1,6 @@
 #### Servicio P2P
 <hr>
-El concepto básico de esta función es compartir datos bibliográficos entre los usuarios de Senayan. El mismo es un servicio XML P2P que utiliza las instalaciones que ya existen de Senayan para compartir datos del catálogo.
+El concepto básico de esta función es compartir datos bibliográficos entre los usuarios de Kutubkhanah. El mismo es un servicio XML P2P que utiliza las instalaciones que ya existen de Kutubkhanah para compartir datos del catálogo.
 
 #### Cara Penggunaan
 <hr>

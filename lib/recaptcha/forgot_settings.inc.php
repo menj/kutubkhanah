@@ -1,6 +1,6 @@
 <?php 
 
-$sysconf['captcha']['forgot']['folder'] = 'recaptcha'; // folder name inside the SENAYAN_LIB_DIR folder
+$sysconf['captcha']['forgot']['folder'] = 'recaptcha'; // folder name inside the KUTUBKHANAH_LIB_DIR folder
 $sysconf['captcha']['forgot']['incfile'] = 'recaptchalib-v2.php'; // php file that needs to be included in php file
 $sysconf['captcha']['forgot']['webfile'] = ''; // php file that needs to accessed to create captcha image
 $sysconf['captcha']['forgot']['publickey'] = '6LdCzFAUAAAAAKV0pEX3h3523MZA5ATRZf2GpgQC'; // some captcha providers need this. Ajdust it with yours

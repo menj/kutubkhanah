@@ -30,7 +30,7 @@ services:
     ports:
       - "${DB_PORT}:3306"
     volumes:
-      - ../install/senayan.sql:/docker-entrypoint-initdb.d/01-senayan.sql
+      - ../install/kutubkhanah.sql:/docker-entrypoint-initdb.d/01-kutubkhanah.sql
       - ../install/sampledata.sql:/docker-entrypoint-initdb.d/02-sampledata.sql
       - dbdata:/var/lib/mysql
     environment:

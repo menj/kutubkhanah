@@ -20,7 +20,7 @@ require SIMBIO.'simbio_GUI/form_maker/simbio_form_table_AJAX.inc.php';
 require SIMBIO.'simbio_GUI/table/simbio_table.inc.php';
 
 if (isset($_POST['saveData'])) {
-    if (trim(config('library_name')) === 'Senayan') {
+    if (trim(config('library_name')) === 'Kutubkhanah') {
       toastr(__('Please update your Library Name first!'))->error();
       redirect()->simbioAJAX(Url::getSelf());
     }
@@ -48,12 +48,12 @@ if (isset($_POST['saveData'])) {
 
     Config::createOrUpdate('registration_info', $data);
 
-    // store to SLiMS Analytic
+    // store to Kutubkhanah Analytic
     try {
 
         $response = Client::withHeaders([
             'Content-Type' => 'application/json',
-            'User-Agent' => 'SLiMS-' . SENAYAN_VERSION_TAG
+            'User-Agent' => 'Kutubkhanah-' . KUTUBKHANAH_VERSION_TAG
         ])->withBody(
             (string)Json::stringify($data)
         )->$method('https://analytics.slims.web.id/?p=api/v1/register');
@@ -87,10 +87,10 @@ if (isset($_POST['saveData'])) {
       <h2><?php echo __('Register Your Site'); ?></h2>
     </div>
     <div class="p-4">
-        <p><?= __('We\'d love to stay in touch and provide you with important things for your SLiMS site! By registering:') ?></p>
+        <p><?= __('We\'d love to stay in touch and provide you with important things for your Kutubkhanah site! By registering:') ?></p>
         <ul>
-            <li><?= __('You are contributing to our SLiMS statistics of the worldwide community, which help us improve SLiMS and our community sites.') ?></li>
-            <li><?= __('If you wish, your site can be included in the list of registered SLiMS sites in your country.') ?></li>
+            <li><?= __('You are contributing to our Kutubkhanah statistics of the worldwide community, which help us improve Kutubkhanah and our community sites.') ?></li>
+            <li><?= __('If you wish, your site can be included in the list of registered Kutubkhanah sites in your country.') ?></li>
         </ul>
     </div>
   </div>

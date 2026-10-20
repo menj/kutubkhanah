@@ -1,6 +1,6 @@
 ###Configuración del sistema
 
-Use este formulario para hacer cambios a las preferencias globales de la aplicación de Senayan, tales como:
+Use este formulario para hacer cambios a las preferencias globales de la aplicación de Kutubkhanah, tales como:
 - Nombre de la biblioteca,
 - Plantilla pública (de la pantalla del OPAC),
 - Idioma predeterminado de la aplicación,
@@ -14,8 +14,8 @@ Use este formulario para hacer cambios a las preferencias globales de la aplicac
 - Permitir(allow) o Prohibir (forbid) que los visitantes/usuarios descarguen archivos adjuntos en el OPAC,
 - Tiempo de espera de inicio de sesión y codificación del código de barras.
 
-En este menú también, podemos ver qué versión de Senayan estamos usando.
+En este menú también, podemos ver qué versión de Kutubkhanah estamos usando.
 
 Mostrar títulos promocionados en la página de inicio es una característica de este sistema: si la casilla de verificación correspondiente está marcada, la parte frontal de la pantalla del OPAC estará en blanco, a menos que haya un conjunto de datos bibliográficos a mostrar en la página principal. Vea el menú Agregar nuevo registro en el módulo de Catalogación.
 
-A partir de Senayan3-stable11, hay una función para especificar las fechas de préstamo y devolución manualmente. Esta función se puede habilitar a través del módulo Sistema -> Configuración del sistema, usando la opción Cambio manual de la fecha de vencimiento del préstamo (Activo/Inactivo) (Se puede acceder a esta característica en el Módulo de Circulación)
+A partir de Kutubkhanah, hay una función para especificar las fechas de préstamo y devolución manualmente. Esta función se puede habilitar a través del módulo Sistema -> Configuración del sistema, usando la opción Cambio manual de la fecha de vencimiento del préstamo (Activo/Inactivo) (Se puede acceder a esta característica en el Módulo de Circulación)

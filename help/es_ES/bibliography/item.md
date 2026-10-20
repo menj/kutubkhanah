@@ -1,6 +1,6 @@
 #### Lista de ejemplares
 <hr>
-Este menú se utiliza para ver los ejemplares de la base de datos de Senayan. La información contenida en este menú es: 
+Este menú se utiliza para ver los ejemplares de la base de datos de Kutubkhanah. La información contenida en este menú es: 
 - Código del ejemplar,
 - Título, 
 - Tipo de colección, 

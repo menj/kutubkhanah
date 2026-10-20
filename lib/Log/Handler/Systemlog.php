@@ -62,7 +62,7 @@ class Systemlog extends Contract
         $logs = DB::getInstance('mysqli')->query('SELECT log_date, log_location, log_msg FROM system_log ORDER BY log_date DESC');
         header('Content-Type: text/plain');
         header('Content-Disposition: attachment; filename="system_logs_'.date('Ymd').'.log"');
-        echo 'SENAYAN system logs record'."\n";
+        echo 'Kutubkhanah system logs record'."\n";
         while ($logs_d = $logs->fetch_row()) {
             echo '['.$logs_d[0].']---'.$logs_d[1].'---'.$logs_d[2]."\n";
         }

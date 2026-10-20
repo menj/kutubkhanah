@@ -1,6 +1,6 @@
 <?php
 /**
- * SENAYAN application global configuration file
+ * Kutubkhanah application global configuration file
  *
  * Copyright (C) 2010  Arie Nugraha (dicarve@yahoo.com), Hendro Wicaksono (hendrowicaksono@yahoo.com), Wardiyono (wynerst@gmail.com)
  *
@@ -76,7 +76,7 @@ $plugins = Plugins::getInstance();
 
 // check if safe mode is on
 if ((bool) ini_get('safe_mode')) {
-    define('SENAYAN_IN_SAFE_MODE', 1);
+    define('KUTUBKHANAH_IN_SAFE_MODE', 1);
 }
 
 // Kutubkhanah needs PHP 8.4 or later.
@@ -85,25 +85,25 @@ if (PHP_VERSION_ID < 80400) {
     exit('Kutubkhanah needs PHP 8.4 or later. This server runs PHP ' . PHP_VERSION . '.');
 }
 
-// Kutubkhanah version. SENAYAN_VERSION_TAG is an internal database schema marker used by the upgrade routine; it is never shown.
+// Kutubkhanah version. KUTUBKHANAH_VERSION_TAG is an internal database schema marker used by the upgrade routine; it is never shown.
 define('KUTUBKHANAH_VERSION', '1.10.0');
-define('SENAYAN_VERSION', 'Kutubkhanah 1.10.0');
-define('SENAYAN_VERSION_TAG', 'v9.8.0');
+define('KUTUBKHANAH_FULL_VERSION', 'Kutubkhanah 1.10.0');
+define('KUTUBKHANAH_VERSION_TAG', 'v1.10.0');
 
-// senayan session cookies name
-define('COOKIES_NAME', 'SenayanAdmin');
-define('MEMBER_COOKIES_NAME', 'SenayanMember');
+// Kutubkhanah session cookies name
+define('COOKIES_NAME', 'KutubkhanahAdmin');
+define('MEMBER_COOKIES_NAME', 'KutubkhanahMember');
 
 // alias for DIRECTORY_SEPARATOR
 define('DS', DIRECTORY_SEPARATOR);
 
-// senayan base dir
+// Kutubkhanah base dir
 define('SB', realpath(dirname(__FILE__)).DS);
 
 // absolute path for simbio platform
 define('SIMBIO', SB.'simbio2'.DS);
 
-// senayan library base dir
+// Kutubkhanah library base dir
 define('LIB', SB.'lib'.DS);
 
 // document, member and barcode images base dir
@@ -152,12 +152,12 @@ define('BINARY_FOUND', 1);
 define('COMMAND_SUCCESS', 0);
 define('COMMAND_FAILED', 2);
 
-// senayan web doc root dir
+// Kutubkhanah web doc root dir
 /* Custom base URL */
 $sysconf['baseurl'] = \SLiMS\Config::getInstance()->get('url.base', '');
 $_SERVER['PHP_SELF'] = strip_tags(str_replace(['"','\''], '', $_SERVER['PHP_SELF']));
-$temp_senayan_web_root_dir = preg_replace('@admin.*@i', '', str_replace('\\', '/', dirname(@$_SERVER['PHP_SELF'])));
-define('SWB', $sysconf['baseurl'].$temp_senayan_web_root_dir.(preg_match('@\/$@i', $temp_senayan_web_root_dir)?'':'/'));
+$temp_web_root_dir = preg_replace('@admin.*@i', '', str_replace('\\', '/', dirname(@$_SERVER['PHP_SELF'])));
+define('SWB', $sysconf['baseurl'].$temp_web_root_dir.(preg_match('@\/$@i', $temp_web_root_dir)?'':'/'));
 $_SERVER['PHP_SELF'] = $sysconf['baseurl'] . $_SERVER['PHP_SELF'];
 
 // admin section web root dir

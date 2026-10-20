@@ -2,7 +2,7 @@
 /**
  * Kutubkhanah: one source of truth for Kutubkhanah's tables, module entry,
  * admin access and seed content. Used by fresh installs, upgrades from plain
- * SLiMS or earlier Kutubkhanah versions, and as self-repair.
+ * the base system or earlier Kutubkhanah versions, and as self-repair.
  *
  * GNU GPL v3 or later.
  */

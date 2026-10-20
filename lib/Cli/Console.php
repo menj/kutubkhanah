@@ -24,7 +24,7 @@ final class Console
 
     private function __construct()
     {
-        $this->app = new Application('SLiMS Console', SENAYAN_VERSION_TAG);  
+        $this->app = new Application('Kutubkhanah Console', KUTUBKHANAH_VERSION_TAG);  
     }
 
     /**

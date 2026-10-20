@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * MARCXML to SENAYAN converter
+ * MARCXML to Kutubkhanah converter
  *
  * Copyright (C) 2009 Arie Nugraha (dicarve@yahoo.com), Hendro Wicaksono (hendrowicaksono@yahoo.com)
  *
@@ -29,11 +29,11 @@ if (!defined('INDEX_AUTH')) {
 }
 
 /**
- * simple MARC XML parser for SENAYAN 3
+ * simple MARC XML parser for Kutubkhanah
  * @param   string  $str_marcxml
  * @return  array
  **/
-function marcXMLsenayan($str_marcxml, $str_xml_type = 'string')
+function marcXMLimport($str_marcxml, $str_xml_type = 'string')
 {
     // MARC XML file path
     $_records = array();

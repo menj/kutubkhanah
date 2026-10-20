@@ -1,7 +1,7 @@
 <?php
 /**
  * Kutubkhanah: PDO connection for SQLite and PostgreSQL that accepts the MySQL dialect used by the
- * SLiMS-derived code. Every statement is translated by Dialect first. MySQL itself uses plain PDO.
+ * inherited code. Every statement is translated by Dialect first. MySQL itself uses plain PDO.
  *
  * GNU GPL v3 or later.
  */

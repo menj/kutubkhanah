@@ -1,6 +1,6 @@
 ###Índices del sistema
 
-Este menú se utiliza para indexar las bases de datos bibliográficas utilizadas por SLiMS. Al realizar esta indexación, se mejorará el rendimiento de las búsquedas de SLiMS.
+Este menú se utiliza para indexar las bases de datos bibliográficas utilizadas por Kutubkhanah. Al realizar esta indexación, se mejorará el rendimiento de las búsquedas de Kutubkhanah.
 
 Hay tres funciones en este menú:
 - Eliminar los índices: para borrar los resultados del índice existente,

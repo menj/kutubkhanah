@@ -41,7 +41,7 @@ require SB . 'admin/default/session_check.inc.php';
 require SIMBIO . 'simbio_GUI/table/simbio_table.inc.php';
 require SIMBIO . 'simbio_GUI/paging/simbio_paging.inc.php';
 require SIMBIO . 'simbio_DB/simbio_dbop.inc.php';
-require LIB . 'modsxmlsenayan.inc.php';
+require LIB . 'modsxml-import.inc.php';
 require MDLBS . 'system/biblio_indexer.inc.php';
 
 // privileges checking
@@ -130,7 +130,7 @@ if (isset($_POST['saveResults']) && isset($_POST['p2precord'])) {
     // construct full XML URI
     $detail_uri = $p2pserver . "/index.php?p=show_detail&inXML=true&id=" . $id;
     // parse XML
-    $data = modsXMLsenayan($detail_uri, 'uri');
+    $data = modsXMLimport($detail_uri, 'uri');
 
     if (is_string($data)) {
       $error_message[] = $data;
@@ -352,11 +352,11 @@ if (isset($_GET['keywords']) && $can_read && isset($_GET['p2pserver'])) {
   if($_GET['fields']!=''){
     $keywords = $_GET['fields'].'='.$keywords;
     $url = $p2pserver . "index.php?resultXML=true&".$keywords."&search=Search&page=".$page;
-    $data = modsXMLsenayan($url, 'uri');
+    $data = modsXMLimport($url, 'uri');
   }
   else{
     $url = $p2pserver . "index.php?resultXML=true&search=Search&page=".$page."&keywords=" . $keywords;
-    $data = modsXMLsenayan($url, 'uri');
+    $data = modsXMLimport($url, 'uri');
   }
 
   # debugging tools
@@ -402,7 +402,7 @@ if (isset($_GET['keywords']) && $can_read && isset($_GET['p2pserver'])) {
         // construct full XML URI
         $detail_uri = $p2pserver . "/index.php?p=show_detail&inXML=true&id=" . $record['id'];
         // parse XML
-        $result = modsXMLsenayan($detail_uri, 'uri');
+        $result = modsXMLimport($detail_uri, 'uri');
         if (isset($result['records']) && isset($result['records'][0])) {
             $detail = $result['records'][0];
             if ( isset($detail['digitals'])) {

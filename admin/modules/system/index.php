@@ -332,7 +332,7 @@ $form->table_content_attr = 'class="alterCell2"';
 utility::loadSettings($dbs);
 
 // version status
-$form->addAnything(__('Version'), '<strong>'.SENAYAN_VERSION.'</strong>');
+$form->addAnything(__('Version'), '<strong>'.KUTUBKHANAH_FULL_VERSION.'</strong>');
 
 // library name
 $form->addTextField('text', 'library_name', __('Library Name'), $sysconf['library_name'], 'class="form-control"');

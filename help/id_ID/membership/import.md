@@ -1,6 +1,6 @@
 #### Import data anggota
  <hr>
-Anda dapat melakukan proses import dengen fitur ini. File yang diimport adalah file .csv dengan urutan kolom sesuai format yang dapat diterima oleh SLiMS. Urutan kolom dalam .csv tersebut adalah: 
+Anda dapat melakukan proses import dengen fitur ini. File yang diimport adalah file .csv dengan urutan kolom sesuai format yang dapat diterima oleh Kutubkhanah. Urutan kolom dalam .csv tersebut adalah: 
 - No anggota
 - Nama
 - Gender 

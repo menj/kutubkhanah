@@ -1,6 +1,6 @@
 <?php
 /**
- * Kutubkhanah: book records on top of the SLiMS catalogue tables
+ * Kutubkhanah: book records on top of the the base system catalogue tables
  * (biblio, mst_author, biblio_author, mst_publisher, item, search_biblio)
  * plus Kutubkhanah's own kk_book table (needs-details flag, reading status, cover state).
  *
@@ -92,7 +92,7 @@ class Books
         return (int)$db->lastInsertId() ?: null;
     }
 
-    /** SLiMS language code for a 2-letter code, adding the language to SLiMS if it is new. */
+    /** the base system language code for a 2-letter code, adding the language to the base system if it is new. */
     public static function languageId(string $code): string
     {
         $code = strtolower(trim($code));
@@ -110,7 +110,7 @@ class Books
         return $code;
     }
 
-    /** Link subject headings to a book (SLiMS topics), creating topics as needed. */
+    /** Link subject headings to a book (the base system topics), creating topics as needed. */
     public static function attachSubjects(int $id, array $subjects): void
     {
         $find = self::db()->prepare('SELECT topic_id FROM mst_topic WHERE topic = ? LIMIT 1');
@@ -131,7 +131,7 @@ class Books
         }
     }
 
-    /** The collation SLiMS shows ("xxxiv, 671 p."), from the source's own wording or a page count. */
+    /** The collation the base system shows ("xxxiv, 671 p."), from the source's own wording or a page count. */
     public static function collation(array $d): string
     {
         $c = trim((string)($d['collation'] ?? ''));
@@ -312,7 +312,7 @@ class Books
         }
     }
 
-    /** Refresh SLiMS's search index row so the OPAC sees the change. */
+    /** Refresh the base system's search index row so the OPAC sees the change. */
     public static function reindex(int $id): void
     {
         global $dbs;

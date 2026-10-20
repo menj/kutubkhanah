@@ -1,6 +1,6 @@
 <?php
 /**
- * Kutubkhanah: translate the MySQL dialect that the SLiMS-derived code is written in
+ * Kutubkhanah: translate the MySQL dialect that the inherited code is written in
  * into SQLite or PostgreSQL. MySQL stays untouched.
  *
  * It works on tokens, so text inside string literals is never altered. Covered: identifier and string
@@ -147,7 +147,7 @@ final class Dialect
 
     private function ident(string $s): string { return '"' . str_replace('"', '""', $s) . '"'; }
 
-    /** PostgreSQL words that cannot be used bare as names; the SLiMS schema uses some of them. */
+    /** PostgreSQL words that cannot be used bare as names; the the base system schema uses some of them. */
     private const PG_QUOTE = ['user' => 1, 'order' => 1, 'group' => 1, 'limit' => 1, 'offset' => 1, 'end' => 1, 'both' => 1, 'check' => 1, 'default' => 1, 'collation' => 1, 'desc' => 0];
 
     private const ALIAS_KEYWORDS = ['index' => 1, 'key' => 1, 'user' => 1, 'order' => 1, 'group' => 1, 'table' => 1, 'values' => 1, 'column' => 1, 'check' => 1, 'default' => 1, 'limit' => 1, 'end' => 1];

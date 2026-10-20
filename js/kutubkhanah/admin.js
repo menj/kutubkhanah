@@ -25,7 +25,7 @@
 
   function each(sel, fn) { Array.prototype.forEach.call(document.querySelectorAll(sel), fn); }
 
-  /* Reload an admin page inside SLiMS's content pane (or the whole window outside it). */
+  /* Reload an admin page inside the base system's content pane (or the whole window outside it). */
   function reloadPane(url) {
     if (!url) { return; }
     if (window.jQuery && window.jQuery('#mainContent').length && window.jQuery.fn.simbioAJAX) {

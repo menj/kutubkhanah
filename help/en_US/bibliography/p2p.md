@@ -1,6 +1,6 @@
 ####P2P Service
 <hr>
-The basic concept of this feature is to share bibliographical data among Senayan users. This is an XML P2P service utilizing the facilities that already exist in Senayan for sharing catalog data. 
+The basic concept of this feature is to share bibliographical data among Kutubkhanah users. This is an XML P2P service utilizing the facilities that already exist in Kutubkhanah for sharing catalog data. 
 
 ####Cara Penggunaan
 <hr>

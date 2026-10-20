@@ -182,7 +182,7 @@ class Upgrade
     $sql['truncate'][] = "TRUNCATE TABLE `setting`;";
 
     $sql['insert'][] = "INSERT INTO `setting` (`setting_id`, `setting_name`, `setting_value`) VALUES
-(1, 'library_name', 's:7:\"Senayan\";'),
+(1, 'library_name', 's:11:\"Kutubkhanah\";'),
 (2, 'library_subname', 's:37:\"Open Source Library Management System\";'),
 (3, 'template', 'a:2:{s:5:\"theme\";s:7:\"default\";s:3:\"css\";s:26:\"template/default/style.css\";}'),
 (4, 'admin_template', 'a:2:{s:5:\"theme\";s:7:\"default\";s:3:\"css\";s:32:\"admin_template/default/style.css\";}'),
@@ -1174,7 +1174,7 @@ ADD INDEX (  `input_date` ,  `last_update` ,  `uid` ) ;";
   }
 
   /**
-   * Upgrade role to v9.8.0
+   * Upgrade role
    */
   function upgrade_role_39()
   {

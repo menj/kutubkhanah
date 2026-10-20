@@ -170,7 +170,7 @@ if (isset($_POST['doExport'])) {
           }
 
           // After all we stream it into a file
-          $csv->download('senayan_biblio_export');
+          $csv->download('kutubkhanah_biblio_export');
         } else {
           utility::jsToastr('Data Export', __('There is no record in bibliographic database yet, Export FAILED!'), 'error');
         }

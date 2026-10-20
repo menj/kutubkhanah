@@ -27,7 +27,7 @@ $sysconf['template']['classic_youtube_link'] = 'https://youtube.com';
 $sysconf['template']['classic_instagram_link'] = '';
 $sysconf['template']['visitor_log_voice'] = 1;
 $sysconf['template']['classic_footer_about_us'] = <<<HTML
-<p>Kutubkhanah is a home library system that brings together SLiMS, PMB and OpenBiblio.</p>
+<p>Kutubkhanah is a home library system.</p>
 HTML;
 $sysconf['template']['classic_library_disableslide'] = 0;
 
@@ -208,7 +208,7 @@ $sysconf['template']['option'][$sysconf['template']['theme']] = [
         'dbfield' => 'classic_instagram_link',
         'label' => __('Instagram URL'),
         'type' => 'longtext',
-        'default' => 'https://www.instagram.com/slims.sdc',
+        'default' => '',
         'width' => '100',
         'max' => 1000
     ],
@@ -216,7 +216,7 @@ $sysconf['template']['option'][$sysconf['template']['theme']] = [
         'dbfield' => 'classic_footer_about_us',
         'label' => __('Footer About Us'),
         'type' => 'ckeditor',
-        'default' => '<p>Kutubkhanah is a home library system that brings together SLiMS, PMB and OpenBiblio.</p>',
+        'default' => '<p>Kutubkhanah is a home library system.</p>',
     ],
     'visitor_voice' => [
         'dbfield' => 'visitor_log_voice',

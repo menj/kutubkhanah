@@ -4,7 +4,7 @@
  * instead of index.php?p=show_detail&id=12, following Google's advice on simple, descriptive URLs.
  *
  *  - Slugs for books, authors and series live in kk_slug and never change once made, so shared links keep working.
- *  - Incoming pretty addresses are translated back to the ?p= form before SLiMS routes the page.
+ *  - Incoming pretty addresses are translated back to the ?p= form before the base system routes the page.
  *  - Old ?p= addresses redirect (301) to the pretty ones.
  *  - Every link the page prints is rewritten on output, so no template needs to know about permalinks.
  *

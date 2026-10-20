@@ -9,7 +9,7 @@ TOC
 4. Start translation
 5. Make translation available
 6. Hints
-APPENDIX - List of commom words/phrases in Senayan
+APPENDIX - List of commom words/phrases in Kutubkhanah
 
 
 0. FOREWORD
@@ -29,7 +29,7 @@ Win/Linux/Mac.
 
 2. CREATE A LANGUAGE FOLDER
 ---------------------------------
-a)  Go to senayan3\lib\lang\locale
+a)  Go to Kutubkhanah\lib\lang\locale
 b)  Create a folder describing the language and the country the translation is
     for. For example en_US stands for english/United States. While it is not 
     strictly necessary to use this convention, it would be nice if you could 
@@ -49,7 +49,7 @@ b)  Goto Menu "File" > "New Catalog"
 b1) Tab "Project info":
     ------------
     "Project Name and Version":
-      -> (optional) Enter Senayan3
+      -> (optional) Enter Kutubkhanah
     "Team"
       -> (optional) Enter your name   
     "Team's email adress"
@@ -77,7 +77,7 @@ b3) Tab "Keywords"
     Add two lines:
     	__ (two underscores)
     	_ngettext
-c)  Press ok and save the file under senayan3\lib\lang\locale\{YOUR LANGUAGE}\LC_MESSAGES.
+c)  Press ok and save the file under Kutubkhanah\lib\lang\locale\{YOUR LANGUAGE}\LC_MESSAGES.
     Name the file messages.po
     
 
@@ -92,7 +92,7 @@ c)  When finished go to "File" > "Save" (or press the second button from the lef
 
 5. Make translation available
 ---------------------------------
-Open file \senayan3\lib\lang\localisation.php and at a line like this at the end:
+Open file \Kutubkhanah\lib\lang\localisation.php and at a line like this at the end:
 $available_languages[] = array('xx_XX', _('ENGLISH NAME OF LANGUAGE'), 'NATIVE NAME OF LANGUAGE');
 I think it should be clear what to fill in.
 
@@ -107,7 +107,7 @@ I think it should be clear what to fill in.
   PoEdit first). The Appendix here might help to prevent this situation.
 
 
-APPENDIX - LIST OF COMMOM WORDS/PHRASES IN SENAYAN
+APPENDIX - LIST OF COMMOM WORDS/PHRASES IN Kutubkhanah
 ---------------------------------   
 This is just a small list with words/phrases that I came up with for my 
 german translation. It might help you to find translations for the most

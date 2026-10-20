@@ -39,7 +39,7 @@ include 'function.php';
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 <head>
-  <title><?php echo $page_title ?? 'SLiMS'; ?></title>
+  <title><?php echo $page_title ?? 'Kutubkhanah'; ?></title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -146,7 +146,7 @@ include 'function.php';
       </div>
     </div>
     <footer class="s-footer">
-      <div class="s-footer-about"><a href="https://github.com/menj/kutubkhanah" target="_blank"><?php echo SENAYAN_VERSION ?? ''; ?></a></div>
+      <div class="s-footer-about"><a href="https://github.com/menj/kutubkhanah" target="_blank"><?php echo KUTUBKHANAH_FULL_VERSION ?? ''; ?></a></div>
       <div class="s-footer-brand"><?php echo ($sysconf['library_name'] ?? '').' - '.($sysconf['library_subname'] ?? '')?> </div>
     </footer>
   </main>

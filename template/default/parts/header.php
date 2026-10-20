@@ -46,7 +46,7 @@ $GLOBALS['kk_desc'] = $kkDesc;
     <meta name="keywords" content="<?php echo htmlspecialchars(strip_tags((string)$subject), ENT_QUOTES); ?>">
 <?php endif; ?>
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
-    <meta name="generator" content="<?php echo SENAYAN_VERSION ?>">
+    <meta name="generator" content="<?php echo KUTUBKHANAH_FULL_VERSION ?>">
     <meta name="theme-color" content="<?php echo htmlspecialchars(\SLiMS\Kutubkhanah\Settings::get('light_primary'), ENT_QUOTES); ?>">
 
     <meta property="og:locale" content="<?php echo str_replace('-', '_', $sysconf['default_lang']); ?>"/>
@@ -83,7 +83,7 @@ $GLOBALS['kk_desc'] = $kkDesc;
     <link href="<?php echo JWB; ?>toastr/toastr.min.css?<?php echo date('this') ?>" rel="stylesheet" type="text/css"/>
     <!-- CKEditor5 CSS -->
     <link rel="stylesheet" href="<?= JWB; ?>ckeditor5/ckeditor5.css">
-    <!-- SLiMS CSS -->
+    <!-- the base system CSS -->
     <link rel="stylesheet" href="<?= JWB; ?>colorbox/colorbox.css">
     <link rel="stylesheet" href="<?= JWB; ?>ion.rangeSlider/css/ion.rangeSlider.min.css">
     <!-- // Flag css -->
@@ -113,7 +113,7 @@ $GLOBALS['kk_desc'] = $kkDesc;
     <!-- // load vegas javascript -->
     <script src="<?php echo assets('plugin/vegas/vegas.min.js'); ?>"></script>
     <script src="<?php echo JWB; ?>toastr/toastr.min.js"></script>
-    <!-- // load SLiMS javascript -->
+    <!-- // load the base system javascript -->
     <script src="<?php echo JWB; ?>colorbox/jquery.colorbox-min.js"></script>
     <script src="<?php echo JWB . v('gui.js'); ?>"></script>
     <script src="<?php echo JWB; ?>fancywebsocket.js"></script>

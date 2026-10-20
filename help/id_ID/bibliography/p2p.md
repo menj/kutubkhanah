@@ -1,6 +1,6 @@
 ####P2P Service
 <hr>
-Fitur ini adalah untuk berbagi data bibliografi antar pengguna SLiMS. P2P Service memanfaatkan fasilitas xml yang telah ada di SLIMS untuk berbagi koleksi bibligrafi.
+Fitur ini adalah untuk berbagi data bibliografi antar pengguna Kutubkhanah. P2P Service memanfaatkan fasilitas xml yang telah ada di SLIMS untuk berbagi koleksi bibligrafi.
 
 ####Cara Penggunaan
 <hr>

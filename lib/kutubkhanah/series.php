@@ -1,6 +1,6 @@
 <?php
 /**
- * Kutubkhanah: series with volume numbers (after PMB). The series name is SLiMS's Series Title,
+ * Kutubkhanah: series with volume numbers (after PMB). The series name is the base system's Series Title,
  * the volume number is Book Details > Volume in series. A series page lists the volumes you own
  * and the gaps, up to the total you set for the series.
  *

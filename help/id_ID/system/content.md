@@ -1,9 +1,9 @@
 ### Konten
 <hr>
-Menu ini digunakan untuk mengubah tampilan content aplikasi senayan. Secara default, tampilan yang sudah ada dan dapat dimodifikasi dalam menu ini adalah:
+Menu ini digunakan untuk mengubah tampilan content aplikasi Kutubkhanah. Secara default, tampilan yang sudah ada dan dapat dimodifikasi dalam menu ini adalah:
 - Homepage info, terletak di bagian depan OPAC
-- Lisensi SLiMS
-- Tentang SLiMS
+- Lisensi Kutubkhanah
+- Tentang Kutubkhanah
 - Model Pengembangan Opensource
 - Modul yang tersedia
 - Welcome to admin page,

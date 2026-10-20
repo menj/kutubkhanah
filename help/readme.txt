@@ -12,7 +12,7 @@ While Markdown’s syntax has been influenced by several existing text-to-HTML f
 The best way to get a feel for Markdown’s formatting syntax is simply to look at a Markdown-formatted document.
 For example, you can view the Markdown source for the article text on this page here: http://daringfireball.net/projects/markdown/index.tex
 
-Contributors md files on help menu at SLiMS 8 Akasia  :
+Contributors md files on help menu at Kutubkhanah 8 Akasia  :
 - Eddy Subratha (eddy.subratha@gmail.com) penasehat
 - Purwoko (purgeologi@yahoo.com, tamanjiwa@gmail.com)
 - Rasyid Ridho (rasyidridho@gmail.com, ridhoedogawa@yahoo.com)

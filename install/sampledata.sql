@@ -1,6 +1,6 @@
--- SENAYAN Library Automation
+-- Kutubkhanah Library Automation
 -- Version 3.0 stable 9
--- Sample data for senayan library automation
+-- Sample data for Kutubkhanah library automation
 
 --
 -- Dumping data for table `biblio`

@@ -188,7 +188,7 @@ if (isset($_POST['saveZ']) AND isset($_SESSION['z3950result'])) {
 
 /* SEARCH OPERATION */
 if (isset($_GET['keywords']) AND $can_read) {
-    require LIB.'marcxmlsenayan.inc.php';
+    require LIB.'marcxml-import.inc.php';
     $_SESSION['z3950result'] = array();
     $keywords = trim($_GET['keywords']);
     $num_hosts = count($zserver);
@@ -242,7 +242,7 @@ if (isset($_GET['keywords']) AND $can_read) {
         if ($hits > 0) {
             echo '<div class="infoBox">' . str_replace(array('{hits}', '{maxHits}'),array($hits, $sysconf['z3950_max_result']),__('Found {hits} records from Z3950 Server, {maxHits} listed.')) . '</div>';
             // parse XML
-            $xmlrec = marcXMLsenayan($xml_result_string);
+            $xmlrec = marcXMLimport($xml_result_string);
             // save it to session vars for retrieving later
             $_SESSION['z3950result'] = $xmlrec;
             // create list and form

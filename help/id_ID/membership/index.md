@@ -9,7 +9,7 @@ Digunakan untuk melihat anggota yang telah terdaftar dalam sistem. Informasi yan
 
 ####Tambah Anggota Baru
 <hr>
-Fasilitas untuk menambahkan data anggota baru ke dalam sistem Senayan. Data anggota yang dimasukkan adalah:
+Fasilitas untuk menambahkan data anggota baru ke dalam sistem Kutubkhanah. Data anggota yang dimasukkan adalah:
 - Member ID (ID Anggota -barcode/RFID-),
 - Member Name (Nama Lengkap Anggota),
 - Register Date (tanggal mendatar),
@@ -30,7 +30,7 @@ Dalam Expiry date terdapat Auto Set, maksud dari fasilitas ini, jika auto set di
 
 Pada form ini pula, disediakan fitur Pending Membership. Jika Pending Membership ini di check, maka anggota yang bersangkutan tidak akan dapat melakukan sirkulasi, meskipun masih aktif. Hal ini dapat diterapkan sebagai sanksi kepada anggota yang melanggar peraturan perpustakaan.
 
-SLiMS mempunyai fitur yang membantu pustakawan dalam memasukkan data foto anggota. Fitur tersebut adalah fitur untuk mengambil foto anggota dan langsung disimpan dalam aplikasi SLiMS. Fitur tersebut dapat anda temukan ketika mengedit membership atau mengisikan data member baru. Tampilan fitur tersebut adalah seperti di bawah ini:
+Kutubkhanah mempunyai fitur yang membantu pustakawan dalam memasukkan data foto anggota. Fitur tersebut adalah fitur untuk mengambil foto anggota dan langsung disimpan dalam aplikasi Kutubkhanah. Fitur tersebut dapat anda temukan ketika mengedit membership atau mengisikan data member baru. Tampilan fitur tersebut adalah seperti di bawah ini:
 
 Untuk dapat mengambil foto, lakukan langkah sebagai berikut:
 

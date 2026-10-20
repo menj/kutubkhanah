@@ -42,7 +42,7 @@ class Shelf
         try {
             return self::query();
         } catch (\PDOException $e) {
-            // Database upgraded from plain SLiMS without the Kutubkhanah table: create it and retry once.
+            // Database upgraded from the base system without the Kutubkhanah table: create it and retry once.
             global $dbs;
             Schema::ensure($dbs);
             return self::query();
@@ -64,7 +64,7 @@ class Shelf
              LEFT JOIN mst_language lg ON lg.language_id = b.language_id
              WHERE b.opac_hide = 0 AND COALESCE(k.needs_details, 0) = 0"
         );
-        // SLiMS runs PDO in silent mode, so a failed query returns false rather than throwing.
+        // the base system runs PDO in silent mode, so a failed query returns false rather than throwing.
         if ($stmt === false) throw new \PDOException('Shelf query failed');
         $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 

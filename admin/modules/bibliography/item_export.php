@@ -118,7 +118,7 @@ if (isset($_POST['doExport'])) {
         } else {
             if ($all_data_q->num_rows > 0) {
                 header('Content-type: text/plain');
-                header('Content-Disposition: attachment; filename="senayan_item_export.csv"');
+                header('Content-Disposition: attachment; filename="kutubkhanah_item_export.csv"');
                 $headers = [];
                 $itemData = [];
                 while ($item_d = $all_data_q->fetch_assoc()) {
@@ -170,7 +170,7 @@ if (isset($_POST['doExport'])) {
 
 // create new instance
 $form = new simbio_form_table_AJAX('downloadForm', $_SERVER['PHP_SELF'], 'post');
-$form->submit_button_attr = 'name="doExport" data-filename="senayan_item_export.csv" value="'.__('Export Now').'" class="s-btn btn btn-default"';
+$form->submit_button_attr = 'name="doExport" data-filename="kutubkhanah_item_export.csv" value="'.__('Export Now').'" class="s-btn btn btn-default"';
 
 // form table attributes
 $form->table_attr = 'id="dataList" class="s-table table"';

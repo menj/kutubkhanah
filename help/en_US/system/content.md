@@ -1,8 +1,8 @@
 ###Content
 
-This menu is used to change the appearance of the Senayan application content. By default, views that already exist and can be modified in this menu are: 
+This menu is used to change the appearance of the Kutubkhanah application content. By default, views that already exist and can be modified in this menu are: 
 - Homepage info, located at the front of the OPAC [displayed when “Home” is clicked ], 
-- Welcome to Admin page [the initial display when entering the Admin menu (Senayan Management Console)],
+- Welcome to Admin page [the initial display when entering the Admin menu (Kutubkhanah Management Console)],
 - Help On Usage [accessed from the OPAC], and 
 - Library Information [ also accessed from the OPAC].
 

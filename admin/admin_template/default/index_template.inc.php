@@ -121,7 +121,7 @@
 
 <footer>
     <div class="row">
-        <div class="col-md-6"><?php echo SENAYAN_VERSION; ?></div>
+        <div class="col-md-6"><?php echo KUTUBKHANAH_FULL_VERSION; ?></div>
         <div class="col-md-6 text-right"><?php echo $sysconf['page_footer']; ?></div>
     </div>
 </footer>

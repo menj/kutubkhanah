@@ -52,6 +52,6 @@
 .kk-modal__close { background: none; border: 0; font-size: 24px; line-height: 1; cursor: pointer; color: var(--kk-mute); }
 .kk-modal__body { padding: 16px 18px 20px; }
 .kk-modal__body .kk-list { margin-top: 12px; }
-/* TinyMCE inside the SLiMS admin */
+/* TinyMCE inside the the base system admin */
 .kk-editor .mce-tinymce { border-radius: 6px; overflow: hidden; border-color: var(--kk-line) !important; }
 @media (max-width: 1000px) { .kk-editor { grid-template-columns: 1fr; } .kk-editor__side { position: static; } }

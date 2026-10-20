@@ -24,7 +24,7 @@ do_checkIP('smc-bibliography');
 // start the session
 require SB.'admin/default/session.inc.php';
 require SB.'admin/default/session_check.inc.php';
-require LIB . 'modsxmlsenayan.inc.php';
+require LIB . 'modsxml-import.inc.php';
 
 // privileges checking
 $can_write = utility::havePrivilege('bibliography', 'w');
@@ -57,7 +57,7 @@ $url = cleanUrl($sysconf['p2pserver'][$serverId]['uri']);
 
 $detail_uri = $url . "/index.php?p=show_detail&inXML=true&id=" . ((int)$_GET['biblioID']);
 // parse XML
-$data = modsXMLsenayan($detail_uri, 'uri');
+$data = modsXMLimport($detail_uri, 'uri');
 
 ob_start();
 

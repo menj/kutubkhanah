@@ -152,7 +152,7 @@ class Lookup
         return mb_substr(trim(preg_replace("/[ \t]+/u", ' ', $s)), 0, $max);
     }
 
-    /** Clean subject headings, 50 characters each (the SLiMS topic limit). */
+    /** Clean subject headings, 50 characters each (the the base system topic limit). */
     private static function subjects(array $list): array
     {
         $out = [];
@@ -164,7 +164,7 @@ class Lookup
         return array_slice($out, 0, 12);
     }
 
-    /** ISO 639-2 ("eng", "may") or 639-1 ("en") → the 2-letter code SLiMS uses. */
+    /** ISO 639-2 ("eng", "may") or 639-1 ("en") → the 2-letter code the base system uses. */
     public static function language(string $code): string
     {
         $code = strtolower(trim(preg_replace('#^/languages/#', '', $code)));
@@ -183,7 +183,7 @@ class Lookup
         return preg_match('/^[a-z]{2}$/', $code) ? $code : '';
     }
 
-    /** Human name for a language code, used when SLiMS doesn't have the language yet. */
+    /** Human name for a language code, used when the base system doesn't have the language yet. */
     public static function languageName(string $code): string
     {
         $names = [

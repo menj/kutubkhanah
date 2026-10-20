@@ -12,7 +12,7 @@
   var elManual = $('#kk-manual'), elIsbn = $('#kk-isbn');
   var elContinuous = $('#kk-continuous'), elCopy = $('#kk-copy');
 
-  // A previous visit to this page (SLiMS loads pages by AJAX) may have left a camera running.
+  // A previous visit to this page (the base system loads pages by AJAX) may have left a camera running.
   if (window.kkScanner) { try { window.kkScanner.stop(); } catch (e) {} window.kkScanner = null; }
 
   var scanner = null, running = false, count = 0, last = { code: '', time: 0 }, chain = Promise.resolve();

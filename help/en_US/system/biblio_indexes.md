@@ -1,6 +1,6 @@
 ###Biblio Indexes
 
-This menu is used to index the bibliographic databases used by SLiMS. Given this indexing, the search performance of SLiMS will be improved.
+This menu is used to index the bibliographic databases used by Kutubkhanah. Given this indexing, the search performance of Kutubkhanah will be improved.
 
 There are three functions in this menu:
 - Emptying the index: to clear the existing index results,
