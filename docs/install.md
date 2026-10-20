@@ -9,7 +9,8 @@ site in a browser and answer a few questions.
   `mbstring`, `xml` (with `dom` and `simplexml`), `zip`, `fileinfo`, `curl` and the driver for your database
   (`mysqli`, `pdo_pgsql` or `pdo_sqlite`). `curl` makes book and cover lookups faster and is used for the WordPress import.
 - **No Composer step is needed.** The PHP libraries Kutubkhanah uses (PDF, spreadsheet, barcode, mail, CSRF, UUID) are
-  bundled in `lib/`. Run `composer install` only if you want the optional Elasticsearch search engine.
+  bundled in `lib/`. Only for the optional Elasticsearch search engine, run `php composer.phar install --no-dev` from the site folder:
+  Composer 2.10.3 is included as `composer.phar`, so nothing else needs installing.
 - **One database:**
   - **SQLite**: nothing to install; the easiest choice for one household.
   - **MySQL 5.7 / MariaDB 10.3 or later**, or **PostgreSQL 13 or later**: create an empty database and a user for it first.
