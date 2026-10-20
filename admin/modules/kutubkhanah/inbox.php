@@ -9,7 +9,8 @@ use SLiMS\Kutubkhanah\Messages;
 require __DIR__ . '/kk.inc.php';
 if (!$kk_can_write) kk_deny();
 
-$type = in_array($_GET['t'] ?? 'access', ['access', 'contact', 'suggest', 'borrow'], true) ? $_GET['t'] : 'access';
+$type = (string)($_GET['t'] ?? 'access');
+if (!in_array($type, ['access', 'contact', 'suggest', 'borrow'], true)) $type = 'access';
 $status = in_array($_GET['s'] ?? '', Messages::STATUSES, true) ? $_GET['s'] : '';
 $counts = Messages::counts();
 $rows = Messages::list($type, $status);
