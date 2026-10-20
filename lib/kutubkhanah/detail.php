@@ -162,7 +162,7 @@ class Detail
             'SELECT a.author_id, a.author_name, COALESCE(m.birth_year, \'\') AS birth_year, COALESCE(m.death_year, \'\') AS death_year,
                     COALESCE(m.nationality, \'\') AS nationality, COALESCE(m.discipline, \'\') AS discipline,
                     COALESCE(m.external_url, \'\') AS external_url, COALESCE(m.notes, \'\') AS notes, COALESCE(m.notes_public, 0) AS notes_public,
-                    COALESCE(m.photo, \'\') AS photo, COALESCE(m.bio, \'\') AS bio, COALESCE(m.bio_source, \'\') AS bio_source, COALESCE(m.native_name, \'\') AS native_name
+                    COALESCE(m.photo, \'\') AS photo, COALESCE(m.bio, \'\') AS bio, COALESCE(m.bio_source, \'\') AS bio_source, COALESCE(m.native_name, \'\') AS native_name, COALESCE(m.viaf_id, \'\') AS viaf_id
              FROM mst_author a LEFT JOIN kk_author m ON m.author_id = a.author_id WHERE a.author_id = ?',
             [$authorId]
         );
@@ -197,6 +197,9 @@ class Detail
         if ($a['external_url'] !== '') {
             $table .= '<tr><th>' . __('More about') . '</th><td><a href="' . $e($a['external_url']) . '" target="_blank" rel="noopener noreferrer">'
                 . $e(parse_url($a['external_url'], PHP_URL_HOST) ?: $a['external_url']) . '</a></td></tr>';
+        }
+        if ($a['viaf_id'] !== '') {
+            $table .= '<tr><th>' . __('Authority record') . '</th><td><a href="https://viaf.org/viaf/' . rawurlencode($a['viaf_id']) . '" target="_blank" rel="noopener noreferrer">VIAF</a></td></tr>';
         }
         if ($table) $html .= '<table class="kk-meta-table"><tbody>' . $table . '</tbody></table>';
         $html .= '</div>' . Library::chapter(__('On the shelves'), sprintf(count($books) === 1 ? __('%d book in the collection') : __('%d books in the collection'), count($books)))

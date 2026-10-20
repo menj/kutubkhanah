@@ -118,6 +118,7 @@ class Authors
                ->execute([date('Y-m-d'), $id]);
         } elseif ($op === 'wikidata') {
             Wikidata::author($id);
+            Viaf::author($id);
         } elseif ($op === 'refetch') {
             $db->prepare("UPDATE kk_author SET reviewed = '' WHERE author_id = ?")->execute([$id]);
             self::fetch($id);
@@ -132,7 +133,7 @@ class Authors
         if ($q !== '') { $w .= ' AND a.author_name LIKE ?'; $args[] = '%' . $q . '%'; }
         else $w .= " AND (COALESCE(m.bio_source, '') <> '' OR COALESCE(m.wd_id, '') <> '') AND COALESCE(m.reviewed, '') = ''";
         return Library::rows(
-            "SELECT a.author_id, a.author_name, m.ol_key, m.ol_name, m.wd_id, m.wd_label, m.isni, m.search_name, m.sort_name, m.native_name, m.reviewed, m.bio_source
+            "SELECT a.author_id, a.author_name, m.ol_key, m.ol_name, m.wd_id, m.wd_label, m.viaf_id, m.isni, m.search_name, m.sort_name, m.native_name, m.reviewed, m.bio_source
              FROM mst_author a LEFT JOIN kk_author m ON m.author_id = a.author_id WHERE $w ORDER BY a.author_name LIMIT " . max(1, $limit),
             $args
         );

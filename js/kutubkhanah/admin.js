@@ -221,6 +221,24 @@
     });
   }
 
+  /* Free digital copies, a few books per request */
+  var fcGo = document.getElementById('kk-copies');
+  if (fcGo) {
+    var fcStatus = document.getElementById('kk-copies-status'), fcReset = document.getElementById('kk-copies-reset');
+    fcGo.addEventListener('click', function () {
+      var done = 0, found = 0, first = true;
+      fcGo.disabled = true;
+      (function step() {
+        api('copies_fetch', { reset: first && fcReset.checked, limit: 3 }).then(function (res) {
+          if (!res.ok) throw new Error();
+          first = false; done += res.j.processed; found += res.j.found;
+          fcStatus.textContent = done + ' checked, ' + found + ' links saved, ' + res.j.remaining + ' to go';
+          if (res.j.remaining > 0 && res.j.processed > 0) { step(); } else { fcGo.disabled = false; }
+        }).catch(function () { fcStatus.textContent = t.error; fcGo.disabled = false; });
+      })();
+    });
+  }
+
   /* Wikidata, a few items per request */
   var wdGo = document.getElementById('kk-wikidata');
   if (wdGo) {

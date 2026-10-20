@@ -48,10 +48,18 @@ echo kk_head();
     </div>
     <p class="kk-note" id="kk-authors-status" aria-live="polite"></p>
 
-    <h4><?= __('Wikidata') ?></h4>
-    <p class="kk-note"><?= sprintf(__('%d authors and books have not been looked up on Wikidata yet. Authors are found by ISNI, then by name; books by ISBN, then OCLC number. Only empty fields are filled, and nothing you wrote is changed.'), \SLiMS\Kutubkhanah\Wikidata::countPendingAuthors() + \SLiMS\Kutubkhanah\Wikidata::countPendingBooks()) ?></p>
+    <h4><?= __('Free digital copies') ?></h4>
+    <p class="kk-note"><?= sprintf(__('%d books have no digital copy link. This looks for a free-to-read copy on Project Gutenberg, HathiTrust (full view) and the Internet Archive, and saves the link. Existing links are never changed.'), \SLiMS\Kutubkhanah\FreeCopies::countPending()) ?></p>
     <div class="kk-actions">
-      <button type="button" class="kk-btn kk-btn--primary" id="kk-wikidata"><?= __('Fetch from Wikidata') ?></button>
+      <button type="button" class="kk-btn kk-btn--primary" id="kk-copies"><?= __('Find free copies') ?></button>
+      <label class="kk-check kk-check--inline"><input type="checkbox" id="kk-copies-reset"> <?= __('Also retry books with no result') ?></label>
+    </div>
+    <p class="kk-note" id="kk-copies-status" aria-live="polite"></p>
+
+    <h4><?= __('Wikidata and VIAF') ?></h4>
+    <p class="kk-note"><?= sprintf(__('%d authors and books have not been looked up on Wikidata yet. Authors are found by ISNI, then by name, on Wikidata and VIAF; books by ISBN, then OCLC number, on Wikidata. Only empty fields are filled, and nothing you wrote is changed.'), \SLiMS\Kutubkhanah\Wikidata::countPendingAuthors() + \SLiMS\Kutubkhanah\Wikidata::countPendingBooks()) ?></p>
+    <div class="kk-actions">
+      <button type="button" class="kk-btn kk-btn--primary" id="kk-wikidata"><?= __('Fetch from Wikidata and VIAF') ?></button>
       <label class="kk-check kk-check--inline"><input type="checkbox" id="kk-wikidata-reset"> <?= __('Also retry items that had no match') ?></label>
     </div>
     <p class="kk-note" id="kk-wikidata-status" aria-live="polite"></p>
@@ -81,7 +89,7 @@ echo kk_head();
           <input data-f="ol_key" value="<?= $h($r['ol_key']) ?>" placeholder="OL123A" aria-label="Open Library ID" size="10">
           <button type="button" class="kk-btn kk-btn--outline kk-btn--sm" data-op="save"><?= __('Save') ?></button>
           <button type="button" class="kk-btn kk-btn--outline kk-btn--sm" data-op="refetch"><?= __('Open Library again') ?></button>
-          <button type="button" class="kk-btn kk-btn--outline kk-btn--sm" data-op="wikidata"><?= __('Wikidata') ?></button>
+          <button type="button" class="kk-btn kk-btn--outline kk-btn--sm" data-op="wikidata"><?= __('Wikidata and VIAF') ?></button>
           <button type="button" class="kk-btn kk-btn--primary kk-btn--sm" data-op="approve"><?= __('Approve') ?></button>
           <button type="button" class="kk-btn kk-btn--ghost kk-btn--sm" data-op="reject"><?= __('Reject') ?></button>
         </div>

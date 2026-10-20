@@ -6,6 +6,8 @@
  *   openlibrary  Open Library (Internet Archive): edition, work description, subjects, classes, cover
  *   loc          Library of Congress catalogue (SRU, MARC 21)
  *   google       Google Books
+ *   hathitrust   HathiTrust Bibliographic API (identifiers, publication date, full-view link)
+ *   internetarchive  Internet Archive search (title, publisher, date, link to a free copy)
  *   k10plus      K10plus union catalogue of German and international libraries (SRU, MARC 21)
  *   custom       Any other SRU catalogue that returns MARCXML (e.g. a national library)
  * All ISBN requests run in parallel, so a lookup takes about as long as the slowest source.
@@ -24,6 +26,8 @@ class Lookup
             'openlibrary' => 'Open Library',
             'loc'         => 'Library of Congress',
             'google'      => 'Google Books',
+            'hathitrust'  => 'HathiTrust',
+            'internetarchive' => 'Internet Archive',
             'k10plus'     => 'K10plus (German and international libraries)',
             'custom'      => __('Custom SRU catalogue'),
         ];
@@ -35,7 +39,7 @@ class Lookup
             'title' => '', 'authors' => [], 'publisher' => '', 'place' => '', 'publish_date' => '',
             'edition' => '', 'pages' => '', 'collation' => '', 'language' => '', 'description' => '',
             'subjects' => [], 'dewey' => '', 'lcc' => '', 'lccn' => '', 'oclc' => '', 'series' => '',
-            'alt_title' => '', 'cover_url' => '', 'openlibrary_id' => '', 'google_books_id' => '',
+            'alt_title' => '', 'digital_link' => '', 'cover_url' => '', 'openlibrary_id' => '', 'google_books_id' => '',
             'source' => '', 'sources' => [],
         ];
     }
@@ -88,6 +92,13 @@ class Lookup
                     $key = trim((string)Settings::get('google_key'));
                     $urls['google'] = $key !== '' ? $u . '&key=' . rawurlencode($key) : $u;
                     break;
+                case 'hathitrust':
+                    $urls['hathitrust'] = 'https://catalog.hathitrust.org/api/volumes/brief/isbn/' . rawurlencode($isbn13) . '.json';
+                    break;
+                case 'internetarchive':
+                    $urls['internetarchive'] = 'https://archive.org/advancedsearch.php?output=json&rows=1&q=' . rawurlencode('isbn:' . $isbn13)
+                        . '&fl%5B%5D=identifier&fl%5B%5D=title&fl%5B%5D=creator&fl%5B%5D=publisher&fl%5B%5D=date&fl%5B%5D=language&fl%5B%5D=description';
+                    break;
                 case 'k10plus':
                     $urls['k10plus'] = self::sruUrl('https://sru.k10plus.de/opac-de-627', 'pica.isb', $isbn13);
                     break;
@@ -107,6 +118,8 @@ class Lookup
             $r = match ($src) {
                 'openlibrary' => self::openLibrary($responses['openlibrary'] ?? [0, ''], $responses['openlibrary_edition'] ?? [0, '']),
                 'google'      => self::google($responses['google'] ?? [0, '']),
+                'hathitrust'  => self::hathiTrust($responses['hathitrust'] ?? [0, '']),
+                'internetarchive' => self::internetArchive($responses['internetarchive'] ?? [0, '']),
                 default       => isset($responses[$src]) && $responses[$src][0] === 200 ? Marc::fromSru($responses[$src][1]) : null,
             };
             if ($r) $records[$src] = $r;
@@ -279,6 +292,47 @@ class Lookup
             'subjects'        => self::subjects((array)($v['categories'] ?? [])),
             'cover_url'       => $cover,
             'google_books_id' => self::text($item['id'] ?? '', 30),
+        ];
+    }
+
+    /** HathiTrust brief record: identifiers, publication date and a link when a full-view copy exists. */
+    public static function hathiTrust(array $response): ?array
+    {
+        $json = Http::decode($response);
+        $rec = is_array($json['records'] ?? null) ? reset($json['records']) : null;
+        if (!$rec) return null;
+        $link = '';
+        foreach ((array)($json['items'] ?? []) as $it) {
+            if (stripos((string)($it['usRightsString'] ?? ''), 'full view') !== false && !empty($it['htid'])) {
+                $link = 'https://babel.hathitrust.org/cgi/pt?id=' . rawurlencode((string)$it['htid']);
+                break;
+            }
+        }
+        $r = [
+            'title'        => self::text((string)($rec['titles'][0] ?? ''), 500),
+            'publish_date' => self::text((string)($rec['publishDates'][0] ?? ''), 20),
+            'oclc'         => self::text((string)($rec['oclcs'][0] ?? ''), 30),
+            'lccn'         => self::text((string)($rec['lccns'][0] ?? ''), 20),
+            'digital_link' => $link,
+        ];
+        return array_filter($r) ? $r : null;
+    }
+
+    /** Internet Archive advanced search: one matching item, with a link to read or borrow it. */
+    public static function internetArchive(array $response): ?array
+    {
+        $json = Http::decode($response);
+        $d = $json['response']['docs'][0] ?? null;
+        if (!$d || empty($d['identifier']) || !preg_match('/^[A-Za-z0-9._-]+$/', (string)$d['identifier'])) return null;
+        $one = fn($v) => is_array($v) ? (string)($v[0] ?? '') : (string)$v;
+        $creator = $d['creator'] ?? [];
+        return [
+            'title'        => self::text($one($d['title'] ?? ''), 500),
+            'authors'      => array_values(array_filter(array_map(fn($a) => self::text((string)$a, 100), is_array($creator) ? $creator : [$creator]))),
+            'publisher'    => self::text($one($d['publisher'] ?? ''), 100),
+            'publish_date' => self::text(substr($one($d['date'] ?? ''), 0, 10), 20),
+            'description'  => self::text(strip_tags($one($d['description'] ?? '')), 5000),
+            'digital_link' => 'https://archive.org/details/' . $d['identifier'],
         ];
     }
 }

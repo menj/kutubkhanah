@@ -273,7 +273,7 @@ class Books
     public static function lookupMeta(array $d, array $current = []): array
     {
         $out = [];
-        $limits = ['lcc' => 60, 'lccn' => 20, 'oclc' => 30, 'openlibrary_id' => 20, 'google_books_id' => 30, 'alt_title' => 500];
+        $limits = ['lcc' => 60, 'lccn' => 20, 'oclc' => 30, 'openlibrary_id' => 20, 'google_books_id' => 30, 'alt_title' => 500, 'digital_link' => 500];
         foreach ($limits as $k => $n) {
             $v = mb_substr(trim((string)($d[$k] ?? '')), 0, $n);
             if ($v !== '' && trim((string)($current[$k] ?? '')) === '') $out[$k] = $v;

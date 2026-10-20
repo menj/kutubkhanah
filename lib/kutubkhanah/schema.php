@@ -40,6 +40,7 @@ class Schema
             'openlibrary_id'   => "varchar(20) NOT NULL default ''",
             'wd_id'            => "varchar(20) NOT NULL default ''",
             'wd_tried'         => "varchar(20) NOT NULL default ''",
+            'fc_tried'         => "varchar(20) NOT NULL default ''",
             'alt_title'        => "varchar(500) NOT NULL default ''",
             'sources'          => "varchar(120) NOT NULL default ''",
             // 1.5.0: ratings and reviews
@@ -91,7 +92,7 @@ class Schema
         foreach (['photo' => "varchar(255) NOT NULL default ''", 'bio' => 'text', 'bio_source' => "varchar(120) NOT NULL default ''", 'photo_tried' => "varchar(20) NOT NULL default ''",
             'ol_key' => "varchar(20) NOT NULL default ''", 'ol_name' => "varchar(200) NOT NULL default ''", 'search_name' => "varchar(200) NOT NULL default ''",
             'sort_name' => "varchar(200) NOT NULL default ''", 'native_name' => "varchar(200) NOT NULL default ''",
-            'isni' => "varchar(30) NOT NULL default ''", 'wd_id' => "varchar(20) NOT NULL default ''", 'wd_label' => "varchar(200) NOT NULL default ''", 'wd_tried' => "varchar(20) NOT NULL default ''", 'reviewed' => "varchar(1) NOT NULL default ''"] as $name => $def) {
+            'isni' => "varchar(30) NOT NULL default ''", 'wd_id' => "varchar(20) NOT NULL default ''", 'wd_label' => "varchar(200) NOT NULL default ''", 'viaf_id' => "varchar(20) NOT NULL default ''", 'wd_tried' => "varchar(20) NOT NULL default ''", 'reviewed' => "varchar(1) NOT NULL default ''"] as $name => $def) {
             if (!isset($have[$name])) $db->query("ALTER TABLE `kk_author` ADD `$name` $def");
         }
 

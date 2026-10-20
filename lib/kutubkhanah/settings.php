@@ -95,6 +95,8 @@ class Settings
             'src_loc'         => 1,
             'src_google'      => 1,
             'src_k10plus'     => 1,
+            'src_hathitrust'  => 1,
+            'src_internetarchive' => 1,
             'src_custom'      => 0,
             'sru_custom_url'  => '',
             'sru_custom_index' => 'isbn',
@@ -149,7 +151,7 @@ class Settings
                 'dark_text' => 'color', 'dark_muted' => 'color',
             ],
             'lookup' => [
-                'src_openlibrary' => 'bool', 'src_loc' => 'bool', 'src_google' => 'bool', 'src_k10plus' => 'bool',
+                'src_openlibrary' => 'bool', 'src_loc' => 'bool', 'src_google' => 'bool', 'src_hathitrust' => 'bool', 'src_internetarchive' => 'bool', 'src_k10plus' => 'bool',
                 'src_custom' => 'bool', 'sru_custom_url' => 'url', 'sru_custom_index' => 'sruindex',
                 'google_key' => 'text', 'download_covers' => 'bool',
             ],

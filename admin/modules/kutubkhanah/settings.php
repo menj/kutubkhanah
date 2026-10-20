@@ -208,6 +208,8 @@ echo kk_head();
         'openlibrary' => __('Free and open (Internet Archive). Descriptions, subjects, Dewey and LC classes, covers.'),
         'loc'         => __('The US national library catalogue. Excellent records for English and many Arabic titles.'),
         'google'      => __('Good descriptions and covers, especially for recent books.'),
+        'hathitrust'  => __('Free and open. Catalogue identifiers, publication dates and a link when a full-view scan exists.'),
+        'internetarchive' => __('Free and open. Links to a free or borrowable copy, and publisher and date.'),
         'k10plus'     => __('Union catalogue of about 200 German and international libraries, strong on academic and European titles.'),
         'custom'      => __('Any library catalogue with an SRU search that returns MARCXML, for example a national library.'),
     ];

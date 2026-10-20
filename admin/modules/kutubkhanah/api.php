@@ -114,9 +114,16 @@ try {
             if (!empty($input['reset'])) $W::resetTried();
             $n = max(1, min(4, (int)($input['limit'] ?? 3)));
             $found = 0; $done = 0;
-            foreach ($W::pendingAuthors($n) as $a) { $done++; if ($W::author((int)$a['author_id'])) $found++; }
+            foreach ($W::pendingAuthors($n) as $a) { $done++; $w = $W::author((int)$a['author_id']); $v = \SLiMS\Kutubkhanah\Viaf::author((int)$a['author_id']); if ($w || $v) $found++; }
             foreach ($W::pendingBooks($n) as $b) { $done++; if ($W::book((int)$b['biblio_id'])) $found++; }
             kk_json(['processed' => $done, 'found' => $found, 'remaining' => $W::countPendingAuthors() + $W::countPendingBooks()]);
+
+        case 'copies_fetch':
+            $F = \SLiMS\Kutubkhanah\FreeCopies::class;
+            if (!empty($input['reset'])) $F::resetTried();
+            $found = 0; $list = $F::pending(max(1, min(4, (int)($input['limit'] ?? 3))));
+            foreach ($list as $b) { if ($F::book((int)$b['biblio_id'])) $found++; }
+            kk_json(['processed' => count($list), 'found' => $found, 'remaining' => $F::countPending()]);
 
         case 'author_review':
             $op = (string)($input['op'] ?? 'save');
