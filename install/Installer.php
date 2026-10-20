@@ -40,11 +40,24 @@ class Installer
         foreach (['gd', 'mbstring', 'curl', 'xml', 'dom', 'json'] as $ext) {
             $rows[] = ['label' => 'PHP extension: ' . $ext, 'ok' => extension_loaded($ext), 'note' => extension_loaded($ext) ? 'Loaded' : 'Missing'];
         }
+        self::prepareFolders();
+        $user = function_exists('posix_getpwuid') && function_exists('posix_geteuid') ? (posix_getpwuid(posix_geteuid())['name'] ?? 'www-data') : 'www-data';
         foreach (['config', 'files', 'images', 'repository'] as $dir) {
-            $ok = is_dir(self::root() . '/' . $dir) && is_writable(self::root() . '/' . $dir);
-            $rows[] = ['label' => '/' . $dir . ' is writable', 'ok' => $ok, 'note' => $ok ? 'Yes' : 'No: change its permissions'];
+            $path = self::root() . '/' . $dir;
+            $ok = is_dir($path) && is_writable($path);
+            $rows[] = ['label' => '/' . $dir . ' is writable', 'ok' => $ok, 'note' => $ok ? 'Yes' : 'No. Run: chown -R ' . $user . ' ' . $path . ' (or chmod -R u+rwX)'];
         }
         return $rows;
+    }
+
+    /** Create the writable folders and loosen their permissions where PHP is allowed to. */
+    public static function prepareFolders(): void
+    {
+        foreach (['config', 'files', 'files/db', 'images', 'images/docs', 'repository'] as $dir) {
+            $path = self::root() . '/' . $dir;
+            if (!is_dir($path)) @mkdir($path, 0775, true);
+            if (is_dir($path) && !is_writable($path)) @chmod($path, 0775);
+        }
     }
 
     public static function requirementsMet(): bool

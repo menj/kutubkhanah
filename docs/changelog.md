@@ -4,6 +4,7 @@ All notable changes to Kutubkhanah. Newest first. The version number lives in `s
 
 ## 1.11.0
 
+- The installer creates the writable folders itself and loosens their permissions where PHP is allowed to; if the web user still cannot write to one, it shows the exact command to run.
 - The installer now removes its own folder once the new site answers and an administrator account exists. If the server will not allow the deletion it says so and leaves the folder for you to delete. The Success page also appears again after install (it was being replaced by "Already installed").
 - More free sources: HathiTrust and Internet Archive join Open Library, the Library of Congress and Google Books as ISBN lookup sources (Settings > Lookup), adding identifiers, dates and links to free copies. Import / Export > Find free copies searches Project Gutenberg, HathiTrust (full view) and the Internet Archive for books with no digital copy link. VIAF now runs with Wikidata for authors: native-script name, birth and death years, ISNI and an authority-record link, only where empty and only when an ISNI agrees.
 - Wikidata (Import / Export > Wikidata): authors are matched by ISNI, then by name or native-script name, and must be a person; books by ISBN, then OCLC number, and a title match must agree on ISBN or OCLC. Fills only empty fields: native-script name, birth and death years, nationality, short description, portrait (Wikimedia Commons) and original title. Matches appear in Review matches, where you can set an ISNI or Wikidata ID, approve or reject.
