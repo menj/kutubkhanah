@@ -22,7 +22,7 @@ class Seo
         if ($canon === '' && empty($_GET['p'])) $canon = Feed::baseUrl();
         if ($canon !== '') $out .= '    <link rel="canonical" href="' . self::e($canon) . '">' . "\n";
         $p = (string)($_GET['p'] ?? '');
-        if (Settings::get('enable_rss')) $out .= '    <link rel="alternate" type="application/rss+xml" title="' . self::e((string)($sysconf['library_name'] ?? '') . ' · ' . __('New additions')) . '" href="' . self::e(Permalink::enabled() ? Feed::baseUrl() . 'feed.xml' : Feed::baseUrl() . 'index.php?p=kk_rss') . '">' . "\n";
+        if (Settings::get('enable_rss')) $out .= '    <link rel="alternate" type="application/rss+xml" title="' . self::e((string)($sysconf['library_name'] ?? '') . ' · ' . __('New additions')) . '" href="' . self::e(Permalink::enabled() ? Feed::baseUrl() . 'feed.xml' : Feed::baseUrl() . 'index.php?p=kk-rss') . '">' . "\n";
         $graph = [];
         try {
             if ($p === '') $graph = self::site();
@@ -135,7 +135,7 @@ class Seo
         } else {
             $root = (string)parse_url($base, PHP_URL_PATH);
             foreach (['admin/', 'lib/', 'files/', 'install/', 'config/', 'plugins/', 'index.php?p=login', 'index.php?p=librarian', 'index.php?p=member'] as $d) $t .= 'Disallow: ' . $root . $d . "\n";
-            $t .= "\nSitemap: " . $base . (Permalink::enabled() ? 'sitemap.xml' : 'index.php?p=kk_sitemap') . "\n";
+            $t .= "\nSitemap: " . $base . (Permalink::enabled() ? 'sitemap.xml' : 'index.php?p=kk-sitemap') . "\n";
         }
         while (ob_get_level() > 0) ob_end_clean();
         header('Content-Type: text/plain; charset=utf-8');

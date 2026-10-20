@@ -51,7 +51,7 @@ class Forms
             $out .= '<div class="kk-alert kk-form-width ' . ($result['ok'] ? 'kk-alert--ok' : 'kk-alert--err') . '" role="' . ($result['ok'] ? 'status' : 'alert') . '">' . $e($result['message']) . '</div>';
         }
 
-        $out .= '<form class="kk-form" method="post" action="index.php?p=' . ($type === 'access' ? 'request_access' : 'contact') . '" novalidate>'
+        $out .= '<form class="kk-form" method="post" action="index.php?p=' . ($type === 'access' ? 'request-access' : 'contact') . '" novalidate>'
             . '<input type="hidden" name="kk_form" value="1"><input type="hidden" name="kk_token" value="' . $e($token) . '">'
             . '<div class="kk-hp" aria-hidden="true"><label for="kk-website">Website</label><input id="kk-website" name="website" type="text" tabindex="-1" autocomplete="off"></div>'
             . '<div class="kk-form__row">'

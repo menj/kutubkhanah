@@ -36,6 +36,32 @@ class Settings
             'ocr_lang'        => 'eng',
             'loan_days'       => 30,
             'permalinks'      => 'pretty',
+            // AI discovery files
+            'ai_enable'       => 1,
+            'ai_log'          => 1,
+            'ai_f_llms_txt' => 1, 'ai_f_llm_txt' => 1, 'ai_f_llms_html' => 1, 'ai_f_ai_txt' => 1, 'ai_f_ai_json' => 1,
+            'ai_f_identity_json' => 1, 'ai_f_brand_txt' => 1, 'ai_f_faq_ai_txt' => 1, 'ai_f_developer_ai_txt' => 1, 'ai_f_robots_ai_txt' => 1,
+            'ai_name'         => '',
+            'ai_legal_name'   => '',
+            'ai_description'  => '',
+            'ai_email'        => '',
+            'ai_org_type'     => 'Library',
+            'ai_country'      => '',
+            'ai_city'         => '',
+            'ai_services'     => "Browsing a private catalogue of books\nBorrowing by arrangement\nReading lists and recommendations",
+            'ai_not_services' => "Public lending\nSelling books",
+            'ai_alternates'   => '',
+            'ai_misspellings' => '',
+            'ai_never'        => '',
+            'ai_voice'        => '',
+            'ai_about'        => '',
+            'ai_faq'          => '',
+            'ai_usage'        => 'allow_with_attribution',
+            'ai_training'     => 'restrict',
+            'ai_crawlers'     => 'allow_known',
+            'ai_citation'     => '',
+            'ai_licence'      => '',
+            'ai_dev_notes'    => '',
             // General (shelf)
             'shelf_title'     => '',
             'show_authors'    => 1,
@@ -94,6 +120,17 @@ class Settings
                 'home_layout' => 'layout', 'recent_count' => 'int:0:30',
                 'enable_contact' => 'bool', 'enable_access' => 'bool', 'notify_email' => 'email', 'show_reading' => 'bool',
                 'show_ratings' => 'bool', 'enable_wishlist' => 'bool', 'enable_rss' => 'bool', 'enable_lists' => 'bool', 'enable_inside' => 'bool', 'ocr_lang' => 'text', 'loan_days' => 'int:0:365', 'permalinks' => 'permalinks',
+            ],
+            'ai' => [
+                'ai_enable' => 'bool', 'ai_log' => 'bool',
+                'ai_f_llms_txt' => 'bool', 'ai_f_llm_txt' => 'bool', 'ai_f_llms_html' => 'bool', 'ai_f_ai_txt' => 'bool', 'ai_f_ai_json' => 'bool',
+                'ai_f_identity_json' => 'bool', 'ai_f_brand_txt' => 'bool', 'ai_f_faq_ai_txt' => 'bool', 'ai_f_developer_ai_txt' => 'bool', 'ai_f_robots_ai_txt' => 'bool',
+                'ai_name' => 'text', 'ai_legal_name' => 'text', 'ai_description' => 'text', 'ai_email' => 'email', 'ai_org_type' => 'enum:Library|Organization|LocalBusiness|Person',
+                'ai_country' => 'text', 'ai_city' => 'text',
+                'ai_services' => 'longtext', 'ai_not_services' => 'longtext', 'ai_alternates' => 'longtext', 'ai_misspellings' => 'longtext', 'ai_never' => 'longtext',
+                'ai_voice' => 'longtext', 'ai_about' => 'longtext', 'ai_faq' => 'longtext',
+                'ai_usage' => 'enum:allow|allow_with_attribution|restrict|prohibit', 'ai_training' => 'enum:allow|restrict|prohibit',
+                'ai_crawlers' => 'enum:allow_all|allow_known|restrict', 'ai_citation' => 'text', 'ai_licence' => 'text', 'ai_dev_notes' => 'longtext',
             ],
             'general' => [
                 'shelf_title' => 'text', 'show_authors' => 'bool', 'group_letters' => 'bool',
@@ -174,6 +211,10 @@ class Settings
                     break;
                 case $type === 'lang':
                     $out[$key] = preg_match('/^[a-z]{2,5}$/', $raw) ? $raw : 'en';
+                    break;
+                case strpos($type, 'enum:') === 0:
+                    $opts = explode('|', substr($type, 5));
+                    $out[$key] = in_array($raw, $opts, true) ? $raw : $defaults[$key];
                     break;
                 case strpos($type, 'int:') === 0:
                     [, $min, $max] = explode(':', $type);

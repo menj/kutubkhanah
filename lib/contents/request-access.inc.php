@@ -1,6 +1,6 @@
 <?php
 /**
- * Kutubkhanah: Request Access page (index.php?p=request_access).
+ * Kutubkhanah: Request Access page (index.php?p=request-access).
  * GNU GPL v3 or later.
  */
 

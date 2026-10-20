@@ -18,7 +18,7 @@ $main_menus += [
   'faq' => ['text' => __('FAQ'), 'url' => 'index.php?p=faq'],
 ];
 if (!empty($kk['enable_contact'])) $main_menus['contact'] = ['text' => __('Contact'), 'url' => 'index.php?p=contact'];
-if (!empty($kk['enable_access'])) $main_menus['request_access'] = ['text' => __('Request Access'), 'url' => 'index.php?p=request_access'];
+if (!empty($kk['enable_access'])) $main_menus['request-access'] = ['text' => __('Request Access'), 'url' => 'index.php?p=request-access'];
 ?>
 <nav class="navbar navbar-expand-lg navbar-light kk-nav" aria-label="<?= __('Main navigation'); ?>">
     <a class="navbar-brand kk-brand" href="index.php">

@@ -29,7 +29,7 @@
       // ------------------------------------------------------------------------
       // include search form part (Kutubkhanah pages have their own search or none)
       // ------------------------------------------------------------------------
-      if (!in_array($_GET['p'] ?? '', ['shelf', 'contact', 'request_access', 'faq', 'author', 'series', 'wishlist', 'blog', 'page', 'lists', 'inside'], true)) include '_search-form.php';
+      if (!in_array($_GET['p'] ?? '', ['shelf', 'contact', 'request-access', 'faq', 'author', 'series', 'wishlist', 'blog', 'page', 'lists', 'inside'], true)) include '_search-form.php';
       else echo '<div class="kk-banner-end" aria-hidden="true"></div>'; ?>
     </section>
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Kutubkhanah: public read-only JSON API (index.php?p=kk_api&r=books|book|stats|authors).
+ * Kutubkhanah: public read-only JSON API (index.php?p=kk-api&r=books|book|stats|authors).
  * GNU GPL v3 or later.
  */
 

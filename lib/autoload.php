@@ -68,7 +68,13 @@ foreach ($namespaces as $namespace => $classpaths) {
             $filename = preg_replace("#\\\\#", "/", $classname) . ".php";
             foreach ($classpaths as $classpath) {
                 $fullpath = __DIR__ . "/" . $classpath . "/$filename";
-                if (file_exists($fullpath)) include_once $fullpath;
+                if (file_exists($fullpath)) { include_once $fullpath; continue; }
+                // Kutubkhanah keeps its files in kebab-case (AiFiles => ai-files.php, Db\\Pdo => db/pdo.php).
+                $kebab = strtolower(preg_replace('/(?<=[a-z0-9])(?=[A-Z])/', '-', $filename));
+                if ($kebab !== strtolower($filename) || $kebab !== $filename) {
+                    $fullpath = __DIR__ . "/" . $classpath . "/$kebab";
+                    if (file_exists($fullpath)) include_once $fullpath;
+                }
             }
         } elseif (isset($class_alias[$classname]) && class_exists($class_alias[$classname])) {
             class_alias($class_alias[$classname], $classname);

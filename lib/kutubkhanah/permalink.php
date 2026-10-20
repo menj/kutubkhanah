@@ -18,9 +18,12 @@ class Permalink
     /** page name => path */
     private const STATIC_PATHS = [
         'shelf' => 'shelf', 'series' => 'series', 'lists' => 'lists', 'wishlist' => 'wishlist',
-        'inside' => 'search-inside', 'contact' => 'contact', 'request_access' => 'request-access', 'faq' => 'faq',
-        'kk_rss' => 'feed.xml', 'blog_rss' => 'journal/feed.xml', 'kk_sitemap' => 'sitemap.xml', 'kk_robots' => 'robots.txt',
+        'inside' => 'search-inside', 'contact' => 'contact', 'request-access' => 'request-access', 'faq' => 'faq',
+        'kk-rss' => 'feed.xml', 'blog-rss' => 'journal/feed.xml', 'kk-sitemap' => 'sitemap.xml', 'kk-robots' => 'robots.txt',
     ];
+
+    /** Page names used before 1.9.0 (underscores); old feeds and bookmarks keep working. */
+    private const LEGACY = ['kk_rss' => 'kk-rss', 'kk_api' => 'kk-api', 'kk_sitemap' => 'kk-sitemap', 'kk_robots' => 'kk-robots', 'blog_rss' => 'blog-rss', 'request_access' => 'request-access'];
 
     /** Parameters that mean "this is not a normal page view": never redirect these. */
     private const NO_REDIRECT = ['inXML', 'inJSON', 'JSONLD', 'json-ld', 'MARC', 'sec', 'destination', 'logout', 'preview', 'inline'];
@@ -177,6 +180,12 @@ class Permalink
                 if (!empty($q['month']) && preg_match('/^\d{4}-\d{2}$/', (string)$q['month'])) { $s = (string)$q['month']; $take('month'); return ['journal/archive/' . $s, $q]; }
                 return ['journal', $q];
         }
+        if ($p === 'kk-ai') {
+            $f = AiFiles::types()[(string)($q['file'] ?? '')][0] ?? null;
+            if ($f === null) return null;
+            unset($q['file']);
+            return [$f, $q];
+        }
         if (isset(self::STATIC_PATHS[$p])) return [self::STATIC_PATHS[$p], $q];
         return null;
     }
@@ -191,9 +200,10 @@ class Permalink
         $moveOnly = fn($kind, $s) => self::resolve($kind, $s);
 
         if ($n === 1 && isset($flip[$head])) return ['p' => $flip[$head]];
+        if ($n === 1 && ($slug = AiFiles::slugFor($head)) !== null) return ['p' => 'kk-ai', 'file' => $slug];
         if ($head === 'journal') {
             if ($n === 1) return ['p' => 'blog'];
-            if ($n === 2 && $seg[1] === 'feed.xml') return ['p' => 'blog_rss'];
+            if ($n === 2 && $seg[1] === 'feed.xml') return ['p' => 'blog-rss'];
             if ($n === 3 && $seg[1] === 'category') return ['p' => 'blog', 'category' => $seg[2]];
             if ($n === 3 && $seg[1] === 'tag') return ['p' => 'blog', 'tag' => $seg[2]];
             if ($n === 3 && $seg[1] === 'archive') return ['p' => 'blog', 'month' => $seg[2]];
@@ -231,7 +241,12 @@ class Permalink
     /** Called from index.php before anything reads $_GET. */
     public static function boot(): void
     {
-        if (PHP_SAPI === 'cli' || !self::enabled()) return;
+        if (PHP_SAPI === 'cli') return;
+        if (isset($_GET['p']) && is_string($_GET['p']) && isset(self::LEGACY[$_GET['p']])) {
+            $_GET['p'] = $_REQUEST['p'] = self::LEGACY[$_GET['p']];
+            self::$active = true; // the page name now comes from $_GET, not the original query string
+        }
+        if (!self::enabled()) return;
         self::$active = true;
         $uri = (string)($_SERVER['REQUEST_URI'] ?? '/');
         $path = (string)parse_url($uri, PHP_URL_PATH);

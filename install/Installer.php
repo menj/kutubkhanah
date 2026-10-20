@@ -112,7 +112,7 @@ class Installer
 
     public static function loadPortable(): void
     {
-        foreach (['Dialect', 'Ddl', 'Statement', 'Pdo', 'Result', 'Stmt', 'Mysqli'] as $c) require_once self::root() . '/lib/Kutubkhanah/Db/' . $c . '.php';
+        foreach (['dialect', 'ddl', 'statement', 'pdo', 'result', 'stmt', 'mysqli'] as $c) require_once self::root() . '/lib/kutubkhanah/db/' . $c . '.php';
     }
 
     /** Absolute path for an SQLite file given as typed (relative paths are inside the site folder). */
@@ -209,7 +209,7 @@ class Installer
         $set('library_name', $site['title']);
         if (!empty($site['private'])) $set('kk_discourage_search', true);
 
-        require_once self::root() . '/lib/Kutubkhanah/Schema.php';
+        require_once self::root() . '/lib/kutubkhanah/schema.php';
         \SLiMS\Kutubkhanah\Schema::ensure($db);
 
         if (!empty($site['sample'])) {

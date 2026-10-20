@@ -1,6 +1,6 @@
 <?php
 /**
- * Kutubkhanah: "New additions" RSS 2.0 feed (index.php?p=kk_rss), after PMB's new-records feed.
+ * Kutubkhanah: "New additions" RSS 2.0 feed (index.php?p=kk-rss), after PMB's new-records feed.
  *
  * GNU GPL v3 or later.
  */
@@ -43,7 +43,7 @@ class Feed
             . '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">' . "\n<channel>\n"
             . '<title>' . self::x($name . ' · ' . __('New additions')) . "</title>\n"
             . '<link>' . self::x($base) . "</link>\n"
-            . '<atom:link href="' . self::x($base . 'index.php?p=kk_rss') . '" rel="self" type="application/rss+xml"/>' . "\n"
+            . '<atom:link href="' . self::x($base . 'index.php?p=kk-rss') . '" rel="self" type="application/rss+xml"/>' . "\n"
             . '<description>' . self::x(__('Books recently added to the collection.')) . "</description>\n"
             . '<language>' . self::x(substr((string)($sysconf['default_lang'] ?? 'en_US'), 0, 2)) . "</language>\n"
             . '<lastBuildDate>' . date(DATE_RSS, $books ? strtotime($books[0]['input_date']) : time()) . "</lastBuildDate>\n";

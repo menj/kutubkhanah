@@ -1,5 +1,5 @@
 === Kutubkhanah ===
-Version: 1.8.0
+Version: 1.9.0
 Requires PHP: 8.4 or later
 Databases: MySQL 5.7 / MariaDB 10.3 or later, PostgreSQL 13 or later, or SQLite 3.35 or later
 License: GNU GPL v3 or later
@@ -47,5 +47,6 @@ https://github.com/menj/kutubkhanah/
 
 == Credits ==
 
+AI discovery files: native port of the AI Discovery Files plugin by 365i (GPL v2 or later).
 SLiMS (GPL v3), PMB (CeCILL v2), OpenBiblio (GPL v2 or later). Fonts and bundled libraries keep their own licences;
 see fonts/kutubkhanah/README.md and js/kutubkhanah/vendor/.

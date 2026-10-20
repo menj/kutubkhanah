@@ -2,6 +2,17 @@
 
 All notable changes to Kutubkhanah. Newest first. The version number lives in `sysconfig.inc.php` (see `ssot.md`).
 
+## 1.9.0
+
+- AI Discovery Files built in: `llms.txt`, `ai.txt`, `identity.json`, `ai.json`, `brand.txt`, `faq-ai.txt`, `llm.txt`,
+  `llms.html`, `developer-ai.txt` and `robots-ai.txt`, generated on request from Settings > AI files and the catalogue
+  (book, author and subject counts, main subjects, pages). Choose which files to publish, what AI may do with the content,
+  the training policy and the crawler policy. A small log shows which AI crawlers fetched the files.
+- All Kutubkhanah files are now kebab-case: `lib/kutubkhanah/ai-files.php`, `lib/kutubkhanah/db/`, `lib/contents/kk-rss.inc.php`.
+  The autoloader finds `AiFiles` as `ai-files.php`. Old page names (`kk_rss`, `kk_api`, `blog_rss`, `request_access`)
+  still work.
+- New table `kk_ai_hit` (created automatically).
+
 ## 1.8.0
 
 - Readable web addresses: `/book/dune`, `/author/frank-herbert`, `/series/the-expanse`, `/lists/favourites`, `/journal/my-post`,
@@ -25,7 +36,7 @@ All notable changes to Kutubkhanah. Newest first. The version number lives in `s
   public "search inside books" page showing the page number and a highlighted snippet. Private files are never searched.
 - Settings: switches for Reading lists and Search inside books, and the OCR language.
 - Runs on MySQL/MariaDB, SQLite or PostgreSQL. Pick the database type in the installer; SQLite needs no server.
-- A built-in translation layer (lib/Kutubkhanah/Db) converts the MySQL-style SQL used across the code base
+- A built-in translation layer (lib/kutubkhanah/db) converts the MySQL-style SQL used across the code base
   for SQLite and PostgreSQL, so existing modules keep working. Verified by installing and crawling
   1,500 pages and exercising the library features on all three.
 - Backups work on all three: MySQL as before; SQLite and PostgreSQL write a portable .sql file (SQLite includes the

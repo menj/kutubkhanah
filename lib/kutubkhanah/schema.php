@@ -11,7 +11,7 @@ namespace SLiMS\Kutubkhanah;
 
 class Schema
 {
-    const VERSION = '1.8.0';
+    const VERSION = '1.9.0';
 
     /** Columns of kk_book, in order. Missing ones are added on upgrade. */
     private static function bookColumns(): array
@@ -276,6 +276,15 @@ class Schema
             KEY `ref` (`kind`, `ref`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
 
+        // AI discovery files: how often each crawler fetched each file, per day.
+        $db->query("CREATE TABLE IF NOT EXISTS `kk_ai_hit` (
+            `day` date NOT NULL,
+            `file` varchar(30) NOT NULL,
+            `bot` varchar(40) NOT NULL,
+            `hits` int(11) NOT NULL default '0',
+            PRIMARY KEY (`day`, `file`, `bot`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
         $db->query("CREATE TABLE IF NOT EXISTS `kk_list` (
             `id` int(11) NOT NULL auto_increment,
             `title` varchar(200) NOT NULL default '',
@@ -395,7 +404,7 @@ class Schema
     private static function faqHtml(): string
     {
         $items = [
-            ['Is this library open to the public?', 'This is a private collection. You can browse the catalogue online; to visit or borrow, please use the <a href="index.php?p=request_access">Request Access</a> page.'],
+            ['Is this library open to the public?', 'This is a private collection. You can browse the catalogue online; to visit or borrow, please use the <a href="index.php?p=request-access">Request Access</a> page.'],
             ['How do I ask about a specific book?', 'Use the <a href="index.php?p=contact">Contact</a> form and mention the book\'s title or ISBN.'],
             ['Are digital copies available?', 'Some items have a digital copy. They are marked "Digital Archive" and have a "View digital copy" link on their detail page.'],
             ['What do the reading labels mean?', '"Unread", "Reading" and "Read" are the owner\'s personal notes and do not affect access.'],

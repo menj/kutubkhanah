@@ -99,8 +99,8 @@ $GLOBALS['kk_desc'] = $kkDesc;
 
     <?php // Kutubkhanah: KK favicon set (images/kutubkhanah/) unless a custom web icon is set in System settings ?>
     <?php echo \SLiMS\Kutubkhanah\Library::iconLinks(); ?>
-    <?php if (\SLiMS\Kutubkhanah\Settings::get('enable_rss')): ?><link rel="alternate" type="application/rss+xml" title="<?= htmlspecialchars(($sysconf['library_name'] ?? 'Kutubkhanah') . ' · ' . __('New additions'), ENT_QUOTES) ?>" href="index.php?p=kk_rss"><?php endif; ?>
-    <?php if (\SLiMS\Kutubkhanah\Settings::get('enable_rss') && \SLiMS\Kutubkhanah\Settings::get('blog_enable')): ?><link rel="alternate" type="application/rss+xml" title="<?= htmlspecialchars(($sysconf['library_name'] ?? 'Kutubkhanah') . ' · ' . \SLiMS\Kutubkhanah\Blog\Render::title(), ENT_QUOTES) ?>" href="index.php?p=blog_rss"><?php endif; ?>
+    <?php if (\SLiMS\Kutubkhanah\Settings::get('enable_rss')): ?><link rel="alternate" type="application/rss+xml" title="<?= htmlspecialchars(($sysconf['library_name'] ?? 'Kutubkhanah') . ' · ' . __('New additions'), ENT_QUOTES) ?>" href="index.php?p=kk-rss"><?php endif; ?>
+    <?php if (\SLiMS\Kutubkhanah\Settings::get('enable_rss') && \SLiMS\Kutubkhanah\Settings::get('blog_enable')): ?><link rel="alternate" type="application/rss+xml" title="<?= htmlspecialchars(($sysconf['library_name'] ?? 'Kutubkhanah') . ' · ' . \SLiMS\Kutubkhanah\Blog\Render::title(), ENT_QUOTES) ?>" href="index.php?p=blog-rss"><?php endif; ?>
 
     <!-- // load vue js -->
     <script src="<?php echo assets('js/vue.min.js'); ?>"></script>

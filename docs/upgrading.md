@@ -34,6 +34,13 @@ Pulling keeps `config/` and `files/` because they are ignored by git.
 
 ## Notes per version
 
+### To 1.9.0
+- New table `kk_ai_hit` (created automatically). New tab Settings > AI files; files are on by default, review the wording first.
+- Apache: copy the new rewrite line from `.htaccess` (it also routes `llms.txt`, `ai.txt` and the other files).
+  Nginx: the `try_files` rule from 1.8.0 already covers them.
+- Files moved to kebab-case (`lib/Kutubkhanah/` is now `lib/kutubkhanah/`). Replace the whole folder when upgrading
+  rather than merging; custom code that includes these files by path must use the new names.
+
 ### To 1.8.0
 - New table `kk_slug` (created automatically). New setting `permalinks` (Settings > Library > Web addresses).
 - **Apache**: the bundled `.htaccess` gained a rewrite rule. If you edited `.htaccess` yourself, copy the new block.

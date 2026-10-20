@@ -35,7 +35,7 @@ $kkE = fn($v) => htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
                     <?php if (!empty($kk['enable_inside'])) : ?><li><a href="index.php?p=inside"><?= __('Search inside books'); ?></a></li><?php endif; ?>
                     <?php if (!empty($kk['enable_wishlist'])) : ?><li><a href="index.php?p=wishlist"><?= __('Wishlist'); ?></a></li><?php endif; ?>
                     <li><a href="index.php?p=news"><?= __('Resources & Guides'); ?></a></li>
-                    <?php if (!empty($kk['enable_rss'])) : ?><li><a href="index.php?p=kk_rss"><?= __('New additions (RSS)'); ?></a></li><?php endif; ?>
+                    <?php if (!empty($kk['enable_rss'])) : ?><li><a href="index.php?p=kk-rss"><?= __('New additions (RSS)'); ?></a></li><?php endif; ?>
                 </ul>
             </div>
             <div>
@@ -49,7 +49,7 @@ $kkE = fn($v) => htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
             <div>
                 <p class="kk-footer__heading"><?= __('Access'); ?></p>
                 <ul class="kk-footer__links">
-                    <?php if (!empty($kk['enable_access'])) : ?><li><a href="index.php?p=request_access"><?= __('Request Access'); ?></a></li><?php endif; ?>
+                    <?php if (!empty($kk['enable_access'])) : ?><li><a href="index.php?p=request-access"><?= __('Request Access'); ?></a></li><?php endif; ?>
                     <?php if (!empty($kk['enable_contact'])) : ?><li><a href="index.php?p=contact"><?= __('Contact'); ?></a></li><?php endif; ?>
                     <li><a href="index.php?p=member"><?= __('Member Area'); ?></a></li>
                     <li><a href="index.php?p=login"><?= __('Librarian Login'); ?></a></li>

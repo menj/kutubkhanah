@@ -18,7 +18,7 @@ Change all of these together on a release:
 | Place | What |
 |---|---|
 | `sysconfig.inc.php` | `KUTUBKHANAH_VERSION`, `SENAYAN_VERSION` |
-| `lib/Kutubkhanah/Schema.php` | `Schema::VERSION` (schema check key) |
+| `lib/kutubkhanah/schema.php` | `Schema::VERSION` (schema check key) |
 | `admin/modules/kutubkhanah/kk.inc.php` | `KK_VERSION` |
 | `README.md`, `readme.txt` | headline version |
 | `docs/changelog.md`, `docs/upgrading.md` | new entry |
@@ -37,7 +37,7 @@ Commit identity: `menj <remotiveasia@gmail.com>`.
 - Config: `config/database.php` (`driver` = `mysql` | `pgsql` | `sqlite`; missing means mysql).
 - `lib/Connection.php::connect()` builds a plain mysqli/PDO for MySQL, otherwise `Db\Pdo`
   (and `Db\Mysqli` wrapper for the `mysqli` handle `$dbs`).
-- Portable layer, `lib/Kutubkhanah/Db/` (namespace `SLiMS\Kutubkhanah\Db`):
+- Portable layer, `lib/kutubkhanah/db/` (namespace `SLiMS\Kutubkhanah\Db`):
   - `Dialect` translates MySQL-style SQL to SQLite/PostgreSQL (tokenised, string literals untouched).
   - `Ddl` translates CREATE/ALTER TABLE.
   - `Pdo`, `Statement` extend PDO; `Mysqli`, `Result`, `Stmt` imitate the mysqli API.
@@ -56,9 +56,9 @@ Docker files are in `docker/`, long-form docs in `docs/`.
 |---|---|
 | `docs/` | install.md, upgrading.md, changelog.md, ssot.md |
 | `docker/` | Dockerfile, docker-compose.yml, entrypoint.sh, .env.example |
-| `lib/Kutubkhanah/` | Own classes (Books, Library, Settings, Schema, Loans, Wishlist, Series, Fields, Lists, Duplicates, DocSearch, Covers, Lookup, Importer, Api, ...) |
-| `lib/Kutubkhanah/Blog/` | Journal (blog): Posts, Terms, Comments, Media, Render, Import, Text, Wp |
-| `lib/Kutubkhanah/Db/` | Portable database layer |
+| `lib/kutubkhanah/` | Own classes (Books, Library, Settings, Schema, Loans, Wishlist, Series, Fields, Lists, Duplicates, DocSearch, Covers, Lookup, Importer, Api, ...) |
+| `lib/kutubkhanah/blog/` | Journal (blog): Posts, Terms, Comments, Media, Render, Import, Text, Wp |
+| `lib/kutubkhanah/db/` | Portable database layer |
 | `lib/contents/*.inc.php` | Public pages, routed by `index.php?p=<name>` |
 | `admin/modules/kutubkhanah/` | Admin module: pages, `api.php` (JSON actions), `submenu.php`, `kk.inc.php` bootstrap |
 | `template/default/` | Public theme (header, footer, detail page) |
@@ -67,6 +67,11 @@ Docker files are in `docker/`, long-form docs in `docs/`.
 | `lib/Opac.php` | Public routing; `p` names listed there are indexable by search engines |
 
 Assets rule: JavaScript and CSS live in their own files under `/js/kutubkhanah/` and `/css/kutubkhanah/`.
+
+## File naming
+Every Kutubkhanah file and folder is kebab-case: `ai-files.php`, `doc-search.php`, `lib/kutubkhanah/db/`, `kk-rss.inc.php`.
+Class `AiFiles` lives in `ai-files.php`; `lib/autoload.php` converts the class name to kebab-case when the exact name is missing.
+Page names (`?p=`) are kebab-case too. Database tables and settings keys keep underscores (`kk_ai_hit`, `ai_f_llms_txt`).
 
 ## Public routes (`index.php?p=`)
 
@@ -79,8 +84,8 @@ Rule: always apply Google's SEO Starter Guide and structured-data rules to publi
 unique title and description, canonical, breadcrumbs, JSON-LD, sitemap, robots, descriptive URLs, 301 for moved pages.
 The raw forms:
 
-`shelf`, `show_detail`, `author`, `series`, `lists`, `wishlist`, `inside`, `blog`, `page`, `blog_rss`, `kk_rss`, `kk_api`,
-`contact`, `request_access`, `faq`, plus the stock catalogue pages.
+`shelf`, `show_detail`, `author`, `series`, `lists`, `wishlist`, `inside`, `blog`, `page`, `blog-rss`, `kk-rss`, `kk-api`,
+`contact`, `request-access`, `faq`, plus the stock catalogue pages.
 
 ## Tables (own, all prefixed `kk_`; the catalogue tables are unprefixed)
 
@@ -110,7 +115,7 @@ Duplicates & Editions, Search Inside, Custom Fields, Authors, Inbox; Journal (Po
 Comments, Media, WordPress import); Settings.
 
 `api.php` actions need a write privilege and the per-session token. Add a new action as a `case` there, and put the logic
-in a class under `lib/Kutubkhanah/`, not in `api.php`.
+in a class under `lib/kutubkhanah/`, not in `api.php`.
 
 ## UI rules
 
@@ -141,3 +146,8 @@ Unfinished installs (database.php without env.php) redirect to `install/index.ph
 
 - Public catalogue redesign (waiting for screenshots).
 - Restore screen for SQLite/PostgreSQL backups.
+
+## AI discovery files
+`lib/kutubkhanah/ai-files.php`, page `kk-ai`, setting keys `ai_*` (Settings > AI files), table `kk_ai_hit`.
+Files follow the AI Discovery Files Specification v1.14.0 (ai-visibility.org.uk). Native port of the "AI Discovery Files"
+plugin by 365i (GPL v2 or later); credit in README.

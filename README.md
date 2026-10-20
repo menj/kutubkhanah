@@ -1,4 +1,4 @@
-Kutubkhanah 1.8.0
+Kutubkhanah 1.9.0
 =================
 A self-hosted home library CMS. Catalogue your books by scanning ISBN barcodes, publish them on a public library site, lend them
 to friends and family, and keep a journal alongside. It replaces Libib, runs on your own server and needs only PHP and one of
@@ -8,9 +8,18 @@ Documents: [install.md](docs/install.md) (install guide), [upgrading.md](docs/up
 [changelog.md](docs/changelog.md) (what changed), [ssot.md](docs/ssot.md) (single source of truth for developers),
 [readme.txt](readme.txt) (plain-text summary).
 
-### New in 1.8.0: three databases, reading lists, duplicates, search inside books
+### New in 1.9.0: AI discovery files
+- `llms.txt`, `ai.txt`, `identity.json` and seven more files from the AI Discovery Files Specification, generated from
+  your settings and catalogue (Settings > AI files), with a log of which AI crawlers read them.
+- All files and folders are now kebab-case (`lib/kutubkhanah/`, `ai-files.php`).
+
+### New in 1.8.0: readable addresses and search-engine basics
+- **SEO permalinks.** `/book/dune`, `/author/frank-herbert`, `/journal/my-post`; old `index.php?p=` links redirect (301).
+- Canonical links, unique descriptions, JSON-LD (Book, BlogPosting, WebSite, breadcrumbs), `sitemap.xml` and `robots.txt`.
+
+### New in 1.7.0: three databases, reading lists, duplicates, search inside books
 - **MySQL/MariaDB, SQLite or PostgreSQL.** Choose in the installer; SQLite needs no database server. The SQL used by
-  the code base is translated on the fly (`lib/Kutubkhanah/Db`). Backups work on all three.
+  the code base is translated on the fly (`lib/kutubkhanah/db`). Backups work on all three.
 - **Reading lists** (Admin > Kutubkhanah > Reading Lists): ordered lists with notes and a public page each (`index.php?p=lists`).
 - **Duplicates & Editions**: find books entered twice and merge them (copies, authors, subjects, files, loans and notes
   move to the record you keep); link different editions of one work so each book page lists the others.
@@ -30,7 +39,7 @@ Documents: [install.md](docs/install.md) (install guide), [upgrading.md](docs/up
 - **Custom fields per format** (Admin > Kutubkhanah > Custom Fields): text, long text, number, date,
   yes/no, choice list or link, for chosen formats, public or private. Starter fields: Signed copy,
   Condition, Provenance, Purchase price (private) and Issue number (periodicals).
-- **"New additions" RSS feed** (index.php?p=kk_rss), linked from every page and the footer.
+- **"New additions" RSS feed** (index.php?p=kk-rss), linked from every page and the footer.
 - **Sign-in lockout** (Settings > Sign-in): after 5 wrong passwords (adjustable) sign-in is paused for
   15 minutes for that username and address, on the staff login and the member area.
 - **Password reset emails** are now sent from your own server (System > Mail Setting) instead of an
@@ -89,7 +98,7 @@ Documents: [install.md](docs/install.md) (install guide), [upgrading.md](docs/up
 - **Contact** and **Request Access** forms with spam protection (session token, honeypot,
   minimum fill time, 3 messages per 10 minutes), stored in the admin **Inbox**.
 - **FAQ** page, editable in System > Content.
-- Read-only JSON API: `index.php?p=kk_api&r=books|book|stats|authors`.
+- Read-only JSON API: `index.php?p=kk-api&r=books|book|stats|authors`.
 
 ### What Kutubkhanah adds
 - **Scan ISBN** (Admin > Kutubkhanah > Scan ISBN): scan barcodes with a phone camera
@@ -109,8 +118,8 @@ Books are stored in the standard catalogue tables (biblio, item, mst_author,
 mst_publisher, search_biblio), so all cataloguing, circulation and reporting features work on them. Kutubkhanah keeps
 its extra fields (needs-details flag, reading status, cover state) in `kk_book`.
 
-Code: `admin/modules/kutubkhanah/`, `lib/Kutubkhanah/`, `lib/contents/` (shelf, author,
-contact, request_access, kk_api), `css/kutubkhanah/`, `js/kutubkhanah/`, and the `default`
+Code: `admin/modules/kutubkhanah/`, `lib/kutubkhanah/`, `lib/contents/` (shelf, author,
+contact, request-access, kk-api), `css/kutubkhanah/`, `js/kutubkhanah/`, and the `default`
 OPAC template (`template/default/`).
 
 ### Creator
@@ -123,6 +132,8 @@ Kutubkhanah brings together three open-source library systems and keeps their li
 - **PMB** by PMB Services, CeCILL v2 (GPL-compatible): https://www.sigb.net
 - **OpenBiblio** by the OpenBiblio developers, GNU GPL v2 or later: https://sourceforge.net/projects/obiblio/
 
+The AI discovery files are a native port of the "AI Discovery Files" plugin by 365i (GPL v2 or later),
+which implements the specification at https://www.ai-visibility.org.uk/specifications/.
 The public design follows the "Private Library CMS" WordPress theme. The barcode scanner uses
 html5-qrcode 2.3.8 (Apache-2.0, `js/kutubkhanah/vendor/`). Font licences: `fonts/kutubkhanah/README.md`.
 

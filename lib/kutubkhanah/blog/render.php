@@ -176,7 +176,7 @@ class Render
             }
             $out .= '</ul></section>';
         }
-        if (Settings::get('enable_rss')) $out .= '<p class="kk-blog-side__rss"><a href="index.php?p=blog_rss">' . __('Subscribe (RSS)') . '</a></p>';
+        if (Settings::get('enable_rss')) $out .= '<p class="kk-blog-side__rss"><a href="index.php?p=blog-rss">' . __('Subscribe (RSS)') . '</a></p>';
         return $out . '</aside>';
     }
 
@@ -396,7 +396,7 @@ class Render
         $name = (string)($sysconf['library_name'] ?? 'Kutubkhanah');
         $out = '<?xml version="1.0" encoding="UTF-8"?>' . "\n" . '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/">' . "\n<channel>\n"
             . '<title>' . $x($name . ' · ' . self::title()) . "</title>\n<link>" . $x($base . 'index.php?p=blog') . "</link>\n"
-            . '<atom:link href="' . $x($base . 'index.php?p=blog_rss') . '" rel="self" type="application/rss+xml"/>' . "\n"
+            . '<atom:link href="' . $x($base . 'index.php?p=blog-rss') . '" rel="self" type="application/rss+xml"/>' . "\n"
             . '<description>' . $x((string)Settings::get('blog_intro')) . "</description>\n";
         foreach ($r['rows'] as $p) {
             $url = $base . ltrim(substr(Posts::url($p), strlen(SWB)), '/');

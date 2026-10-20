@@ -28,7 +28,7 @@ if (empty($_SESSION['kk_token'])) {
     $_SESSION['kk_token'] = bin2hex(random_bytes(16));
 }
 
-const KK_VERSION = '1.8.0';
+const KK_VERSION = '1.9.0';
 
 function kk_e($s): string
 {

@@ -3,10 +3,10 @@
  * Kutubkhanah: public read-only JSON API (ported from the Private Library REST endpoints).
  * Only books visible in the OPAC are exposed. Writes are done in the admin.
  *
- *   index.php?p=kk_api&r=books[&q=&genre=&format=&lang=&page=1&per_page=20]
- *   index.php?p=kk_api&r=book&id=123
- *   index.php?p=kk_api&r=stats
- *   index.php?p=kk_api&r=authors&q=name
+ *   index.php?p=kk-api&r=books[&q=&genre=&format=&lang=&page=1&per_page=20]
+ *   index.php?p=kk-api&r=book&id=123
+ *   index.php?p=kk-api&r=stats
+ *   index.php?p=kk-api&r=authors&q=name
  *
  * GNU GPL v3 or later.
  */

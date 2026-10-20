@@ -11,7 +11,7 @@ if (!$kk_can_write) kk_deny();
 
 $s = Settings::all();
 $d = Settings::defaults();
-$tabs = ['library' => __('Library'), 'general' => __('Shelf'), 'display' => __('Display'), 'lookup' => __('Lookup'), 'blog' => __('Journal'), 'security' => __('Sign-in')];
+$tabs = ['library' => __('Library'), 'general' => __('Shelf'), 'display' => __('Display'), 'lookup' => __('Lookup'), 'blog' => __('Journal'), 'ai' => __('AI files'), 'security' => __('Sign-in')];
 
 $languages = [];
 $lq = $dbs->query('SELECT language_id, language_name FROM mst_language ORDER BY language_name');
@@ -137,7 +137,54 @@ echo kk_head();
     <div class="kk-actions"><button type="submit" class="kk-btn kk-btn--primary"><?= __('Save changes') ?></button><span class="kk-note kk-saved" aria-live="polite"></span></div>
   </form>
 
-  <!-- Sign-in security (lockout from OpenBiblio) -->
+  <!-- AI discovery files -->
+  <form class="kk-panel kk-settings notAJAX" id="kk-pane-ai" role="tabpanel" aria-labelledby="kk-tab-ai" data-tab="ai" hidden>
+    <?php
+    use SLiMS\Kutubkhanah\AiFiles;
+    kk_row(__('AI discovery files'), kk_check('ai_enable', __('Publish llms.txt, ai.txt and the other AI discovery files'), $s) . kk_check('ai_log', __('Count visits from AI crawlers'), $s),
+        __('These files tell AI assistants who you are and what they may do with your site. They are generated on request from the settings below and your catalogue; nothing is written to disk.'));
+    $fl = '';
+    foreach (AiFiles::types() as $slug => $t) {
+        $key = 'ai_f_' . str_replace('-', '_', $slug);
+        $fl .= kk_check($key, $t[0] . ' · ' . $t[1] . ' (' . $t[2] . ')', $s);
+        if (!empty($s['ai_enable']) && !empty($s[$key])) $fl = rtrim($fl) . ' <a class="notAJAX" target="_blank" rel="noopener" href="' . kk_e(AiFiles::url($slug)) . '">' . __('View') . '</a>';
+    }
+    kk_row(__('Files'), $fl);
+    kk_row(__('Name'), '<input type="text" name="ai_name" value="' . kk_e($s['ai_name']) . '" class="kk-input" placeholder="' . kk_e((string)($sysconf['library_name'] ?? '')) . '">', __('Leave empty to use the library name.'));
+    kk_row(__('Legal name'), '<input type="text" name="ai_legal_name" value="' . kk_e($s['ai_legal_name']) . '" class="kk-input">');
+    kk_row(__('Description'), '<input type="text" name="ai_description" value="' . kk_e($s['ai_description']) . '" class="kk-input">', __('One sentence. Leave empty to use the mission statement.'));
+    $ot = '<select name="ai_org_type" class="kk-input">';
+    foreach (['Library' => __('Library'), 'Organization' => __('Organisation'), 'LocalBusiness' => __('Local business'), 'Person' => __('Person')] as $v => $l) $ot .= '<option value="' . $v . '"' . ($s['ai_org_type'] === $v ? ' selected' : '') . '>' . kk_e($l) . '</option>';
+    kk_row(__('Type'), $ot . '</select>');
+    kk_row(__('Contact email'), '<input type="email" name="ai_email" value="' . kk_e($s['ai_email']) . '" class="kk-input">', __('Leave empty to use the Notify email.'));
+    kk_row(__('City and country'), '<input type="text" name="ai_city" value="' . kk_e($s['ai_city']) . '" class="kk-input kk-input--short" placeholder="' . kk_e(__('City')) . '"> <input type="text" name="ai_country" value="' . kk_e($s['ai_country']) . '" class="kk-input kk-input--short" placeholder="' . kk_e(__('Country')) . '">');
+    foreach (['ai_services' => [__('What you offer'), __('One per line.')], 'ai_not_services' => [__('What you do not do'), __('One per line. Stops assistants inventing services, such as public lending.')],
+              'ai_alternates' => [__('Other accepted names'), __('One per line.')], 'ai_misspellings' => [__('Common misspellings'), __('One per line.')], 'ai_never' => [__('Names never to use'), __('One per line.')],
+              'ai_voice' => [__('Voice'), __('How the library should be described.')], 'ai_about' => [__('About'), __('A short paragraph for assistants to quote.')],
+              'ai_faq' => [__('Questions and answers'), __('One per line as: Question | Answer.')], 'ai_dev_notes' => [__('Technical notes'), __('Optional, for developer-ai.txt.')]] as $k => [$l, $h]) {
+        kk_row($l, '<textarea name="' . $k . '" class="kk-input kk-textarea" rows="3">' . kk_e($s[$k]) . '</textarea>', $h);
+    }
+    $enum = function (string $key, array $opts) use ($s): string {
+        $o = '<select name="' . $key . '" class="kk-input">';
+        foreach ($opts as $v => $l) $o .= '<option value="' . $v . '"' . ($s[$key] === $v ? ' selected' : '') . '>' . kk_e($l) . '</option>';
+        return $o . '</select>';
+    };
+    kk_row(__('AI may use my content'), $enum('ai_usage', ['allow' => __('Yes'), 'allow_with_attribution' => __('Yes, with attribution'), 'restrict' => __('Only describe and link, no copying'), 'prohibit' => __('No, only point people here')]));
+    kk_row(__('AI model training'), $enum('ai_training', ['allow' => __('Allowed'), 'restrict' => __('Only with my permission'), 'prohibit' => __('Not allowed')]));
+    kk_row(__('AI crawlers'), $enum('ai_crawlers', ['allow_all' => __('Allow all'), 'allow_known' => __('Allow known crawlers, but not those that train models unless allowed above'), 'restrict' => __('Search engines only')]));
+    kk_row(__('Preferred citation'), '<input type="text" name="ai_citation" value="' . kk_e($s['ai_citation']) . '" class="kk-input">');
+    kk_row(__('Content licence'), '<input type="text" name="ai_licence" value="' . kk_e($s['ai_licence']) . '" class="kk-input">', __('For example "CC BY-NC 4.0". Optional.'));
+    $hits = AiFiles::hits();
+    if ($hits) {
+        $t = '<table class="kk-table"><thead><tr><th>' . __('Crawler') . '</th><th>' . __('Visits (90 days)') . '</th><th>' . __('Last seen') . '</th></tr></thead><tbody>';
+        foreach ($hits as $h) $t .= '<tr><td>' . kk_e($h['bot']) . '</td><td>' . (int)$h['hits'] . '</td><td>' . kk_e($h['last']) . '</td></tr>';
+        kk_row(__('Who reads them'), $t . '</tbody></table>');
+    }
+    ?>
+    <div class="kk-actions"><button type="submit" class="kk-btn kk-btn--primary"><?= __('Save changes') ?></button><span class="kk-note kk-saved" aria-live="polite"></span></div>
+  </form>
+
+  <!-- Sign-in -->
   <form class="kk-panel kk-settings notAJAX" id="kk-pane-security" role="tabpanel" aria-labelledby="kk-tab-security" data-tab="security" hidden>
     <?php
     kk_row(__('Lockout'), kk_check('lockout_enable', __('Lock sign-in after repeated wrong passwords'), $s),
