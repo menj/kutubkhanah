@@ -19,5 +19,14 @@
         "psr/log": "*",
         "mpdf/psr-log-aware-trait": "*"
     },
-    "license": "GNU GPL v3"
+    "license": "GNU GPL v3",
+    "authors": [
+        {
+            "name": "MENJ",
+            "email": "contact@menj.org",
+            "homepage": "https://github.com/menj/kutubkhanah/",
+            "role": "Creator"
+        }
+    ],
+    "homepage": "https://github.com/menj/kutubkhanah/"
 }

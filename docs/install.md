@@ -81,4 +81,5 @@ The site is then at `http://localhost:8881` (or the `HTTP_PORT` you set). The Do
 - **Installer appears again**: `config/database.php` exists but `config/env.php` does not; finish the installer.
 - **Camera does not start**: use HTTPS, and allow the camera in the browser.
 - **Covers do not download**: the server must be allowed to make outgoing HTTPS requests.
+- Questions or bugs: contact@menj.org or https://github.com/menj/kutubkhanah/issues
 - More: [upgrading.md](upgrading.md) and [ssot.md](ssot.md).

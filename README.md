@@ -112,6 +112,9 @@ Code: `admin/modules/kutubkhanah/`, `lib/Kutubkhanah/`, `lib/contents/` (shelf, 
 contact, request_access, kk_api), `css/kutubkhanah/`, `js/kutubkhanah/`, and the `default`
 OPAC template (`template/default/`).
 
+### Creator
+Kutubkhanah is created and maintained by **MENJ** · contact@menj.org · https://github.com/menj/kutubkhanah/
+
 ### Credits
 Kutubkhanah brings together three open-source library systems and keeps their licences:
 - **SLiMS** (Senayan Library Management System) by the SLiMS Developer Community, GNU GPL v3:

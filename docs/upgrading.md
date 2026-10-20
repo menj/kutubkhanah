@@ -67,4 +67,4 @@ Pulling keeps `config/` and `files/` because they are ignored by git.
 
 - Restore the database backup and the files, then try again.
 - Set `$env = 'development'` in `config/env.php` to see full error messages; set it back to `production` afterwards.
-- Open an issue at https://github.com/menj/kutubkhanah/issues with the message and your PHP and database versions.
+- Email contact@menj.org or open an issue at https://github.com/menj/kutubkhanah/issues with the message and your PHP and database versions.

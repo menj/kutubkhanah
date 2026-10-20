@@ -39,6 +39,11 @@ docs/upgrading.md  How to upgrade, and notes per version
 docs/changelog.md  What changed in each version
 docs/ssot.md       Single source of truth for developers: layout, tables, routes, conventions
 
+== Creator ==
+
+MENJ <contact@menj.org>
+https://github.com/menj/kutubkhanah/
+
 == Credits ==
 
 SLiMS (GPL v3), PMB (CeCILL v2), OpenBiblio (GPL v2 or later). Fonts and bundled libraries keep their own licences;

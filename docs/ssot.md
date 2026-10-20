@@ -7,7 +7,8 @@ in the same commit. Keep it short and factual.
 
 - Name: **Kutubkhanah** ("KK"). Only this name is public-facing. No third-party version strings in the UI; the projects Kutubkhanah builds on are named only in the credits.
 - Purpose: home library CMS that replaces Libib.
-- Licence: GNU GPL v3 or later. Repository: https://github.com/menj/kutubkhanah (branch `main`, always in sync).
+- Creator and maintainer: **MENJ**, contact@menj.org. Repository and site: https://github.com/menj/kutubkhanah/ (branch `main`, always in sync).
+- Licence: GNU GPL v3 or later.
 - Brand: navy and gold. Fonts in `fonts/kutubkhanah/`.
 
 ## Versions and where they live
