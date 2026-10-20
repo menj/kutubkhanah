@@ -14,7 +14,7 @@ if (!$kk_can_write) kk_deny();
 $status = in_array($_GET['status'] ?? '', Comments::STATUSES, true) ? $_GET['status'] : 'pending';
 $r = Comments::adminList($status);
 $counts = Comments::counts();
-$self = MWB . 'kutubkhanah/blog_comments.php?status=' . $status;
+$self = MWB . 'kutubkhanah/blog-comments.php?status=' . $status;
 
 echo kk_head();
 ?>
@@ -25,7 +25,7 @@ echo kk_head();
   </header>
   <div class="kk-filter">
     <?php foreach (Comments::statusLabels() as $k => $l): ?>
-      <a href="<?= kk_e(MWB . 'kutubkhanah/blog_comments.php?status=' . $k) ?>" class="<?= $status === $k ? 'is-active' : '' ?>"><?= kk_e($l) ?> <span class="kk-count"><?= (int)($counts[$k] ?? 0) ?></span></a>
+      <a href="<?= kk_e(MWB . 'kutubkhanah/blog-comments.php?status=' . $k) ?>" class="<?= $status === $k ? 'is-active' : '' ?>"><?= kk_e($l) ?> <span class="kk-count"><?= (int)($counts[$k] ?? 0) ?></span></a>
     <?php endforeach; ?>
   </div>
   <div class="kk-panel">

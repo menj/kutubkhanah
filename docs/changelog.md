@@ -4,6 +4,8 @@ All notable changes to Kutubkhanah. Newest first. The version number lives in `s
 
 ## 1.10.0
 
+- Admin files `blog_*.php` renamed to kebab-case (`blog-comments.php` and so on).
+
 - Themes: a theme manager (Kutubkhanah > Themes) with live preview, child themes (`theme.json` with `parent`) and upload.
   WordPress themes (`style.css`) and Omeka Classic themes (`theme.ini`) run through compatibility layers; see `themes.md`.
 - Plugins: a plugin system (Kutubkhanah > Plugins) with WordPress-style actions, filters and shortcodes, activate/deactivate/delete

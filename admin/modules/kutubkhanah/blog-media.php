@@ -12,7 +12,7 @@ if (!$kk_can_write) kk_deny();
 
 $page = max(1, (int)($_GET['page'] ?? 1));
 $r = Media::list($page, 40);
-$self = MWB . 'kutubkhanah/blog_media.php';
+$self = MWB . 'kutubkhanah/blog-media.php';
 
 echo kk_head();
 echo '<link rel="stylesheet" href="' . SWB . 'css/kutubkhanah/blog-admin.css?v=' . KK_VERSION . '">';

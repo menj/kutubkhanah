@@ -12,7 +12,7 @@ if (!$kk_can_write) kk_deny();
 
 $tax = ($_GET['tax'] ?? 'category') === 'tag' ? 'tag' : 'category';
 $rows = $tax === 'category' ? Terms::tree() : Terms::all('tag');
-$self = MWB . 'kutubkhanah/blog_terms.php?tax=' . $tax;
+$self = MWB . 'kutubkhanah/blog-terms.php?tax=' . $tax;
 $cats = $tax === 'category' ? Terms::tree() : [];
 
 function kk_term_parent_select(array $cats, int $selected, int $self): string
@@ -33,8 +33,8 @@ echo kk_head();
     <p><?= $tax === 'tag' ? __('Tags are loose keywords. Add them while writing a post; tidy them up here.') : __('Categories group posts by subject, and can be nested.') ?></p>
   </header>
   <div class="kk-tabs" role="tablist">
-    <a class="kk-tab<?= $tax === 'category' ? ' is-active' : '' ?>" href="<?= MWB ?>kutubkhanah/blog_terms.php?tax=category"><?= __('Categories') ?></a>
-    <a class="kk-tab<?= $tax === 'tag' ? ' is-active' : '' ?>" href="<?= MWB ?>kutubkhanah/blog_terms.php?tax=tag"><?= __('Tags') ?></a>
+    <a class="kk-tab<?= $tax === 'category' ? ' is-active' : '' ?>" href="<?= MWB ?>kutubkhanah/blog-terms.php?tax=category"><?= __('Categories') ?></a>
+    <a class="kk-tab<?= $tax === 'tag' ? ' is-active' : '' ?>" href="<?= MWB ?>kutubkhanah/blog-terms.php?tax=tag"><?= __('Tags') ?></a>
   </div>
 
   <form class="kk-panel kk-save notAJAX" data-action="term_save" data-id="0" data-taxonomy="<?= $tax ?>" data-reload="<?= kk_e($self) ?>">
