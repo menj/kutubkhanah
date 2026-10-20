@@ -2,6 +2,19 @@
 
 All notable changes to Kutubkhanah. Newest first. The version number lives in `sysconfig.inc.php` (see `ssot.md`).
 
+## 1.8.0
+
+- Readable web addresses: `/book/dune`, `/author/frank-herbert`, `/series/the-expanse`, `/lists/favourites`, `/journal/my-post`,
+  `/page/about`, `/shelf`, `/faq` and so on. Slugs are made once and never change; merged duplicates redirect to the kept book.
+  Old `index.php?p=` links redirect (301) to the new addresses, so nothing breaks. Settings > Library > Web addresses
+  switches back to the plain form.
+- Search-engine basics, following Google's SEO Starter Guide and structured-data documentation: a canonical link on every page,
+  a unique meta description per page, `<base href>`, JSON-LD (Book with author, ISBN, publisher and image; BlogPosting;
+  WebSite with search box; BreadcrumbList), a generated `sitemap.xml` and a `robots.txt` that also honours
+  "discourage search engines".
+- Fix: the home page failed on PostgreSQL ("argument of AND must be type boolean").
+- New table `kk_slug` (created automatically).
+
 ## 1.7.0
 
 - Reading lists: ordered lists of books with notes, a public page each (index.php?p=lists) and links from book pages.

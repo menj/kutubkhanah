@@ -28,8 +28,18 @@ define('INDEX_AUTH', '1');
 // flag for public area
 define('PUBLIC_AREA', 'public_area');
 
+// Readable addresses: some servers (PHP's built-in one, FastCGI setups) report /index.php/book/dune as the script name.
+foreach (['SCRIPT_NAME', 'PHP_SELF'] as $kkKey) {
+    if (isset($_SERVER[$kkKey]) && ($kkPos = strpos($_SERVER[$kkKey], '.php/')) !== false) {
+        $_SERVER[$kkKey] = substr($_SERVER[$kkKey], 0, $kkPos + 4);
+    }
+}
+
 // required file
 require 'sysconfig.inc.php';
+
+// Kutubkhanah: readable addresses (must run before anything reads $_GET)
+try { \SLiMS\Kutubkhanah\Permalink::boot(); } catch (\Throwable $e) { error_log('Kutubkhanah permalinks: ' . $e->getMessage()); }
 
 // Cleanup SQL Injection and Common XSS
 $sanitizer->cleanUp(exception: ['contentDesc','fieldEnc']);

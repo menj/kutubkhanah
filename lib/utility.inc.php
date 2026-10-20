@@ -406,7 +406,10 @@ class utility
             } else if ($str_input_type == 'server') {
                 $mix_input = $_SERVER[$mix_input] ?? null;
             } else {
-                $mix_input = filter_input(INPUT_GET, $mix_input);
+                // Kutubkhanah: with readable addresses the page comes from the path, so read the rewritten $_GET.
+                $mix_input = (class_exists(\SLiMS\Kutubkhanah\Permalink::class, false) && \SLiMS\Kutubkhanah\Permalink::$active)
+                    ? (isset($_GET[$mix_input]) && is_scalar($_GET[$mix_input]) ? (string)$_GET[$mix_input] : null)
+                    : filter_input(INPUT_GET, $mix_input);
             }
         } else {
             if ($str_input_type == 'get') {

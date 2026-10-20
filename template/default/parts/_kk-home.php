@@ -11,7 +11,7 @@ use SLiMS\Kutubkhanah\Settings;
 
 $kk = Settings::all();
 $kkStats = Library::stats();
-$kkRecent = (int)$kk['recent_count'] > 0 ? Library::books('1', [], 'b.input_date DESC, b.biblio_id DESC', (int)$kk['recent_count']) : [];
+$kkRecent = (int)$kk['recent_count'] > 0 ? Library::books('1=1', [], 'b.input_date DESC, b.biblio_id DESC', (int)$kk['recent_count']) : [];
 $kkGenres = Library::genres(16);
 $kkNews = Library::news(3);
 $e = [Library::class, 'e'];

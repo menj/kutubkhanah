@@ -1,4 +1,4 @@
-Kutubkhanah 1.7.0
+Kutubkhanah 1.8.0
 =================
 A self-hosted home library CMS. Catalogue your books by scanning ISBN barcodes, publish them on a public library site, lend them
 to friends and family, and keep a journal alongside. It replaces Libib, runs on your own server and needs only PHP and one of
@@ -8,7 +8,7 @@ Documents: [install.md](docs/install.md) (install guide), [upgrading.md](docs/up
 [changelog.md](docs/changelog.md) (what changed), [ssot.md](docs/ssot.md) (single source of truth for developers),
 [readme.txt](readme.txt) (plain-text summary).
 
-### New in 1.7.0: three databases, reading lists, duplicates, search inside books
+### New in 1.8.0: three databases, reading lists, duplicates, search inside books
 - **MySQL/MariaDB, SQLite or PostgreSQL.** Choose in the installer; SQLite needs no database server. The SQL used by
   the code base is translated on the fly (`lib/Kutubkhanah/Db`). Backups work on all three.
 - **Reading lists** (Admin > Kutubkhanah > Reading Lists): ordered lists with notes and a public page each (`index.php?p=lists`).

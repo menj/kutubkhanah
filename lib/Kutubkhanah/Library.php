@@ -48,7 +48,7 @@ class Library
     }
 
     /** Card data for a set of books. $where/$args extend the visibility filter. */
-    public static function books(string $where = '1', array $args = [], string $order = 'b.input_date DESC, b.biblio_id DESC', int $limit = 12): array
+    public static function books(string $where = '1=1', array $args = [], string $order = 'b.input_date DESC, b.biblio_id DESC', int $limit = 12): array
     {
         return self::rows(
             "SELECT b.biblio_id, b.title, b.image, b.publish_year, b.call_number,

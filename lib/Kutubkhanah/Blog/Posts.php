@@ -49,8 +49,17 @@ class Posts
         return $st->fetch(\PDO::FETCH_ASSOC) ?: null;
     }
 
+    /** @return array<int,array{0:string,1:?string}> slug and last change of every public post and page */
+    public static function sitemapRows(): array
+    {
+        self::publishDue();
+        return self::db()->query("SELECT slug, updated_at FROM kk_post WHERE status = 'publish' AND type = 'post' ORDER BY id")->fetchAll(\PDO::FETCH_NUM);
+    }
+
     public static function url(array $p): string
     {
+        if ($p['type'] === 'post' && \SLiMS\Kutubkhanah\Permalink::enabled()) return SWB . 'journal/' . rawurlencode($p['slug']);
+        if ($p['type'] === 'page' && \SLiMS\Kutubkhanah\Permalink::enabled()) return SWB . 'page/' . rawurlencode($p['slug']);
         return SWB . 'index.php?' . ($p['type'] === 'page' ? 'p=page&slug=' : 'p=blog&post=') . rawurlencode($p['slug']);
     }
 

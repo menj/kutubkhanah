@@ -70,6 +70,10 @@ echo kk_head();
     kk_row(__('Search inside books'), kk_check('enable_inside', __('Show the public page that searches the text of digital books'), $s)
         . '<input type="text" name="ocr_lang" value="' . kk_e($s['ocr_lang']) . '" class="kk-input kk-input--short" aria-label="OCR"> ',
         __('Language codes for reading scanned pages (OCR), such as eng, ara, msa or eng+ara. Install the matching tesseract language data on the server.'));
+    $pl = '<select name="permalinks" class="kk-input">'
+        . '<option value="pretty"' . ($s['permalinks'] !== 'plain' ? ' selected' : '') . '>' . kk_e(__('Readable: /book/dune')) . '</option>'
+        . '<option value="plain"' . ($s['permalinks'] === 'plain' ? ' selected' : '') . '>' . kk_e(__('Plain: index.php?p=show_detail&id=12')) . '</option></select>';
+    kk_row(__('Web addresses'), $pl, __('Readable addresses help search engines and people. Old links redirect automatically. Needs URL rewriting on the web server (see docs/install.md); choose Plain if it is not available.'));
     kk_row(__('Lending period'), '<input type="number" min="0" max="365" name="loan_days" value="' . (int)$s['loan_days'] . '" class="kk-input kk-input--short"> ' . __('days'),
         __('Default due date when you lend a book. 0 means no due date.'));
     ?>

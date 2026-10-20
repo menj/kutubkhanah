@@ -70,6 +70,15 @@ Assets rule: JavaScript and CSS live in their own files under `/js/kutubkhanah/`
 
 ## Public routes (`index.php?p=`)
 
+With Settings > Library > Web addresses = Readable (default), `Permalink::boot()` (called from `index.php`) maps paths to `?p=`:
+`/book/{slug}`, `/author/{slug}`, `/series[/{slug}]`, `/lists[/{slug}]`, `/shelf`, `/wishlist`, `/search-inside`, `/contact`,
+`/request-access`, `/faq`, `/journal[/{post}|/category/x|/tag/x|/archive/YYYY-MM]`, `/page/{slug}`, `/feed.xml`,
+`/journal/feed.xml`, `/sitemap.xml`, `/robots.txt`. Old `?p=` GET links 301 to these; an output filter rewrites every
+`index.php?p=` link the templates print. Slugs for books, authors and series live in `kk_slug` and never change.
+Rule: always apply Google's SEO Starter Guide and structured-data rules to public pages (see `Seo.php` and `header.php`):
+unique title and description, canonical, breadcrumbs, JSON-LD, sitemap, robots, descriptive URLs, 301 for moved pages.
+The raw forms:
+
 `shelf`, `show_detail`, `author`, `series`, `lists`, `wishlist`, `inside`, `blog`, `page`, `blog_rss`, `kk_rss`, `kk_api`,
 `contact`, `request_access`, `faq`, plus the stock catalogue pages.
 

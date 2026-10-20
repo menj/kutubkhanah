@@ -124,6 +124,7 @@ class Duplicates
         foreach (['item', 'reserve', 'loan_history', 'kk_loan', 'comment', 'biblio_mark'] as $t) {
             $db->prepare("UPDATE $t SET biblio_id = ? WHERE biblio_id = ?")->execute([$keep, $d]);
         }
+        $db->prepare("UPDATE kk_slug SET ref = ?, main = 0 WHERE kind = 'book' AND ref = ?")->execute([(string)$keep, (string)$d]);
         $db->prepare('UPDATE kk_wish SET acquired_biblio_id = ? WHERE acquired_biblio_id = ?')->execute([$keep, $d]);
         $db->prepare('UPDATE kk_doc_index SET biblio_id = ? WHERE biblio_id = ?')->execute([$keep, $d]);
         $db->prepare('UPDATE kk_doc_text SET biblio_id = ? WHERE biblio_id = ?')->execute([$keep, $d]);

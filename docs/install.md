@@ -60,12 +60,14 @@ Example (Debian/Ubuntu with Apache): `chown -R www-data:www-data config files im
 
 ## Web server notes
 
-**Apache**: the bundled `.htaccess` is enough; enable `mod_rewrite`.
+**Apache**: the bundled `.htaccess` is enough; enable `mod_rewrite` and `AllowOverride All`. It sends readable addresses (`/book/dune`) to `index.php`. If the site lives in a sub-folder, add `RewriteBase /that-folder/` to `.htaccess`.
 
 **Nginx**: serve `index.php` through PHP-FPM and deny access to `config/`, `files/db/` and `.htaccess`-protected folders:
 
 ```nginx
 location ~ ^/(config|files/db)/ { deny all; }
+# readable addresses (/book/dune, /sitemap.xml ...)
+location / { try_files $uri $uri/ /index.php?$query_string; }
 location ~ \.php$ { include fastcgi_params; fastcgi_pass unix:/run/php/php8.4-fpm.sock; fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name; }
 ```
 

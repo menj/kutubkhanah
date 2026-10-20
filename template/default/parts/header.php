@@ -16,6 +16,7 @@ $request_uri = urlencode(strip_tags(urldecode($_SERVER['REQUEST_URI'])));
 <html>
 <head>
     <meta charset="utf-8">
+<?php if (\SLiMS\Kutubkhanah\Permalink::$active) echo '    <base href="' . htmlspecialchars(\SLiMS\Kutubkhanah\Feed::baseUrl(), ENT_QUOTES) . '">' . "\n"; ?>
     <title><?php echo $page_title; ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <?php if (!empty($sysconf['kk_discourage_search'])) echo '    <meta name="robots" content="noindex, nofollow">' . "\n"; ?>
@@ -26,15 +27,24 @@ $request_uri = urlencode(strip_tags(urldecode($_SERVER['REQUEST_URI'])));
     <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, post-check=0, pre-check=0"/>
     <meta http-equiv="Expires" content="Sat, 26 Jul 1997 05:00:00 GMT"/>
     <?php echo $metadata;?>
-    <?php if (isset($_GET['p']) && ($_GET['p'] == 'show_detail')): ?>
-        <meta name="description" content="<?php echo substr($notes, 0, 152) . '...'; ?>">
-        <meta name="keywords" content="<?php echo $subject; ?>">
-    <?php elseif (!empty($GLOBALS['kk_meta']['description'])): ?>
-        <meta name="description" content="<?php echo htmlspecialchars($GLOBALS['kk_meta']['description'], ENT_QUOTES); ?>">
-    <?php else: ?>
-        <meta name="description" content="<?php echo $page_title; ?>">
-        <meta name="keywords" content="<?php echo $sysconf['library_subname']; ?>">
-    <?php endif; ?>
+<?php echo \SLiMS\Kutubkhanah\Seo::head(); ?>
+<?php
+// One unique description per page (Google SEO Starter Guide): book notes, post excerpt, or the page title with the library name.
+$kkDesc = '';
+if (isset($_GET['p']) && $_GET['p'] == 'show_detail' && !empty($notes) && trim(strip_tags($notes)) !== '') {
+    $kkDesc = mb_strlen(trim(strip_tags($notes))) > 155 ? mb_substr(trim(strip_tags($notes)), 0, 152) . '...' : trim(strip_tags($notes));
+} elseif (!empty($GLOBALS['kk_meta']['description'])) {
+    $kkDesc = $GLOBALS['kk_meta']['description'];
+} else {
+    $kkDesc = trim(strip_tags(html_entity_decode((string)$page_title, ENT_QUOTES, 'UTF-8')));
+    if (!empty($sysconf['library_subname'])) $kkDesc .= ' – ' . $sysconf['library_subname'];
+}
+$GLOBALS['kk_desc'] = $kkDesc;
+?>
+    <meta name="description" content="<?php echo htmlspecialchars($kkDesc, ENT_QUOTES); ?>">
+<?php if (isset($_GET['p']) && $_GET['p'] == 'show_detail' && !empty($subject)): ?>
+    <meta name="keywords" content="<?php echo htmlspecialchars(strip_tags((string)$subject), ENT_QUOTES); ?>">
+<?php endif; ?>
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
     <meta name="generator" content="<?php echo SENAYAN_VERSION ?>">
     <meta name="theme-color" content="<?php echo htmlspecialchars(\SLiMS\Kutubkhanah\Settings::get('light_primary'), ENT_QUOTES); ?>">
@@ -42,14 +52,8 @@ $request_uri = urlencode(strip_tags(urldecode($_SERVER['REQUEST_URI'])));
     <meta property="og:locale" content="<?php echo str_replace('-', '_', $sysconf['default_lang']); ?>"/>
     <meta property="og:type" content="book"/>
     <meta property="og:title" content="<?php echo $page_title; ?>"/>
-    <?php if (isset($_GET['p']) && ($_GET['p'] == 'show_detail')): ?>
-        <meta property="og:description" content="<?php echo substr($notes, 0, 152) . '...'; ?>"/>
-    <?php elseif (!empty($GLOBALS['kk_meta']['description'])): ?>
-        <meta property="og:description" content="<?php echo htmlspecialchars($GLOBALS['kk_meta']['description'], ENT_QUOTES); ?>"/>
-    <?php else: ?>
-        <meta property="og:description" content="<?php echo $sysconf['library_subname']; ?>"/>
-    <?php endif; ?>
-    <meta property="og:url" content="//<?php echo $_SERVER["SERVER_NAME"] . $request_uri; ?>"/>
+    <meta property="og:description" content="<?php echo htmlspecialchars($GLOBALS['kk_desc'], ENT_QUOTES); ?>"/>
+    <meta property="og:url" content="<?php echo htmlspecialchars(\SLiMS\Kutubkhanah\Permalink::canonical() ?: (\SLiMS\Kutubkhanah\Feed::baseUrl()), ENT_QUOTES); ?>"/>
     <meta property="og:site_name" content="<?php echo $sysconf['library_name']; ?>"/>
     <?php if (isset($_GET['p']) && ($_GET['p'] == 'show_detail')): ?>
         <meta property="og:image" content="//<?php echo $_SERVER["SERVER_NAME"] . SWB . $image_src ?>"/>

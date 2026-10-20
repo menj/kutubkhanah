@@ -48,7 +48,7 @@ class Feed
             . '<language>' . self::x(substr((string)($sysconf['default_lang'] ?? 'en_US'), 0, 2)) . "</language>\n"
             . '<lastBuildDate>' . date(DATE_RSS, $books ? strtotime($books[0]['input_date']) : time()) . "</lastBuildDate>\n";
         foreach ($books as $b) {
-            $url = $base . 'index.php?p=show_detail&id=' . (int)$b['biblio_id'];
+            $url = Permalink::book((int)$b['biblio_id']);
             $desc = '';
             if ($b['image']) $desc .= '<p><img src="' . self::x($base . 'lib/minigalnano/createthumb.php?filename=images/docs/' . rawurlencode($b['image']) . '&width=200') . '" alt=""/></p>';
             $line = trim(($b['authors'] ?: '') . ($b['publish_year'] ? ' (' . $b['publish_year'] . ')' : ''));

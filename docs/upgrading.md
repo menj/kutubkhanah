@@ -34,6 +34,13 @@ Pulling keeps `config/` and `files/` because they are ignored by git.
 
 ## Notes per version
 
+### To 1.8.0
+- New table `kk_slug` (created automatically). New setting `permalinks` (Settings > Library > Web addresses).
+- **Apache**: the bundled `.htaccess` gained a rewrite rule. If you edited `.htaccess` yourself, copy the new block.
+  **Nginx**: add `location / { try_files $uri $uri/ /index.php?$query_string; }` (see `install.md`).
+  Without URL rewriting, set Web addresses to Plain.
+- Old links keep working (301 redirect). Submit `/sitemap.xml` to Google Search Console.
+
 ### To 1.7.0
 - New tables: `kk_list`, `kk_list_item`, `kk_work_link`, `kk_doc_index`, `kk_doc_text` (created automatically).
 - New settings: `enable_lists`, `enable_inside`, `ocr_lang` (Settings > Library).

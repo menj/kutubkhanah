@@ -11,7 +11,7 @@ namespace SLiMS\Kutubkhanah;
 
 class Schema
 {
-    const VERSION = '1.7.0';
+    const VERSION = '1.8.0';
 
     /** Columns of kk_book, in order. Missing ones are added on upgrade. */
     private static function bookColumns(): array
@@ -264,6 +264,16 @@ class Schema
             `created_at` datetime NOT NULL,
             PRIMARY KEY (`id`),
             KEY `post` (`post_id`, `created_at`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+        // Permalinks: readable, stable slugs for books, authors and series.
+        $db->query("CREATE TABLE IF NOT EXISTS `kk_slug` (
+            `kind` varchar(10) NOT NULL,
+            `ref` varchar(190) NOT NULL,
+            `slug` varchar(150) NOT NULL,
+            `main` tinyint(1) NOT NULL default '1',
+            PRIMARY KEY (`kind`, `slug`),
+            KEY `ref` (`kind`, `ref`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
 
         $db->query("CREATE TABLE IF NOT EXISTS `kk_list` (

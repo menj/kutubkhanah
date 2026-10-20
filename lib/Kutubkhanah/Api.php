@@ -62,7 +62,7 @@ class Api
             'genres'         => array_values(array_filter(array_map('trim', explode('|', (string)$b['genres'])))),
             'tags'           => array_values(array_filter(array_map('trim', explode(',', (string)$b['tags'])))),
             'cover_url'      => $b['image'] ? $base . 'images/docs/' . rawurlencode($b['image']) : null,
-            'url'            => $base . 'index.php?p=show_detail&id=' . (int)$b['biblio_id'],
+            'url'            => Permalink::book((int)$b['biblio_id']),
         ];
     }
 
