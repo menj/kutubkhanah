@@ -221,6 +221,24 @@
     });
   }
 
+  /* Wikidata, a few items per request */
+  var wdGo = document.getElementById('kk-wikidata');
+  if (wdGo) {
+    var wdStatus = document.getElementById('kk-wikidata-status'), wdReset = document.getElementById('kk-wikidata-reset');
+    wdGo.addEventListener('click', function () {
+      var done = 0, found = 0, first = true;
+      wdGo.disabled = true;
+      (function step() {
+        api('wikidata_fetch', { reset: first && wdReset.checked, limit: 3 }).then(function (res) {
+          if (!res.ok) throw new Error();
+          first = false; done += res.j.processed; found += res.j.found;
+          wdStatus.textContent = done + ' looked up, ' + found + ' matched, ' + res.j.remaining + ' to go';
+          if (res.j.remaining > 0 && res.j.processed > 0) { step(); } else { wdGo.disabled = false; }
+        }).catch(function () { wdStatus.textContent = t.error; wdGo.disabled = false; });
+      })();
+    });
+  }
+
   /* Review author matches */
   document.querySelectorAll('.kk-author-review__row').forEach(function (row) {
     row.addEventListener('click', function (e) {
@@ -234,6 +252,7 @@
         var m = row.querySelector('.kk-ar-match');
         if (body.op === 'reject') { row.style.opacity = '.5'; m.textContent = 'rejected'; }
         else if (body.op === 'approve') { row.style.opacity = '.6'; m.textContent += ' ✓'; }
+        else if (body.op === 'wikidata') { var w = row.querySelector('.kk-ar-wd'); w.textContent = res.j.wd_id ? ' · Wikidata: ' + res.j.wd_label + ' (' + res.j.wd_id + ')' : ' · no Wikidata match'; row.querySelector('[data-f=wd_id]').value = res.j.wd_id; }
         else if (body.op === 'refetch') { m.textContent = res.j.ol_name ? res.j.ol_name + ' (' + res.j.ol_key + ')' : 'no match'; row.querySelector('[data-f=ol_key]').value = res.j.ol_key; }
       }).catch(function () { alert(t.error); }).then(function () { b.disabled = false; });
     });

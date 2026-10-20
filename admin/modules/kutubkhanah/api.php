@@ -109,12 +109,21 @@ try {
             foreach ($pending as $a) { if (\SLiMS\Kutubkhanah\Authors::fetch((int)$a['author_id'])) $found++; }
             kk_json(['processed' => count($pending), 'found' => $found, 'remaining' => \SLiMS\Kutubkhanah\Authors::countPending()]);
 
+        case 'wikidata_fetch':
+            $W = \SLiMS\Kutubkhanah\Wikidata::class;
+            if (!empty($input['reset'])) $W::resetTried();
+            $n = max(1, min(4, (int)($input['limit'] ?? 3)));
+            $found = 0; $done = 0;
+            foreach ($W::pendingAuthors($n) as $a) { $done++; if ($W::author((int)$a['author_id'])) $found++; }
+            foreach ($W::pendingBooks($n) as $b) { $done++; if ($W::book((int)$b['biblio_id'])) $found++; }
+            kk_json(['processed' => $done, 'found' => $found, 'remaining' => $W::countPendingAuthors() + $W::countPendingBooks()]);
+
         case 'author_review':
             $op = (string)($input['op'] ?? 'save');
-            if (!in_array($op, ['save', 'approve', 'reject', 'refetch'], true)) kk_json(['message' => __('Unknown action.')], 400);
+            if (!in_array($op, ['save', 'approve', 'reject', 'refetch', 'wikidata'], true)) kk_json(['message' => __('Unknown action.')], 400);
             if (!\SLiMS\Kutubkhanah\Authors::review((int)($input['id'] ?? 0), $op, $input)) kk_json(['message' => __('Author not found.')], 404);
             $m = \SLiMS\Kutubkhanah\Authors::meta((int)$input['id']);
-            kk_json(['ok' => true, 'ol_name' => (string)($m['ol_name'] ?? ''), 'ol_key' => (string)($m['ol_key'] ?? ''), 'found' => ($m['bio_source'] ?? '') !== '']);
+            kk_json(['ok' => true, 'ol_name' => (string)($m['ol_name'] ?? ''), 'ol_key' => (string)($m['ol_key'] ?? ''), 'wd_id' => (string)($m['wd_id'] ?? ''), 'wd_label' => (string)($m['wd_label'] ?? ''), 'found' => ($m['bio_source'] ?? '') !== '']);
 
         case 'suggest_to_wishlist':
             $mid = (int)($input['id'] ?? 0);

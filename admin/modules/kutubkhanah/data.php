@@ -48,6 +48,14 @@ echo kk_head();
     </div>
     <p class="kk-note" id="kk-authors-status" aria-live="polite"></p>
 
+    <h4><?= __('Wikidata') ?></h4>
+    <p class="kk-note"><?= sprintf(__('%d authors and books have not been looked up on Wikidata yet. Authors are found by ISNI, then by name; books by ISBN, then OCLC number. Only empty fields are filled, and nothing you wrote is changed.'), \SLiMS\Kutubkhanah\Wikidata::countPendingAuthors() + \SLiMS\Kutubkhanah\Wikidata::countPendingBooks()) ?></p>
+    <div class="kk-actions">
+      <button type="button" class="kk-btn kk-btn--primary" id="kk-wikidata"><?= __('Fetch from Wikidata') ?></button>
+      <label class="kk-check kk-check--inline"><input type="checkbox" id="kk-wikidata-reset"> <?= __('Also retry items that had no match') ?></label>
+    </div>
+    <p class="kk-note" id="kk-wikidata-status" aria-live="polite"></p>
+
     <h4><?= __('Review matches') ?></h4>
     <p class="kk-note"><?= __('Names are matched by search, so a different spelling or name order can pick the wrong person. Check each match, set a search name or Open Library ID if needed, and add a sort name to file an author under the part you choose.') ?></p>
     <form method="get" class="kk-actions">
@@ -61,15 +69,19 @@ echo kk_head();
       <?php foreach ($kkRev as $r) : $h = fn($v) => htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); ?>
       <div class="kk-author-review__row" data-author="<?= (int)$r['author_id'] ?>">
         <p><strong dir="auto"><?= $h($r['author_name']) ?></strong>
-          <span class="kk-muted">&rarr; <span class="kk-ar-match"><?= $r['ol_name'] ? $h($r['ol_name']) . ' (' . $h($r['ol_key']) . ')' : __('no match') ?></span></span>
+          <span class="kk-muted">&rarr; <span class="kk-ar-match"><?= $r['ol_name'] ? 'Open Library: ' . $h($r['ol_name']) . ' (' . $h($r['ol_key']) . ')' : __('no Open Library match') ?></span>
+          <span class="kk-ar-wd kk-muted"><?= $r['wd_id'] ? ' · Wikidata: ' . $h($r['wd_label']) . ' (' . $h($r['wd_id']) . ')' : '' ?></span></span>
           <?= $r['reviewed'] === 'a' ? '<span class="kk-badge kk-badge--muted">' . __('Approved') . '</span>' : ($r['reviewed'] === 'r' ? '<span class="kk-badge kk-badge--muted">' . __('Rejected') . '</span>' : '') ?></p>
         <div class="kk-actions">
           <input data-f="sort_name" value="<?= $h($r['sort_name']) ?>" placeholder="<?= __('Sort name') ?>" aria-label="<?= __('Sort name') ?>">
           <input data-f="native_name" dir="auto" value="<?= $h($r['native_name']) ?>" placeholder="<?= __('Native-script name') ?>" aria-label="<?= __('Native-script name') ?>">
+          <input data-f="isni" value="<?= $h($r['isni']) ?>" placeholder="ISNI" aria-label="ISNI" size="20">
+          <input data-f="wd_id" value="<?= $h($r['wd_id']) ?>" placeholder="Q123" aria-label="Wikidata ID" size="9">
           <input data-f="search_name" value="<?= $h($r['search_name']) ?>" placeholder="<?= __('Search name') ?>" aria-label="<?= __('Search name') ?>">
           <input data-f="ol_key" value="<?= $h($r['ol_key']) ?>" placeholder="OL123A" aria-label="Open Library ID" size="10">
           <button type="button" class="kk-btn kk-btn--outline kk-btn--sm" data-op="save"><?= __('Save') ?></button>
-          <button type="button" class="kk-btn kk-btn--outline kk-btn--sm" data-op="refetch"><?= __('Look up again') ?></button>
+          <button type="button" class="kk-btn kk-btn--outline kk-btn--sm" data-op="refetch"><?= __('Open Library again') ?></button>
+          <button type="button" class="kk-btn kk-btn--outline kk-btn--sm" data-op="wikidata"><?= __('Wikidata') ?></button>
           <button type="button" class="kk-btn kk-btn--primary kk-btn--sm" data-op="approve"><?= __('Approve') ?></button>
           <button type="button" class="kk-btn kk-btn--ghost kk-btn--sm" data-op="reject"><?= __('Reject') ?></button>
         </div>

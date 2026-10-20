@@ -82,6 +82,7 @@ class Detail
         if ($m['goodreads_id'] !== '') $links .= '<a class="kk-btn kk-btn--outline kk-btn--sm" href="https://www.goodreads.com/book/show/' . rawurlencode($m['goodreads_id']) . '" target="_blank" rel="noopener noreferrer">Goodreads</a>';
         if (($m['openlibrary_id'] ?? '') !== '') $links .= '<a class="kk-btn kk-btn--outline kk-btn--sm" href="https://openlibrary.org/books/' . rawurlencode($m['openlibrary_id']) . '" target="_blank" rel="noopener noreferrer">Open Library</a>';
         if (($m['lccn'] ?? '') !== '') $links .= '<a class="kk-btn kk-btn--ghost kk-btn--sm" href="https://lccn.loc.gov/' . rawurlencode($m['lccn']) . '" target="_blank" rel="noopener noreferrer">' . __('Library of Congress') . '</a>';
+        if (($m['wd_id'] ?? '') !== '') $links .= '<a class="kk-btn kk-btn--ghost kk-btn--sm" href="https://www.wikidata.org/wiki/' . rawurlencode($m['wd_id']) . '" target="_blank" rel="noopener noreferrer">Wikidata</a>';
         if ($m['oclc'] !== '') $links .= '<a class="kk-btn kk-btn--ghost kk-btn--sm" href="https://www.worldcat.org/oclc/' . rawurlencode($m['oclc']) . '" target="_blank" rel="noopener noreferrer">WorldCat</a>';
         if ($links) $out .= '<div class="kk-links">' . $links . '</div>';
 

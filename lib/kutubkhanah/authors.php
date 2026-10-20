@@ -89,6 +89,9 @@ class Authors
             $photo = Covers::download('https://covers.openlibrary.org/a/olid/' . $key . '-L.jpg?default=false', 'kk-author-' . $id);
             $source = ($bio !== '' || $photo !== '') ? 'Open Library' : '';
         }
+        // Keep anything already saved (for example from Wikidata) when Open Library has nothing.
+        if ($photo === '') $photo = (string)($m['photo'] ?? '');
+        if ($bio === '') { $bio = (string)($m['bio'] ?? ''); if ($source === '') $source = (string)($m['bio_source'] ?? ''); }
         self::ensure($id);
         $db->prepare('UPDATE kk_author SET photo = ?, bio = ?, bio_source = ?, ol_key = ?, ol_name = ?, reviewed = ?, photo_tried = ? WHERE author_id = ?')
            ->execute([$photo, mb_substr($bio, 0, 4000), $source, $key, $source !== '' ? $olName : '', '', $now, $id]);
@@ -103,15 +106,18 @@ class Authors
         $db = DB::getInstance();
         $key = strtoupper(trim((string)($in['ol_key'] ?? '')));
         if ($key !== '' && !preg_match('/^OL\d+A$/', $key)) $key = '';
-        if (in_array($op, ['save', 'refetch'], true)) {
-            $db->prepare('UPDATE kk_author SET search_name = ?, sort_name = ?, native_name = ?, ol_key = ? WHERE author_id = ?')
-               ->execute([mb_substr(trim((string)($in['search_name'] ?? '')), 0, 200), mb_substr(trim((string)($in['sort_name'] ?? '')), 0, 200), mb_substr(trim((string)($in['native_name'] ?? '')), 0, 200), $key, $id]);
+        if (in_array($op, ['save', 'refetch', 'wikidata'], true)) {
+            $db->prepare('UPDATE kk_author SET search_name = ?, sort_name = ?, native_name = ?, ol_key = ?, isni = ?, wd_id = ? WHERE author_id = ?')
+               ->execute([mb_substr(trim((string)($in['search_name'] ?? '')), 0, 200), mb_substr(trim((string)($in['sort_name'] ?? '')), 0, 200), mb_substr(trim((string)($in['native_name'] ?? '')), 0, 200), $key,
+                           mb_substr(trim((string)($in['isni'] ?? '')), 0, 30), preg_match('/^Q\d+$/i', trim((string)($in['wd_id'] ?? ''))) ? strtoupper(trim($in['wd_id'])) : '', $id]);
         }
         if ($op === 'approve') {
             $db->prepare("UPDATE kk_author SET reviewed = 'a' WHERE author_id = ?")->execute([$id]);
         } elseif ($op === 'reject') {
-            $db->prepare("UPDATE kk_author SET photo = '', bio = '', bio_source = '', ol_key = '', ol_name = '', reviewed = 'r', photo_tried = ? WHERE author_id = ?")
+            $db->prepare("UPDATE kk_author SET photo = '', bio = '', bio_source = '', ol_key = '', ol_name = '', wd_id = '', wd_label = '', reviewed = 'r', photo_tried = ? WHERE author_id = ?")
                ->execute([date('Y-m-d'), $id]);
+        } elseif ($op === 'wikidata') {
+            Wikidata::author($id);
         } elseif ($op === 'refetch') {
             $db->prepare("UPDATE kk_author SET reviewed = '' WHERE author_id = ?")->execute([$id]);
             self::fetch($id);
@@ -124,9 +130,9 @@ class Authors
     {
         $w = "EXISTS (SELECT 1 FROM biblio_author ba WHERE ba.author_id = a.author_id)"; $args = [];
         if ($q !== '') { $w .= ' AND a.author_name LIKE ?'; $args[] = '%' . $q . '%'; }
-        else $w .= " AND COALESCE(m.bio_source, '') <> '' AND COALESCE(m.reviewed, '') = ''";
+        else $w .= " AND (COALESCE(m.bio_source, '') <> '' OR COALESCE(m.wd_id, '') <> '') AND COALESCE(m.reviewed, '') = ''";
         return Library::rows(
-            "SELECT a.author_id, a.author_name, m.ol_key, m.ol_name, m.search_name, m.sort_name, m.native_name, m.reviewed, m.bio_source
+            "SELECT a.author_id, a.author_name, m.ol_key, m.ol_name, m.wd_id, m.wd_label, m.isni, m.search_name, m.sort_name, m.native_name, m.reviewed, m.bio_source
              FROM mst_author a LEFT JOIN kk_author m ON m.author_id = a.author_id WHERE $w ORDER BY a.author_name LIMIT " . max(1, $limit),
             $args
         );
