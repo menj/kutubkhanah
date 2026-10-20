@@ -5,7 +5,8 @@ Databases: MySQL 5.7 / MariaDB 10.3 or later, PostgreSQL 13 or later, or SQLite 
 License: GNU GPL v3 or later
 Repository: https://github.com/menj/kutubkhanah
 
-A home library system. It replaces Libib and runs on your own server.
+Self-hosted home library CMS. Catalogue your books by scanning ISBN barcodes, publish them on a public library site, lend them to
+friends and family, and keep a journal alongside. It replaces Libib and runs on your own server.
 
 == Description ==
 

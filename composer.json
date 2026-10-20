@@ -1,6 +1,6 @@
 {
     "name": "menj/kutubkhanah",
-    "description": "Kutubkhanah home library system",
+    "description": "Self-hosted home library CMS: scan ISBNs to catalogue your books, share a public library site, lend to friends and keep a journal. Runs on MySQL, PostgreSQL or SQLite.",
     "type": "project",
     "autoload": {
         "psr-0": {
